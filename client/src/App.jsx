@@ -6,7 +6,8 @@ import Messages from "./pages/Messages";
 import Profile from "./pages/Profile";
 import Home from "./pages/Home";
 import { darkTheme, lightTheme } from "./themeData";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { DarkmodeContext } from "./contexts/darkmode.jsx";
 
 const Container = styled.div``;
 
@@ -34,14 +35,7 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  const [darkmode, setDarkmode] = useState(
-    JSON.parse(localStorage.getItem("darkmode")) || false
-  );
-
-  useEffect(() => {
-    localStorage.setItem("darkmode", JSON.stringify(darkmode));
-  }, [darkmode]);
-
+  const { darkmode } = useContext(DarkmodeContext);
   return (
     <ThemeProvider theme={darkmode ? darkTheme : lightTheme}>
       <RouterProvider router={router} />

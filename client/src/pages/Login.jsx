@@ -79,7 +79,7 @@ const Right = styled.div`
 
 const LoginSpan = styled.span`
   font-weight: bold;
-  color: orange;
+  color: orangered;
 `;
 
 const Form = styled.form`
@@ -108,7 +108,7 @@ const BottomSpan = styled.span`
 `;
 
 const Button = styled.button`
-  background: linear-gradient(to right, pink, orange);
+  background: linear-gradient(to right, red, orange);
   border: none;
   padding: 10px;
   font-size: 12px;
