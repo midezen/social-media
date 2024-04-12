@@ -94,6 +94,8 @@ const Input = styled.input`
   border: 1px solid ${({ theme }) => theme.divider};
   outline: 0;
   border-radius: 10px;
+  background: transparent;
+  color: ${({ theme }) => theme.text};
 `;
 
 const Bottom = styled.div`
