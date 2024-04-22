@@ -4,14 +4,16 @@ export const lightTheme = {
   text: "black",
   textSoft: "#333333",
   divider: "black",
-  bbg: "linear-gradient(to right, pink, orange)",
+  bbg: "linear-gradient(to right, skyblue, blue)",
+  spT: "#0000ff",
 };
 
 export const darkTheme = {
-  bgSoft: "#000d1a",
+  bgSoft: "#070713",
   bg: "black",
   text: "white",
   textSoft: "lightgray",
   divider: "gray",
-  bbg: "linear-gradient(to right, pink, orange)",
+  bbg: "linear-gradient(to right, skyblue, blue)",
+  spT: "#0000ff",
 };

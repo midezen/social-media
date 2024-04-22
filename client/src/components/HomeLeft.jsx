@@ -74,7 +74,7 @@ const Button = styled.button`
   border: none;
   background: transparent;
   font-weight: bold;
-  color: orangered;
+  color: ${({ theme }) => theme.spT};
   width: 100%;
   display: flex;
   justify-content: center;
@@ -103,14 +103,14 @@ const HomeLeft = () => {
       {/* Left-Middle items */}
       <LeftMiddleItem
         onClick={() => handleActiveClick("feed")}
-        style={{ color: active === "feed" ? "orangered" : "inherit" }}
+        style={{ color: active === "feed" ? "#0000ff" : "inherit" }}
       >
         <HomeOutlinedIcon />
         Feed
       </LeftMiddleItem>
       <LeftMiddleItem
         onClick={() => handleActiveClick("messages")}
-        style={{ color: active === "messages" ? "orangered" : "inherit" }}
+        style={{ color: active === "messages" ? "#0000ff" : "inherit" }}
       >
         <SendOutlinedIcon />
         Messages
@@ -126,14 +126,14 @@ const HomeLeft = () => {
       )}
       <LeftMiddleItem
         onClick={() => handleActiveClick("friends")}
-        style={{ color: active === "friends" ? "orangered" : "inherit" }}
+        style={{ color: active === "friends" ? "#0000ff" : "inherit" }}
       >
         <PeopleAltOutlinedIcon />
         Friends
       </LeftMiddleItem>
       <LeftMiddleItem
         onClick={() => handleActiveClick("saved posts")}
-        style={{ color: active === "saved posts" ? "orangered" : "inherit" }}
+        style={{ color: active === "saved posts" ? "#0000ff" : "inherit" }}
       >
         <BookmarkBorderOutlinedIcon />
         Saved Posts
@@ -150,9 +150,7 @@ const HomeLeft = () => {
             <Span2>Lagos, Nigeria</Span2>
           </Spans>
         </Info>
-        <EmailOutlinedIcon
-          style={{ marginRight: "35px", color: "orangered" }}
-        />
+        <EmailOutlinedIcon style={{ marginRight: "35px", color: "#0000ff" }} />
       </LeftBottomItem>
       <LeftBottomItem>
         <Info>
@@ -162,9 +160,7 @@ const HomeLeft = () => {
             <Span2>Lagos, Nigeria</Span2>
           </Spans>
         </Info>
-        <EmailOutlinedIcon
-          style={{ marginRight: "35px", color: "orangered" }}
-        />
+        <EmailOutlinedIcon style={{ marginRight: "35px", color: "#0000ff" }} />
       </LeftBottomItem>
       <LeftBottomItem>
         <Info>
@@ -174,9 +170,7 @@ const HomeLeft = () => {
             <Span2>Lagos, Nigeria</Span2>
           </Spans>
         </Info>
-        <EmailOutlinedIcon
-          style={{ marginRight: "35px", color: "orangered" }}
-        />
+        <EmailOutlinedIcon style={{ marginRight: "35px", color: "#0000ff" }} />
       </LeftBottomItem>
       <Button>View All</Button>
     </Container>

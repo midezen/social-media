@@ -16,9 +16,9 @@ const RightHeadSpan = styled.span`
 
 const RightHeadSpanb = styled.span`
   padding: 1px 4px;
-  color: inherit;
+  color: white;
   border-radius: 50%;
-  background-color: orangered;
+  background-color: ${({ theme }) => theme.spT};
   font-size: 14px;
   display: flex;
   align-items: center;
@@ -59,7 +59,7 @@ const Buttons = styled.div`
   align-items: center;
   margin-top: 5px;
   &:first-child {
-    color: orangered;
+    color: ${({ theme }) => theme.spT};
   }
   &:last-child {
     color: ${({ theme }) => theme.textSoft};
@@ -70,8 +70,9 @@ const Button = styled.button`
   border: none;
   background: transparent;
   font-weight: bold;
+  cursor: pointer;
   &:first-child {
-    color: orangered;
+    color: ${({ theme }) => theme.spT};
   }
   &:last-child {
     color: ${({ theme }) => theme.textSoft};
@@ -82,7 +83,7 @@ const Button2 = styled.button`
   border: none;
   background: transparent;
   font-weight: bold;
-  color: orangered;
+  color: ${({ theme }) => theme.spT};
   width: 100%;
   display: flex;
   justify-content: center;
@@ -202,7 +203,7 @@ const HomeRight = ({ theme }) => {
             <Span2>Lagos, Nigeria</Span2>
           </Spans>
         </Info>
-        <GroupAddOutlinedIcon style={{ color: "orangered" }} />
+        <GroupAddOutlinedIcon style={{ color: "#0000ff" }} />
       </RightItem>
       <RightItem>
         <Info>
@@ -212,7 +213,7 @@ const HomeRight = ({ theme }) => {
             <Span2>Lagos, Nigeria</Span2>
           </Spans>
         </Info>
-        <GroupAddOutlinedIcon style={{ color: "orangered" }} />
+        <GroupAddOutlinedIcon style={{ color: "#0000ff" }} />
       </RightItem>
       <RightItem>
         <Info>
@@ -222,7 +223,7 @@ const HomeRight = ({ theme }) => {
             <Span2>Lagos, Nigeria</Span2>
           </Spans>
         </Info>
-        <GroupAddOutlinedIcon style={{ color: "orangered" }} />
+        <GroupAddOutlinedIcon style={{ color: "#0000ff" }} />
       </RightItem>
       <Button2>View All</Button2>
       <Divider />

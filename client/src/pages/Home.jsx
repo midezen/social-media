@@ -1,6 +1,9 @@
 import styled from "styled-components";
 import HomeLeft from "../components/HomeLeft";
 import HomeRight from "../components/HomeRight";
+import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
+import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
+import Ayomide from "../img/Ayomide 2.png";
 
 const Container = styled.div`
   background-color: ${({ theme }) => theme.bgSoft};
@@ -12,13 +15,177 @@ const Container = styled.div`
 const Middle = styled.div`
   width: 50%;
   height: 100%;
+  padding: 0px 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+`;
+
+const TopContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+const SearchContainer = styled.div`
+  padding: 16px;
+  border-radius: 12px;
+  background-color: black;
+  opacity: 0.7;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: white;
+`;
+
+const SearchInput = styled.input`
+  outline: 0;
+  background-color: transparent;
+  border: none;
+  color: white;
+`;
+
+const Button = styled.button`
+  background: ${({ theme }) => theme.bbg};
+  border: none;
+  border-radius: 12px;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  color: white;
+  font-weight: bold;
+  gap: 10px;
+  cursor: pointer;
+`;
+
+const StoriesContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+`;
+
+const HeadSpan = styled.div`
+  font-size: 18px;
+  font-weight: bold;
+`;
+
+const Button2 = styled.button`
+  border: none;
+  background: transparent;
+  font-weight: bold;
+  color: ${({ theme }) => theme.spT};
+  cursor: pointer;
+`;
+
+const StoriesBottom = styled.div`
+  display: flex;
+  gap: 15px;
+`;
+
+const StoryItem = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  color: ${({ theme }) => theme.textSoft};
+  gap: 7px;
+  font-weight: 300;
+`;
+
+const AddStory = styled.div`
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px dotted;
+  transition: all 0.3s ease-in-out;
+  cursor: pointer;
+  &:hover {
+    scale: 1.1;
+  }
+`;
+
+const Story = styled.img`
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  border-width: 3px;
+  border-style: solid;
+  border-color: #ff6600 #ff6600 #ff3300 #ff3300;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  &:hover {
+    border-style: dotted;
+    scale: 1.1;
+  }
 `;
 
 const Home = () => {
   return (
     <Container>
       <HomeLeft />
-      <Middle></Middle>
+      <Middle>
+        <TopContainer>
+          <SearchContainer>
+            <SearchOutlinedIcon style={{ fontSize: "18px" }} />
+            <SearchInput type="text" placeholder="Search" />
+          </SearchContainer>
+          <Button>
+            <AddOutlinedIcon />
+            Create new post
+          </Button>
+        </TopContainer>
+
+        <StoriesContainer>
+          <TopContainer>
+            <HeadSpan>Stories</HeadSpan>
+            <Button2>watch all</Button2>
+          </TopContainer>
+          <StoriesBottom>
+            <StoryItem>
+              <AddStory>
+                <AddOutlinedIcon style={{ fontSize: "14px" }} />
+              </AddStory>
+              Add Story
+            </StoryItem>
+
+            <StoryItem>
+              <Story src={Ayomide} />
+              Ayomide
+            </StoryItem>
+            <StoryItem>
+              <Story src={Ayomide} />
+              Ayomide
+            </StoryItem>
+            <StoryItem>
+              <Story src={Ayomide} />
+              Ayomide
+            </StoryItem>
+            <StoryItem>
+              <Story src={Ayomide} />
+              Ayomide
+            </StoryItem>
+            <StoryItem>
+              <Story src={Ayomide} />
+              Ayomide
+            </StoryItem>
+            <StoryItem>
+              <Story src={Ayomide} />
+              Ayomide
+            </StoryItem>
+            <StoryItem>
+              <Story src={Ayomide} />
+              Ayomide
+            </StoryItem>
+          </StoriesBottom>
+        </StoriesContainer>
+      </Middle>
       <HomeRight />
     </Container>
   );

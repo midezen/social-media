@@ -5,7 +5,7 @@ import Register from "./pages/Register";
 import Messages from "./pages/Messages";
 import Profile from "./pages/Profile";
 import Home from "./pages/Home";
-import { darkTheme, lightTheme } from "./themeData";
+import { darkTheme, lightTheme } from "./utils/themeData";
 import { useContext, useEffect, useState } from "react";
 import { DarkmodeContext } from "./contexts/darkmode.jsx";
 
