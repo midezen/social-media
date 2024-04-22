@@ -3,7 +3,22 @@ import Ayomide from "../img/Ayomide 2.png";
 import GroupAddOutlinedIcon from "@mui/icons-material/GroupAddOutlined";
 
 const Container = styled.div`
-  width: 25%;
+  width: 30%;
+  position: sticky;
+  top: 30px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  height: Calc(100vh - 40px);
+  &::-webkit-scrollbar {
+    width: 7px;
+  }
+  &::-webkit-scrollbar-track {
+    background: lightgray;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: gray;
+  }
 `;
 
 const RightHeadSpan = styled.span`
@@ -19,7 +34,7 @@ const RightHeadSpanb = styled.span`
   color: white;
   border-radius: 50%;
   background-color: ${({ theme }) => theme.spT};
-  font-size: 14px;
+  font-size: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -106,7 +121,7 @@ const Span2 = styled.span`
 `;
 
 const Divider = styled.hr`
-  width: 100%;
+  width: 90%;
   margin: 25px 0px;
 `;
 

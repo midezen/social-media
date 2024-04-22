@@ -2,7 +2,7 @@ export const lightTheme = {
   bgSoft: "#f5f5f0",
   bg: "white",
   text: "black",
-  textSoft: "#333333",
+  textSoft: "#4e4e32",
   divider: "black",
   bbg: "linear-gradient(to right, skyblue, blue)",
   spT: "#0000ff",

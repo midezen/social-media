@@ -4,6 +4,8 @@ import HomeRight from "../components/HomeRight";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import Ayomide from "../img/Ayomide 2.png";
+import { useState } from "react";
+import Post from "../components/Post";
 
 const Container = styled.div`
   background-color: ${({ theme }) => theme.bgSoft};
@@ -13,9 +15,9 @@ const Container = styled.div`
 `;
 
 const Middle = styled.div`
-  width: 50%;
+  width: 60%;
   height: 100%;
-  padding: 0px 80px;
+  padding: 0px 60px;
   display: flex;
   flex-direction: column;
   gap: 40px;
@@ -62,7 +64,7 @@ const Button = styled.button`
 const StoriesContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 20px;
 `;
 
 const HeadSpan = styled.div`
@@ -126,11 +128,60 @@ const Story = styled.img`
   }
 `;
 
+const FeedContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+`;
+
+const Buttons = styled.div`
+  display: flex;
+  gap: 10px;
+  align-items: center;
+`;
+
+const FeedButton = styled.button`
+  border: none;
+  background: ${(props) =>
+    props.active === "all" ? "#3333ff" : "transparent"};
+  font-weight: bold;
+  color: ${(props) => (props.active === "all" ? "white" : "#0000ff")};
+  cursor: pointer;
+  padding: 12px;
+  border-radius: 12px;
+`;
+
+const FeedButton2 = styled.button`
+  border: none;
+  background: ${(props) =>
+    props.active === "latest" ? "#3333ff" : "transparent"};
+  font-weight: bold;
+  color: ${(props) => (props.active === "latest" ? "white" : "#0000ff")};
+  cursor: pointer;
+  padding: 12px;
+  border-radius: 12px;
+`;
+
+const Posts = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+`;
+
 const Home = () => {
+  const [active, setActive] = useState("all");
+
+  const handleActive = (props) => {
+    setActive(props);
+  };
   return (
     <Container>
+      {/* HERE WE HAVE THE LEFT SIDE OF THE HOME PAGE */}
       <HomeLeft />
+
+      {/* THE MIDDLE SECTION IS DIVIDED INTO THREE */}
       <Middle>
+        {/* THIS IS SECTION ONE, HERE YOU CAN SEARCH AND CREATE POSTS*/}
         <TopContainer>
           <SearchContainer>
             <SearchOutlinedIcon style={{ fontSize: "18px" }} />
@@ -142,10 +193,11 @@ const Home = () => {
           </Button>
         </TopContainer>
 
+        {/* THIS IS SECTION 2, IT CONTAINS THE STORIES */}
         <StoriesContainer>
           <TopContainer>
             <HeadSpan>Stories</HeadSpan>
-            <Button2>watch all</Button2>
+            <Button2>Watch all</Button2>
           </TopContainer>
           <StoriesBottom>
             <StoryItem>
@@ -185,7 +237,34 @@ const Home = () => {
             </StoryItem>
           </StoriesBottom>
         </StoriesContainer>
+
+        {/* THIS IS SECTION 3, IT CONTAINS THE FEED */}
+        <FeedContainer>
+          <TopContainer>
+            <HeadSpan>Feeds</HeadSpan>
+            <Buttons>
+              <FeedButton active={active} onClick={() => handleActive("all")}>
+                All
+              </FeedButton>
+              <FeedButton2
+                active={active}
+                onClick={() => handleActive("latest")}
+              >
+                Latest
+              </FeedButton2>
+            </Buttons>
+          </TopContainer>
+          <Posts>
+            <Post />
+            <Post />
+            <Post />
+            <Post />
+            <Post />
+          </Posts>
+        </FeedContainer>
       </Middle>
+
+      {/* HERE WE HAVE THE RIGHT SIDE OF THE HOME PAGE */}
       <HomeRight />
     </Container>
   );

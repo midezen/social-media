@@ -12,7 +12,22 @@ import Ayomide from "../img/Ayomide 2.png";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 
 const Container = styled.div`
-  width: 25%;
+  width: 30%;
+  position: sticky;
+  top: 30px;
+  overflow-y: auto;
+  height: Calc(100vh - 40px);
+  overflow-x: hidden;
+  &::-webkit-scrollbar {
+    width: 7px;
+  }
+  &::-webkit-scrollbar-track {
+    background: lightgray;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: gray;
+  }
 `;
 
 const LeftMiddleItem = styled.div`
@@ -66,7 +81,7 @@ const Span2 = styled.span`
 `;
 
 const Divider = styled.hr`
-  width: 100%;
+  width: 90%;
   margin: 25px 0px;
 `;
 
@@ -150,7 +165,7 @@ const HomeLeft = () => {
             <Span2>Lagos, Nigeria</Span2>
           </Spans>
         </Info>
-        <EmailOutlinedIcon style={{ marginRight: "35px", color: "#0000ff" }} />
+        <EmailOutlinedIcon style={{ marginRight: "25px", color: "#0000ff" }} />
       </LeftBottomItem>
       <LeftBottomItem>
         <Info>
@@ -160,7 +175,7 @@ const HomeLeft = () => {
             <Span2>Lagos, Nigeria</Span2>
           </Spans>
         </Info>
-        <EmailOutlinedIcon style={{ marginRight: "35px", color: "#0000ff" }} />
+        <EmailOutlinedIcon style={{ marginRight: "25px", color: "#0000ff" }} />
       </LeftBottomItem>
       <LeftBottomItem>
         <Info>
@@ -170,7 +185,7 @@ const HomeLeft = () => {
             <Span2>Lagos, Nigeria</Span2>
           </Spans>
         </Info>
-        <EmailOutlinedIcon style={{ marginRight: "35px", color: "#0000ff" }} />
+        <EmailOutlinedIcon style={{ marginRight: "25px", color: "#0000ff" }} />
       </LeftBottomItem>
       <Button>View All</Button>
     </Container>
