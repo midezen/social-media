@@ -149,6 +149,7 @@ const FeedButton = styled.button`
   cursor: pointer;
   padding: 12px;
   border-radius: 12px;
+  transition: all 0.4 ease;
 `;
 
 const FeedButton2 = styled.button`
@@ -160,6 +161,7 @@ const FeedButton2 = styled.button`
   cursor: pointer;
   padding: 12px;
   border-radius: 12px;
+  transition: all 0.4 ease;
 `;
 
 const Posts = styled.div`
