@@ -23,12 +23,6 @@ const Left = styled.div`
   align-items: center;
 `;
 
-const Image = styled.img`
-  width: 140px;
-  height: 140px;
-  object-fit: contain;
-`;
-
 const TextInfo = styled.div`
   display: flex;
   flex-direction: column;
@@ -125,11 +119,10 @@ const Login = () => {
     <Container>
       <Wrapper>
         <Left>
-          <Image src={loginPic} alt="login picture" />
           <TextInfo>
             <Logo>
               <LogoImage src={fire} alt="fire" />
-              <H1>MZ Social</H1>
+              <H1>ConnectiVerse</H1>
               <LogoImage src={fire} alt="fire" />
             </Logo>
 

@@ -127,7 +127,7 @@ const Register = () => {
           <TextInfo>
             <Logo>
               <LogoImage src={fire} alt="fire" />
-              <H1>MZ Social</H1>
+              <H1>ConnectiVerse</H1>
               <LogoImage src={fire} alt="fire" />
             </Logo>
 

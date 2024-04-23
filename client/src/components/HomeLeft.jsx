@@ -10,6 +10,7 @@ import { useContext, useState } from "react";
 import { DarkmodeContext } from "../contexts/darkmode.jsx";
 import Ayomide from "../img/Ayomide 2.png";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
+import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
 
 const Container = styled.div`
   width: 30%;
@@ -37,6 +38,27 @@ const LeftMiddleItem = styled.div`
   font-size: 14px;
   padding: 12px;
   cursor: pointer;
+`;
+
+const NotificationIcon = styled.div`
+  position: relative;
+`;
+
+const NotificationCount = styled.span`
+  width: 10px;
+  height: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 11px;
+  background-color: red;
+  color: white;
+  position: absolute;
+  padding: 3.5px 3px;
+  top: -3px;
+  right: -3px;
+  font-weight: bolder;
 `;
 
 const LeftBottomSpan1 = styled.span`
@@ -120,15 +142,31 @@ const HomeLeft = () => {
         onClick={() => handleActiveClick("feed")}
         style={{ color: active === "feed" ? "#0000ff" : "inherit" }}
       >
-        <HomeOutlinedIcon />
+        <NotificationIcon>
+          <HomeOutlinedIcon style={{ fontSize: "25px" }} />
+          <NotificationCount>9+</NotificationCount>
+        </NotificationIcon>
         Feed
       </LeftMiddleItem>
       <LeftMiddleItem
         onClick={() => handleActiveClick("messages")}
         style={{ color: active === "messages" ? "#0000ff" : "inherit" }}
       >
-        <SendOutlinedIcon />
+        <NotificationIcon>
+          <SendOutlinedIcon />
+          <NotificationCount>3</NotificationCount>
+        </NotificationIcon>
         Messages
+      </LeftMiddleItem>
+      <LeftMiddleItem
+        onClick={() => handleActiveClick("notifications")}
+        style={{ color: active === "notifications" ? "#0000ff" : "inherit" }}
+      >
+        <NotificationIcon>
+          <NotificationsNoneOutlinedIcon style={{ fontSize: "25px" }} />
+          <NotificationCount>8</NotificationCount>
+        </NotificationIcon>
+        Notifications
       </LeftMiddleItem>
       {darkmode ? (
         <LeftMiddleItem onClick={handleToggle}>
@@ -153,6 +191,7 @@ const HomeLeft = () => {
         <BookmarkBorderOutlinedIcon />
         Saved Posts
       </LeftMiddleItem>
+
       <Divider />
 
       {/* Left Bottom */}

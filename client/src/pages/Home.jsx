@@ -184,7 +184,7 @@ const Home = () => {
       {/* THE MIDDLE SECTION IS DIVIDED INTO THREE */}
       <Middle>
         {/* THIS IS SECTION ONE, HERE YOU CAN SEARCH AND CREATE POSTS*/}
-        <TopContainer>
+        {/* <TopContainer>
           <SearchContainer>
             <SearchOutlinedIcon style={{ fontSize: "18px" }} />
             <SearchInput type="text" placeholder="Search" />
@@ -193,7 +193,7 @@ const Home = () => {
             <AddOutlinedIcon />
             Create new post
           </Button>
-        </TopContainer>
+        </TopContainer> */}
 
         {/* THIS IS SECTION 2, IT CONTAINS THE STORIES */}
         <StoriesContainer>
