@@ -176,6 +176,10 @@ const P = styled.p``;
 const HomeRight = ({ theme }) => {
   return (
     <Container>
+      {/* THE RIGHT SIDE OF THE HOME PAGE CONSIST OF THREE SECTIONS: THE TOP, THE
+      MIDDLE AND THE BOTTOM SECTION */}
+
+      {/* THIS IS THE TOP SECTION */}
       <RightHeadSpan>
         Requests
         <RightHeadSpanb>2</RightHeadSpanb>
@@ -209,6 +213,9 @@ const HomeRight = ({ theme }) => {
         </Info>
       </RightItem>
       <Divider />
+
+      {/* THIS IS THE MIDDLE SECTION, AND IT IS DIVIDED INTO TWO SECTIONS */}
+      {/* THIS IS THE FIRST SECTION OF THE MIDDLE SECTION */}
       <RightHeadSpan>Suggestions for you</RightHeadSpan>
       <RightItem>
         <Info>
@@ -242,6 +249,8 @@ const HomeRight = ({ theme }) => {
       </RightItem>
       <Button2>View All</Button2>
       <Divider />
+
+      {/* THIS IS THE SECOND SECTION IN THE MIDDLE SECTION */}
       <ActiveNowContainer>
         <ProfileImages>
           <ActiveProfile src={Ayomide} alt="ActiveProfileImage" />
@@ -258,6 +267,8 @@ const HomeRight = ({ theme }) => {
         <span style={{ marginLeft: "-10px" }}>Active now on your profile</span>
       </ActiveNowContainer>
       <Divider />
+
+      {/* THIS IS THE BOTTOM OF THE RIGHT SIDE OF THE HOME PAGE */}
       <Pre>
         <P>
           About {"    "} Accessibility {"    "} Help Center

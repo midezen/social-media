@@ -132,6 +132,8 @@ const Post = () => {
 
   return (
     <Container>
+      {/* THE POST CONTAINER IS DIVIDED INTO THREE PARTS: THE TOP, THE MIDDLE AND THE BOTTOM */}
+      {/* THIS IS THE TOP SECTION, IT CONTAINS THE PROFILE INFO OF THE POST OWNER */}
       <Top>
         <TopLeft>
           <ProfilePic src={Ayomide} alt="profile picture" />
@@ -142,6 +144,9 @@ const Post = () => {
         </TopLeft>
         <MoreHorizOutlinedIcon style={{ fontSize: "18px" }} />
       </Top>
+
+      {/* THIS IS THE MIDDLE SECTION, IT CONTAINS THE POST IMAGE
+      THE POST DESCRIPTION AND THE HASHTAGS */}
       <Middle>
         <PostImage
           src="https://images.unsplash.com/photo-1713714614660-18a216d92281?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyfHx8ZW58MHx8fHx8"
@@ -162,6 +167,8 @@ const Post = () => {
           <Hashtags>#lorem #ipsum #text</Hashtags>
         </PostDesc>
       </Middle>
+
+      {/* THIS IS THE BOTTOM SECTION, IT CONTAINS LIKE, COMMENT, AND SAVED */}
       <Bottom>
         <Items>
           <ItemsLeft>

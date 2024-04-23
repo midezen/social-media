@@ -1,7 +1,9 @@
 import styled from "styled-components";
 import Ayomide from "../img/Ayomide 2.png";
 
-const Container = styled.div``;
+const Container = styled.div`
+  margin-right: 30px;
+`;
 
 const Top = styled.div`
   display: flex;
@@ -37,7 +39,7 @@ const Span2 = styled.span`
 
 const TopBottom = styled.div`
   display: flex;
-  gap: 70px;
+  gap: 50px;
   align-items: center;
 `;
 
@@ -46,6 +48,7 @@ const TopBottomItem = styled.div`
   flex-direction: column;
   align-items: center;
   cursor: pointer;
+  margin-left: 7px;
 `;
 
 const Span3 = styled.span`

@@ -2,8 +2,8 @@ import styled from "styled-components";
 
 const Container = styled.div``;
 
-const Stories = () => {
+const Story = () => {
   return <Container></Container>;
 };
 
-export default Stories;
+export default Story;
