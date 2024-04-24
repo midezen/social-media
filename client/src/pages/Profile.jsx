@@ -4,11 +4,15 @@ import Ayomide from "../img/Ayomide 2.png";
 import CameraAltOutlinedIcon from "@mui/icons-material/CameraAltOutlined";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import { useState } from "react";
+import CreatePost from "../components/CreatePost";
+import Post from "../components/Post";
 
 const Container = styled.div`
   background-color: ${({ theme }) => theme.bgSoft};
   width: 100%;
   color: ${({ theme }) => theme.text};
+  padding-top: 30px;
+  margin-top: -8px;
 `;
 
 const Top = styled.div`
@@ -156,7 +160,24 @@ const Friends = styled.span`
   cursor: pointer;
 `;
 
-const Bottom = styled.div``;
+const Bottom = styled.div`
+  width: 60%;
+  margin: auto;
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
+`;
+
+const BottomLeft = styled.div`
+  width: 40%;
+`;
+
+const BottomRight = styled.div`
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+`;
 
 const Profile = () => {
   const [tab, setTab] = useState("posts");
@@ -222,8 +243,16 @@ const Profile = () => {
         </Wrapper>
       </Top>
       <Bottom>
-        <BottomLeft></BottomLeft>
-        <BottomRight></BottomRight>
+        <BottomLeft>left</BottomLeft>
+        <BottomRight>
+          <CreatePost />
+          <Post />
+          <Post />
+          <Post />
+          <Post />
+          <Post />
+          <Post />
+        </BottomRight>
       </Bottom>
     </Container>
   );

@@ -9,7 +9,6 @@ import CommentOutlinedIcon from "@mui/icons-material/CommentOutlined";
 import BookmarkBorderOutlinedIcon from "@mui/icons-material/BookmarkBorderOutlined";
 
 const Container = styled.div`
-  width: 100%;
   background-color: ${({ theme }) => theme.bg};
   border-radius: 12px;
   padding: 12px;
