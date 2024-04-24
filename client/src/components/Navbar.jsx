@@ -19,6 +19,9 @@ const Container = styled.div`
   justify-content: space-between;
   padding: 20px;
   color: ${({ theme }) => theme.text};
+  position: sticky;
+  top: 0;
+  z-index: 999;
 `;
 
 const Left = styled.div`

@@ -5,10 +5,10 @@ import GroupAddOutlinedIcon from "@mui/icons-material/GroupAddOutlined";
 const Container = styled.div`
   width: 30%;
   position: sticky;
-  top: 30px;
+  top: 90px;
   overflow-y: scroll;
   overflow-x: hidden;
-  height: Calc(100vh - 40px);
+  height: Calc(100vh - 120px);
   &::-webkit-scrollbar {
     width: 7px;
   }
