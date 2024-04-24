@@ -48,7 +48,6 @@ const Input = styled.input`
 
 const Divider = styled.hr`
   width: 90%;
-  color: gray;
   margin: auto;
   margin-top: 10px;
 `;

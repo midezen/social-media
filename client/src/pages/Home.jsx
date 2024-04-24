@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import HomeLeft from "../components/HomeLeft";
 import HomeRight from "../components/HomeRight";
-import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import Ayomide from "../img/Ayomide 2.png";
 import { useState } from "react";
@@ -28,38 +27,6 @@ const TopContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-`;
-
-const SearchContainer = styled.div`
-  padding: 16px;
-  border-radius: 12px;
-  background-color: black;
-  opacity: 0.7;
-  font-size: 14px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  color: white;
-`;
-
-const SearchInput = styled.input`
-  outline: 0;
-  background-color: transparent;
-  border: none;
-  color: white;
-`;
-
-const Button = styled.button`
-  background: ${({ theme }) => theme.bbg};
-  border: none;
-  border-radius: 12px;
-  padding: 8px;
-  display: flex;
-  align-items: center;
-  color: white;
-  font-weight: bold;
-  gap: 10px;
-  cursor: pointer;
 `;
 
 const StoriesContainer = styled.div`
@@ -184,18 +151,6 @@ const Home = () => {
 
       {/* THE MIDDLE SECTION IS DIVIDED INTO THREE */}
       <Middle>
-        {/* THIS IS SECTION ONE, HERE YOU CAN SEARCH AND CREATE POSTS*/}
-        {/* <TopContainer>
-          <SearchContainer>
-            <SearchOutlinedIcon style={{ fontSize: "18px" }} />
-            <SearchInput type="text" placeholder="Search" />
-          </SearchContainer>
-          <Button>
-            <AddOutlinedIcon />
-            Create new post
-          </Button>
-        </TopContainer> */}
-
         {/* THIS IS SECTION 2, IT CONTAINS THE STORIES */}
         <StoriesContainer>
           <TopContainer>
