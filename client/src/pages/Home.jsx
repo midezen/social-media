@@ -6,6 +6,7 @@ import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import Ayomide from "../img/Ayomide 2.png";
 import { useState } from "react";
 import Post from "../components/Post";
+import CreatePost from "../components/CreatePost";
 
 const Container = styled.div`
   background-color: ${({ theme }) => theme.bgSoft};
@@ -239,6 +240,8 @@ const Home = () => {
             </StoryItem>
           </StoriesBottom>
         </StoriesContainer>
+
+        <CreatePost />
 
         {/* THIS IS SECTION 3, IT CONTAINS THE FEED */}
         <FeedContainer>
