@@ -10,7 +10,10 @@ import { useContext, useEffect, useState } from "react";
 import { DarkmodeContext } from "./contexts/darkmode.jsx";
 import Navbar from "./components/Navbar.jsx";
 
-const Container = styled.div``;
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
 
 const Layout = () => {
   return (

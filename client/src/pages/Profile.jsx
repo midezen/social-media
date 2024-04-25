@@ -6,13 +6,14 @@ import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import { useState } from "react";
 import CreatePost from "../components/CreatePost";
 import Post from "../components/Post";
+import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
+import GroupAddOutlinedIcon from "@mui/icons-material/GroupAddOutlined";
+import SendOutlinedIcon from "@mui/icons-material/SendOutlined";
 
 const Container = styled.div`
   background-color: ${({ theme }) => theme.bgSoft};
   width: 100%;
   color: ${({ theme }) => theme.text};
-  padding-top: 30px;
-  margin-top: -8px;
 `;
 
 const Top = styled.div`
@@ -74,11 +75,6 @@ const WrapperTopLeftInfo = styled.div`
 
 const H1 = styled.h1`
   margin-left: -10px;
-`;
-
-const InfoDesc = styled.p`
-  margin-left: -10px;
-  font-size: 16px;
 `;
 
 const FriendsCount = styled.span`
@@ -170,6 +166,103 @@ const Bottom = styled.div`
 
 const BottomLeft = styled.div`
   width: 40%;
+  display: flex;
+  flex-direction: column;
+`;
+
+const BottomLeftTop = styled.div`
+  display: flex;
+  flex-direction: column;
+  background-color: ${({ theme }) => theme.bg};
+  padding-top: 25px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  border-bottom-left-radius: 0px;
+  border-bottom-right-radius: 0px;
+`;
+
+const BottomLeftTopItems = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  justify-content: center;
+  width: 80%;
+`;
+
+const BottomLeftTopItem = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  align-items: center;
+  jusify-content: center;
+  background-color: ${({ theme }) => theme.bg};
+  box-shadow: 0px 1px 6px 3px ${({ theme }) => theme.bg};
+  -webkit-box-shadow: 0px 1px 6px 3px ${({ theme }) => theme.bg};
+  -moz-box-shadow: 0px 1px 6px 3px ${({ theme }) => theme.bg};
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  border: 1px solid ${({ theme }) => theme.bgSoft};
+  width: 70px;
+  cursor: pointer;
+  height: 70px;
+`;
+
+const FollowXCount = styled.span`
+  font-size: 16px;
+  font-weight: bold;
+  color: ${({ theme }) => theme.spT};
+`;
+
+const FollowX = styled.span`
+  font-size: 12px;
+  font-weight: bold;
+  color: ${({ theme }) => theme.textSoft};
+`;
+
+const Button2 = styled.button`
+  background: ${({ theme }) => theme.spT};
+  border: none;
+  border-radius: 10px;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  color: white;
+  font-weight: bold;
+  gap: 10px;
+  cursor: pointer;
+  justify-content: center;
+  margin-top: 20px;
+  width: 80%;
+`;
+
+const BottomLeftBottom = styled.div`
+  display: flex;
+  flex-direction: column;
+  background-color: ${({ theme }) => theme.bg};
+  padding-top: 25px;
+  border-radius: 12px;
+  padding-left: 25px;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+`;
+
+const InfoItem = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+`;
+
+const InfoItemHead = styled.span`
+  font-size: 16px;
+  font-weight: bold;
+`;
+
+const InfoItemDesc = styled.p`
+  font-size: 14px;
+  color: ${({ theme }) => theme.textSoft};
 `;
 
 const BottomRight = styled.div`
@@ -200,7 +293,6 @@ const Profile = () => {
               </ProfilePicContainer>
               <WrapperTopLeftInfo>
                 <H1>Ayomide Oluwadiya</H1>
-                <InfoDesc>I Love to code💻</InfoDesc>
                 <FriendsCount>1.4k Friends</FriendsCount>
                 <FriendsProfilePicContainer>
                   <FriendsProfilePic src={Ayomide} alt="friends profile pic" />
@@ -243,7 +335,72 @@ const Profile = () => {
         </Wrapper>
       </Top>
       <Bottom>
-        <BottomLeft>left</BottomLeft>
+        <BottomLeft>
+          <BottomLeftTop>
+            <BottomLeftTopItems>
+              <BottomLeftTopItem>
+                <PersonOutlineOutlinedIcon
+                  style={{ fontSize: "30px", color: "#0000ff" }}
+                />
+                <FollowXCount>200k</FollowXCount>
+                <FollowX>Followers</FollowX>
+              </BottomLeftTopItem>
+              <BottomLeftTopItem>
+                <PersonOutlineOutlinedIcon
+                  style={{ fontSize: "30px", color: "#0000ff" }}
+                />
+                <FollowXCount>2.1k</FollowXCount>
+                <FollowX>Following</FollowX>
+              </BottomLeftTopItem>
+            </BottomLeftTopItems>
+            <BottomLeftTopItems>
+              <BottomLeftTopItem>
+                <PersonOutlineOutlinedIcon
+                  style={{ fontSize: "30px", color: "#0000ff" }}
+                />
+                <FollowXCount>358</FollowXCount>
+                <FollowX>Posts</FollowX>
+              </BottomLeftTopItem>
+              <BottomLeftTopItem>
+                <PersonOutlineOutlinedIcon
+                  style={{
+                    fontSize: "30px",
+                    color: "#0000ff",
+                    marginTop: "9px",
+                  }}
+                />
+
+                <FollowX>Edit Profile</FollowX>
+              </BottomLeftTopItem>
+            </BottomLeftTopItems>
+            <Button2>
+              <GroupAddOutlinedIcon />
+              Follow Now
+            </Button2>
+            <Button2>
+              <SendOutlinedIcon />
+              Message
+            </Button2>
+          </BottomLeftTop>{" "}
+          <BottomLeftBottom>
+            <InfoItem>
+              <InfoItemHead>About</InfoItemHead>
+              <InfoItemDesc>I love to code 💻</InfoItemDesc>
+            </InfoItem>
+            <InfoItem>
+              <InfoItemHead>Mobile</InfoItemHead>
+              <InfoItemDesc>+2348165553289</InfoItemDesc>
+            </InfoItem>
+            <InfoItem>
+              <InfoItemHead>Email Address</InfoItemHead>
+              <InfoItemDesc>victordiya90@gmail.com</InfoItemDesc>
+            </InfoItem>
+            <InfoItem>
+              <InfoItemHead>Location</InfoItemHead>
+              <InfoItemDesc>Lagos, Nigeria</InfoItemDesc>
+            </InfoItem>
+          </BottomLeftBottom>
+        </BottomLeft>
         <BottomRight>
           <CreatePost />
           <Post />
