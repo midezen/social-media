@@ -182,7 +182,7 @@ const HomeLeft = () => {
         style={{ color: active === "friends" ? "#0000ff" : "inherit" }}
       >
         <PeopleAltOutlinedIcon />
-        Friends
+        Find Friends
       </LeftMiddleItem>
       <LeftMiddleItem
         onClick={() => handleActiveClick("saved posts")}
