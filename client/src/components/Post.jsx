@@ -141,7 +141,9 @@ const Post = () => {
             <ProfileUsername>@midzen</ProfileUsername>
           </ProfileInfo>
         </TopLeft>
-        <MoreHorizOutlinedIcon style={{ fontSize: "18px" }} />
+        <MoreHorizOutlinedIcon
+          style={{ fontSize: "18px", cursor: "pointer" }}
+        />
       </Top>
 
       {/* THIS IS THE MIDDLE SECTION, IT CONTAINS THE POST IMAGE

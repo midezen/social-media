@@ -12,6 +12,7 @@ import SendOutlinedIcon from "@mui/icons-material/SendOutlined";
 import Friend from "../components/Friend";
 import SuggestedSlider from "../components/SuggestedSlider";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import FriendsComponent from "../components/FriendsComponent";
 
 const Container = styled.div`
   background-color: ${({ theme }) => theme.bgSoft};
@@ -324,13 +325,14 @@ const ProfileRight = styled.div`
 
 const Profile = () => {
   const [tab, setTab] = useState("posts");
+  const [expand, setExpand] = useState(false);
 
   const handleTabClick = (prop) => {
     setTab(prop);
   };
 
   return (
-    <Container>
+    <Container style={{ height: tab === "friends" && "100vh" }}>
       <Top>
         <Wrapper>
           <WrapperTop>
@@ -358,13 +360,19 @@ const Profile = () => {
                 <AddOutlinedIcon />
                 Add to story
               </Button>
-              <DropArrowIconContainer>
-                <ExpandMoreIcon />
-              </DropArrowIconContainer>
+              {expand ? (
+                <DropArrowIconContainer onClick={() => setExpand(false)}>
+                  <KeyboardArrowUpIcon />
+                </DropArrowIconContainer>
+              ) : (
+                <DropArrowIconContainer onClick={() => setExpand(true)}>
+                  <ExpandMoreIcon />
+                </DropArrowIconContainer>
+              )}
             </WrapperTopRight>
           </WrapperTop>
           <Divider />
-          <SuggestedSlider />
+          <SuggestedSlider expand={expand} />
           <WrapperBottom>
             <Posts
               onClick={() => handleTabClick("posts")}
@@ -385,108 +393,112 @@ const Profile = () => {
           </WrapperBottom>
         </Wrapper>
       </Top>
-      <ProfileBottom>
-        <ProfileLeft>
-          <ProfileLeftTop>
-            <ProfileLeftTopItems>
-              <ProfileLeftTopItem>
-                <PersonOutlineOutlinedIcon
-                  style={{ fontSize: "30px", color: "#0000ff" }}
-                />
-                <FollowXCount>200k</FollowXCount>
-                <FollowX>Followers</FollowX>
-              </ProfileLeftTopItem>
-              <ProfileLeftTopItem>
-                <PersonOutlineOutlinedIcon
-                  style={{ fontSize: "30px", color: "#0000ff" }}
-                />
-                <FollowXCount>2.1k</FollowXCount>
-                <FollowX>Following</FollowX>
-              </ProfileLeftTopItem>
-            </ProfileLeftTopItems>
-            <ProfileLeftTopItems>
-              <ProfileLeftTopItem>
-                <PersonOutlineOutlinedIcon
-                  style={{ fontSize: "30px", color: "#0000ff" }}
-                />
-                <FollowXCount>358</FollowXCount>
-                <FollowX>Posts</FollowX>
-              </ProfileLeftTopItem>
-              <ProfileLeftTopItem>
-                <PersonOutlineOutlinedIcon
-                  style={{
-                    fontSize: "30px",
-                    color: "#0000ff",
-                    marginTop: "9px",
-                  }}
-                />
+      {tab === "posts" ? (
+        <ProfileBottom>
+          <ProfileLeft>
+            <ProfileLeftTop>
+              <ProfileLeftTopItems>
+                <ProfileLeftTopItem>
+                  <PersonOutlineOutlinedIcon
+                    style={{ fontSize: "30px", color: "#0000ff" }}
+                  />
+                  <FollowXCount>200k</FollowXCount>
+                  <FollowX>Followers</FollowX>
+                </ProfileLeftTopItem>
+                <ProfileLeftTopItem>
+                  <PersonOutlineOutlinedIcon
+                    style={{ fontSize: "30px", color: "#0000ff" }}
+                  />
+                  <FollowXCount>2.1k</FollowXCount>
+                  <FollowX>Following</FollowX>
+                </ProfileLeftTopItem>
+              </ProfileLeftTopItems>
+              <ProfileLeftTopItems>
+                <ProfileLeftTopItem>
+                  <PersonOutlineOutlinedIcon
+                    style={{ fontSize: "30px", color: "#0000ff" }}
+                  />
+                  <FollowXCount>358</FollowXCount>
+                  <FollowX>Posts</FollowX>
+                </ProfileLeftTopItem>
+                <ProfileLeftTopItem>
+                  <PersonOutlineOutlinedIcon
+                    style={{
+                      fontSize: "30px",
+                      color: "#0000ff",
+                      marginTop: "9px",
+                    }}
+                  />
 
-                <FollowX>Edit Profile</FollowX>
-              </ProfileLeftTopItem>
-            </ProfileLeftTopItems>
-            <Button2>
-              <GroupAddOutlinedIcon />
-              Follow Now
-            </Button2>
-            <Button2>
-              <SendOutlinedIcon />
-              Message
-            </Button2>
-          </ProfileLeftTop>{" "}
-          <ProfileLeftTopBottom>
-            <InfoItem>
-              <InfoItemHead>About</InfoItemHead>
-              <InfoItemDesc>I love to code 💻</InfoItemDesc>
-            </InfoItem>
-            <InfoItem>
-              <InfoItemHead>Mobile</InfoItemHead>
-              <InfoItemDesc>+2348165553289</InfoItemDesc>
-            </InfoItem>
-            <InfoItem>
-              <InfoItemHead>Email Address</InfoItemHead>
-              <InfoItemDesc>victordiya90@gmail.com</InfoItemDesc>
-            </InfoItem>
-            <InfoItem>
-              <InfoItemHead>Location</InfoItemHead>
-              <InfoItemDesc>Lagos, Nigeria</InfoItemDesc>
-            </InfoItem>
-          </ProfileLeftTopBottom>
-          <ProfileLeftMiddle>
-            <Heading>
-              <HeadingLeft>
-                <FriendsHead>Friends</FriendsHead>
-                <FriendsCount style={{ marginLeft: "0", fontWeight: "300" }}>
-                  4,305
-                </FriendsCount>
-              </HeadingLeft>
-              <HeadingRight>See all</HeadingRight>
-            </Heading>
-            <ProfileLeftMiddleItems>
-              <Friend />
-              <Friend />
-              <Friend />
-              <Friend />
-              <Friend />
-              <Friend />
-              <Friend />
-              <Friend />
-              <Friend />
-            </ProfileLeftMiddleItems>
-          </ProfileLeftMiddle>
-          <ProfileLeftBottom>
-            Privacy · Terms · Advertising · Ad Choices · Cookies · CTV © 2024
-          </ProfileLeftBottom>
-        </ProfileLeft>
-        <ProfileRight>
-          <CreatePost />
-          <Post />
-          <Post />
-          <Post />
-          <Post />
-          <Post />
-          <Post />
-        </ProfileRight>
-      </ProfileBottom>
+                  <FollowX>Edit Profile</FollowX>
+                </ProfileLeftTopItem>
+              </ProfileLeftTopItems>
+              <Button2>
+                <GroupAddOutlinedIcon />
+                Follow Now
+              </Button2>
+              <Button2>
+                <SendOutlinedIcon />
+                Message
+              </Button2>
+            </ProfileLeftTop>{" "}
+            <ProfileLeftTopBottom>
+              <InfoItem>
+                <InfoItemHead>About</InfoItemHead>
+                <InfoItemDesc>I love to code 💻</InfoItemDesc>
+              </InfoItem>
+              <InfoItem>
+                <InfoItemHead>Mobile</InfoItemHead>
+                <InfoItemDesc>+2348165553289</InfoItemDesc>
+              </InfoItem>
+              <InfoItem>
+                <InfoItemHead>Email Address</InfoItemHead>
+                <InfoItemDesc>victordiya90@gmail.com</InfoItemDesc>
+              </InfoItem>
+              <InfoItem>
+                <InfoItemHead>Location</InfoItemHead>
+                <InfoItemDesc>Lagos, Nigeria</InfoItemDesc>
+              </InfoItem>
+            </ProfileLeftTopBottom>
+            <ProfileLeftMiddle>
+              <Heading>
+                <HeadingLeft>
+                  <FriendsHead>Friends</FriendsHead>
+                  <FriendsCount style={{ marginLeft: "0", fontWeight: "300" }}>
+                    4,305
+                  </FriendsCount>
+                </HeadingLeft>
+                <HeadingRight>See all</HeadingRight>
+              </Heading>
+              <ProfileLeftMiddleItems>
+                <Friend />
+                <Friend />
+                <Friend />
+                <Friend />
+                <Friend />
+                <Friend />
+                <Friend />
+                <Friend />
+                <Friend />
+              </ProfileLeftMiddleItems>
+            </ProfileLeftMiddle>
+            <ProfileLeftBottom>
+              Privacy · Terms · Advertising · Ad Choices · Cookies · CTV © 2024
+            </ProfileLeftBottom>
+          </ProfileLeft>
+          <ProfileRight>
+            <CreatePost />
+            <Post />
+            <Post />
+            <Post />
+            <Post />
+            <Post />
+            <Post />
+          </ProfileRight>
+        </ProfileBottom>
+      ) : (
+        <FriendsComponent />
+      )}
     </Container>
   );
 };

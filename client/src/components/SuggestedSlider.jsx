@@ -10,6 +10,7 @@ const Container = styled.div`
   background-color: ${({ theme }) => theme.bg};
   position: relative;
   border-radius: 10px;
+  transition: all 0.3s ease;
 `;
 
 const Wrapper = styled.div`
@@ -77,7 +78,7 @@ const ArrowItem = styled.div`
   padding: 12px;
 `;
 
-const SuggestedSlider = () => {
+const SuggestedSlider = ({ expand }) => {
   const scrollRef = useRef(null);
   const [friendNameStore, setFriendNameStore] = useState("Ayomide Oluwadiya");
 
@@ -93,7 +94,7 @@ const SuggestedSlider = () => {
     }
   };
   return (
-    <Container>
+    <Container style={{ display: expand ? "flex" : "none" }}>
       <Wrapper ref={scrollRef}>
         <Item>
           <FriendPicture src={Ayomide} alt="Friend's Picture" />
