@@ -38,6 +38,12 @@ const LeftMiddleItem = styled.div`
   font-size: 14px;
   padding: 12px;
   cursor: pointer;
+  border-radius: 10px;
+  width: 80%;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.bg};
+  }
 `;
 
 const NotificationIcon = styled.div`

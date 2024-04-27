@@ -9,6 +9,7 @@ import Post from "../components/Post";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 import GroupAddOutlinedIcon from "@mui/icons-material/GroupAddOutlined";
 import SendOutlinedIcon from "@mui/icons-material/SendOutlined";
+import Friend from "../components/Friend";
 
 const Container = styled.div`
   background-color: ${({ theme }) => theme.bgSoft};
@@ -108,7 +109,7 @@ const WrapperTopRight = styled.div`
 `;
 
 const Button = styled.button`
-  background: ${({ theme }) => theme.bbg};
+  background: ${({ theme }) => theme.spT};
   border: none;
   border-radius: 12px;
   padding: 8px;
@@ -156,7 +157,7 @@ const Friends = styled.span`
   cursor: pointer;
 `;
 
-const Bottom = styled.div`
+const ProfileBottom = styled.div`
   width: 60%;
   margin: auto;
   display: flex;
@@ -164,13 +165,14 @@ const Bottom = styled.div`
   margin-top: 20px;
 `;
 
-const BottomLeft = styled.div`
-  width: 40%;
+const ProfileLeft = styled.div`
+  width: 45%;
   display: flex;
   flex-direction: column;
+  gap: 20px;
 `;
 
-const BottomLeftTop = styled.div`
+const ProfileLeftTop = styled.div`
   display: flex;
   flex-direction: column;
   background-color: ${({ theme }) => theme.bg};
@@ -182,7 +184,7 @@ const BottomLeftTop = styled.div`
   border-bottom-right-radius: 0px;
 `;
 
-const BottomLeftTopItems = styled.div`
+const ProfileLeftTopItems = styled.div`
   display: flex;
   align-items: center;
   gap: 30px;
@@ -190,7 +192,7 @@ const BottomLeftTopItems = styled.div`
   width: 80%;
 `;
 
-const BottomLeftTopItem = styled.div`
+const ProfileLeftTopItem = styled.div`
   display: flex;
   flex-direction: column;
   gap: 5px;
@@ -234,10 +236,10 @@ const Button2 = styled.button`
   cursor: pointer;
   justify-content: center;
   margin-top: 20px;
-  width: 80%;
+  width: 60%;
 `;
 
-const BottomLeftBottom = styled.div`
+const ProfileLeftTopBottom = styled.div`
   display: flex;
   flex-direction: column;
   background-color: ${({ theme }) => theme.bg};
@@ -246,6 +248,7 @@ const BottomLeftBottom = styled.div`
   padding-left: 25px;
   border-top-left-radius: 0px;
   border-top-right-radius: 0px;
+  margin-top: -20px;
 `;
 
 const InfoItem = styled.div`
@@ -265,8 +268,51 @@ const InfoItemDesc = styled.p`
   color: ${({ theme }) => theme.textSoft};
 `;
 
-const BottomRight = styled.div`
-  width: 60%;
+const ProfileLeftMiddle = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px 18px;
+  border-radius: 12px;
+  background-color: ${({ theme }) => theme.bg};
+`;
+
+const Heading = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+const HeadingLeft = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+`;
+
+const FriendsHead = styled.span`
+  font-size: 18px;
+  font-weight: bold;
+`;
+
+const HeadingRight = styled.span`
+  font-size: 16px;
+  color: ${({ theme }) => theme.spT};
+  cursor: pointer;
+`;
+
+const ProfileLeftMiddleItems = styled.div`
+  display: grid;
+  grid-template-rows: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-gap: 8px;
+`;
+
+const ProfileLeftBottom = styled.span`
+  font-size: 12px;
+  color: ${({ theme }) => theme.textSoft};
+`;
+
+const ProfileRight = styled.div`
+  width: 55%;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -334,34 +380,34 @@ const Profile = () => {
           </WrapperBottom>
         </Wrapper>
       </Top>
-      <Bottom>
-        <BottomLeft>
-          <BottomLeftTop>
-            <BottomLeftTopItems>
-              <BottomLeftTopItem>
+      <ProfileBottom>
+        <ProfileLeft>
+          <ProfileLeftTop>
+            <ProfileLeftTopItems>
+              <ProfileLeftTopItem>
                 <PersonOutlineOutlinedIcon
                   style={{ fontSize: "30px", color: "#0000ff" }}
                 />
                 <FollowXCount>200k</FollowXCount>
                 <FollowX>Followers</FollowX>
-              </BottomLeftTopItem>
-              <BottomLeftTopItem>
+              </ProfileLeftTopItem>
+              <ProfileLeftTopItem>
                 <PersonOutlineOutlinedIcon
                   style={{ fontSize: "30px", color: "#0000ff" }}
                 />
                 <FollowXCount>2.1k</FollowXCount>
                 <FollowX>Following</FollowX>
-              </BottomLeftTopItem>
-            </BottomLeftTopItems>
-            <BottomLeftTopItems>
-              <BottomLeftTopItem>
+              </ProfileLeftTopItem>
+            </ProfileLeftTopItems>
+            <ProfileLeftTopItems>
+              <ProfileLeftTopItem>
                 <PersonOutlineOutlinedIcon
                   style={{ fontSize: "30px", color: "#0000ff" }}
                 />
                 <FollowXCount>358</FollowXCount>
                 <FollowX>Posts</FollowX>
-              </BottomLeftTopItem>
-              <BottomLeftTopItem>
+              </ProfileLeftTopItem>
+              <ProfileLeftTopItem>
                 <PersonOutlineOutlinedIcon
                   style={{
                     fontSize: "30px",
@@ -371,8 +417,8 @@ const Profile = () => {
                 />
 
                 <FollowX>Edit Profile</FollowX>
-              </BottomLeftTopItem>
-            </BottomLeftTopItems>
+              </ProfileLeftTopItem>
+            </ProfileLeftTopItems>
             <Button2>
               <GroupAddOutlinedIcon />
               Follow Now
@@ -381,8 +427,8 @@ const Profile = () => {
               <SendOutlinedIcon />
               Message
             </Button2>
-          </BottomLeftTop>{" "}
-          <BottomLeftBottom>
+          </ProfileLeftTop>{" "}
+          <ProfileLeftTopBottom>
             <InfoItem>
               <InfoItemHead>About</InfoItemHead>
               <InfoItemDesc>I love to code 💻</InfoItemDesc>
@@ -399,9 +445,34 @@ const Profile = () => {
               <InfoItemHead>Location</InfoItemHead>
               <InfoItemDesc>Lagos, Nigeria</InfoItemDesc>
             </InfoItem>
-          </BottomLeftBottom>
-        </BottomLeft>
-        <BottomRight>
+          </ProfileLeftTopBottom>
+          <ProfileLeftMiddle>
+            <Heading>
+              <HeadingLeft>
+                <FriendsHead>Friends</FriendsHead>
+                <FriendsCount style={{ marginLeft: "0", fontWeight: "300" }}>
+                  4,305
+                </FriendsCount>
+              </HeadingLeft>
+              <HeadingRight>See all</HeadingRight>
+            </Heading>
+            <ProfileLeftMiddleItems>
+              <Friend />
+              <Friend />
+              <Friend />
+              <Friend />
+              <Friend />
+              <Friend />
+              <Friend />
+              <Friend />
+              <Friend />
+            </ProfileLeftMiddleItems>
+          </ProfileLeftMiddle>
+          <ProfileLeftBottom>
+            Privacy · Terms · Advertising · Ad Choices · Cookies · CTV © 2024
+          </ProfileLeftBottom>
+        </ProfileLeft>
+        <ProfileRight>
           <CreatePost />
           <Post />
           <Post />
@@ -409,8 +480,8 @@ const Profile = () => {
           <Post />
           <Post />
           <Post />
-        </BottomRight>
-      </Bottom>
+        </ProfileRight>
+      </ProfileBottom>
     </Container>
   );
 };

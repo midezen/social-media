@@ -31,7 +31,7 @@ const ProfileImage = styled.img`
 
 const InputContainer = styled.div`
   display: flex;
-  background-color: lightgray;
+  background-color: ${({ theme }) => theme.input};
   color: black;
   flex: 1;
   border-radius: 30px;
@@ -44,6 +44,12 @@ const Input = styled.input`
   width: 100%;
   outline: 0;
   background-color: transparent;
+  color: ${({ theme }) => theme.text};
+
+  &::placeholder {
+    color: ${({ theme }) => theme.text};
+    opacity: 0.6;
+  }
 `;
 
 const Divider = styled.hr`

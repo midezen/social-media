@@ -10,6 +10,7 @@ import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNone
 import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
 import BookmarkBorderOutlinedIcon from "@mui/icons-material/BookmarkBorderOutlined";
 import { useContext, useState } from "react";
+import { Link } from "react-router-dom";
 
 const Container = styled.div`
   background-color: ${({ theme }) => theme.bg};
@@ -44,12 +45,12 @@ const H1 = styled.h1`
 const SearchContainer = styled.div`
   padding: 10px;
   border-radius: 12px;
-  background-color: lightgray;
+  background-color: ${({ theme }) => theme.input};
   font-size: 14px;
   display: flex;
   align-items: center;
-  gap: 10px;
-  color: black;
+  gap: 5px;
+  color: ${({ theme }) => theme.text};
 `;
 
 const SearchInput = styled.input`
@@ -57,6 +58,12 @@ const SearchInput = styled.input`
   background-color: transparent;
   border: none;
   color: black;
+  color: ${({ theme }) => theme.text};
+
+  &::placeholder {
+    color: ${({ theme }) => theme.text};
+    opacity: 0.6;
+  }
 `;
 
 const Middle = styled.div`
@@ -76,7 +83,7 @@ const NavItem = styled.div`
   transition: all 0.2s ease-in-out;
 
   &:hover {
-    background-color: lightgray;
+    background-color: ${({ theme }) => theme.hover};
     scale: 1.1;
   }
 `;
@@ -149,16 +156,17 @@ const Navbar = () => {
         </SearchContainer>
       </Left>
       <Middle>
-        <NavItem
-          onClick={() => handleActiveClick("home")}
-          style={{ color: active === "home" ? "#0000ff" : "inherit" }}
-        >
-          <NotificationIcon>
-            <HomeOutlinedIcon style={{ fontSize: "25px" }} />
-            <NotificationCount>8</NotificationCount>
-          </NotificationIcon>
-        </NavItem>
-
+        <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
+          <NavItem
+            onClick={() => handleActiveClick("home")}
+            style={{ color: active === "home" ? "#0000ff" : "inherit" }}
+          >
+            <NotificationIcon>
+              <HomeOutlinedIcon style={{ fontSize: "25px" }} />
+              <NotificationCount>8</NotificationCount>
+            </NotificationIcon>
+          </NavItem>
+        </Link>
         <NavItem
           onClick={() => handleActiveClick("friends")}
           style={{ color: active === "friends" ? "#0000ff" : "inherit" }}

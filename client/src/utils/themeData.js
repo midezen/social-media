@@ -5,15 +5,19 @@ export const lightTheme = {
   textSoft: "#4e4e32",
   divider: "black",
   bbg: "linear-gradient(to right, skyblue, blue)",
-  spT: "#0000ff",
+  spT: "blue",
+  input: "lightgray",
+  hover: "lightgray",
 };
 
 export const darkTheme = {
-  bgSoft: "#070713",
-  bg: "black",
+  bg: "#202020",
+  bgSoft: "#181818",
   text: "white",
   textSoft: "lightgray",
   divider: "gray",
   bbg: "linear-gradient(to right, skyblue, blue)",
-  spT: "#0000ff",
+  spT: "blue",
+  input: "#666666",
+  hover: "#666666",
 };

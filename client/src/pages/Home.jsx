@@ -3,9 +3,11 @@ import HomeLeft from "../components/HomeLeft";
 import HomeRight from "../components/HomeRight";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import Ayomide from "../img/Ayomide 2.png";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Post from "../components/Post";
 import CreatePost from "../components/CreatePost";
+import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
+import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
 const Container = styled.div`
   background-color: ${({ theme }) => theme.bgSoft};
@@ -15,7 +17,7 @@ const Container = styled.div`
 `;
 
 const Middle = styled.div`
-  width: 60%;
+  width: 40%;
   height: 100%;
   padding: 0px 60px;
   display: flex;
@@ -49,8 +51,20 @@ const Button2 = styled.button`
 `;
 
 const StoriesBottom = styled.div`
+  width: 100%;
+  position: relative;
+`;
+
+const StoriesWrapper = styled.div`
   display: flex;
-  gap: 15px;
+  overflow-x: scroll;
+  width: 100%;
+  transition: all 0.5s;
+  scroll-behavior: smooth;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const StoryItem = styled.div`
@@ -62,6 +76,7 @@ const StoryItem = styled.div`
   color: ${({ theme }) => theme.textSoft};
   gap: 7px;
   font-weight: 300;
+  margin-right: 15px;
 `;
 
 const AddStory = styled.div`
@@ -94,6 +109,18 @@ const Story = styled.img`
     border-style: dotted;
     scale: 1.1;
   }
+`;
+
+const ArrowItem = styled.div`
+  display: flex;
+  background-color: ${({ theme }) => theme.hover};
+  color: ${({ theme }) => theme.text};
+  position: absolute;
+  top: 20px;
+  border-radius: 50%;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
 `;
 
 const FeedContainer = styled.div`
@@ -140,10 +167,24 @@ const Posts = styled.div`
 
 const Home = () => {
   const [active, setActive] = useState("all");
+  const scrollRef = useRef(null);
 
   const handleActive = (props) => {
     setActive(props);
   };
+
+  const scrollLeft = () => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollLeft -= 210;
+    }
+  };
+
+  const scrollRight = () => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollLeft += 210;
+    }
+  };
+
   return (
     <Container>
       {/* HERE WE HAVE THE LEFT SIDE OF THE HOME PAGE */}
@@ -158,41 +199,82 @@ const Home = () => {
             <Button2>Watch all</Button2>
           </TopContainer>
           <StoriesBottom>
-            <StoryItem>
-              <AddStory>
-                <AddOutlinedIcon style={{ fontSize: "14px" }} />
-              </AddStory>
-              Add Story
-            </StoryItem>
+            <StoriesWrapper ref={scrollRef}>
+              <StoryItem>
+                <AddStory>
+                  <AddOutlinedIcon style={{ fontSize: "14px" }} />
+                </AddStory>
+                Add Story
+              </StoryItem>
 
-            <StoryItem>
-              <Story src={Ayomide} />
-              Ayomide
-            </StoryItem>
-            <StoryItem>
-              <Story src={Ayomide} />
-              Ayomide
-            </StoryItem>
-            <StoryItem>
-              <Story src={Ayomide} />
-              Ayomide
-            </StoryItem>
-            <StoryItem>
-              <Story src={Ayomide} />
-              Ayomide
-            </StoryItem>
-            <StoryItem>
-              <Story src={Ayomide} />
-              Ayomide
-            </StoryItem>
-            <StoryItem>
-              <Story src={Ayomide} />
-              Ayomide
-            </StoryItem>
-            <StoryItem>
-              <Story src={Ayomide} />
-              Ayomide
-            </StoryItem>
+              <StoryItem>
+                <Story src={Ayomide} />
+                Ayomide
+              </StoryItem>
+              <StoryItem>
+                <Story src={Ayomide} />
+                Ayomide
+              </StoryItem>
+              <StoryItem>
+                <Story src={Ayomide} />
+                Ayomide
+              </StoryItem>
+              <StoryItem>
+                <Story src={Ayomide} />
+                Ayomide
+              </StoryItem>
+              <StoryItem>
+                <Story src={Ayomide} />
+                Ayomide
+              </StoryItem>
+              <StoryItem>
+                <Story src={Ayomide} />
+                Ayomide
+              </StoryItem>
+              <StoryItem>
+                <Story src={Ayomide} />
+                Ayomide
+              </StoryItem>
+              <StoryItem>
+                <Story src={Ayomide} />
+                Ayomide
+              </StoryItem>
+              <StoryItem>
+                <Story src={Ayomide} />
+                Ayomide
+              </StoryItem>
+              <StoryItem>
+                <Story src={Ayomide} />
+                Ayomide
+              </StoryItem>
+              <StoryItem>
+                <Story src={Ayomide} />
+                Ayomide
+              </StoryItem>
+              <StoryItem>
+                <Story src={Ayomide} />
+                Ayomide
+              </StoryItem>
+            </StoriesWrapper>
+
+            <ArrowItem
+              style={{
+                left: "0",
+                // display: scrollRef.current.scrollLeft < 0 ? "none" : "flex",
+              }}
+              onClick={scrollLeft}
+            >
+              <KeyboardArrowLeftIcon />
+            </ArrowItem>
+            <ArrowItem
+              style={{
+                right: "0",
+                // display: scrollRef.current.scrollLeft > 0 ? "none" : "flex",
+              }}
+              onClick={scrollRight}
+            >
+              <KeyboardArrowRightIcon />
+            </ArrowItem>
           </StoriesBottom>
         </StoriesContainer>
 
