@@ -22,7 +22,7 @@ const FriendName = styled.span`
 const Friend = () => {
   return (
     <Container>
-      <FriendPicture src={Ayomide} />
+      <FriendPicture src={Ayomide} alt="Friend's Picture" />
       <FriendName>Ayomide Oluwadiya</FriendName>
     </Container>
   );

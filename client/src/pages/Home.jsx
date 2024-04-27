@@ -260,7 +260,6 @@ const Home = () => {
             <ArrowItem
               style={{
                 left: "0",
-                // display: scrollRef.current.scrollLeft < 0 ? "none" : "flex",
               }}
               onClick={scrollLeft}
             >
@@ -269,7 +268,6 @@ const Home = () => {
             <ArrowItem
               style={{
                 right: "0",
-                // display: scrollRef.current.scrollLeft > 0 ? "none" : "flex",
               }}
               onClick={scrollRight}
             >

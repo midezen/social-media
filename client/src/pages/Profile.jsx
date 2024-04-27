@@ -10,11 +10,15 @@ import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined
 import GroupAddOutlinedIcon from "@mui/icons-material/GroupAddOutlined";
 import SendOutlinedIcon from "@mui/icons-material/SendOutlined";
 import Friend from "../components/Friend";
+import SuggestedSlider from "../components/SuggestedSlider";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 
 const Container = styled.div`
   background-color: ${({ theme }) => theme.bgSoft};
   width: 100%;
   color: ${({ theme }) => theme.text};
+  position: sticky;
+  top: 0;
 `;
 
 const Top = styled.div`
@@ -360,6 +364,7 @@ const Profile = () => {
             </WrapperTopRight>
           </WrapperTop>
           <Divider />
+          <SuggestedSlider />
           <WrapperBottom>
             <Posts
               onClick={() => handleTabClick("posts")}
