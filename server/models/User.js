@@ -11,6 +11,8 @@ const UserSchema = new mongoose.Schema(
     followers: { type: [String] },
     following: { type: [String] },
     savedPosts: { type: [String] },
+    friends: { type: [String] },
+    friendRequests: { type: [String] },
   },
   { timestamps: true }
 );

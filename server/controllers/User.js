@@ -90,3 +90,44 @@ export const unsavePost = async (req, res) => {
     res.status(500).json(err);
   }
 };
+
+export const sendFriendRequest = async (req, res) => {
+  try {
+    await User.findById(req.params.id, {
+      $push: { friendRequests: req.user.id },
+    });
+    res.status(200).json("request sent");
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
+export const deleteFriendRequest = async (req, res) => {
+  try {
+    await User.findById(req.user.id, { $pull: req.params.id });
+    res.status(200).json("request deleted");
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
+export const unFriend = async (req, res) => {
+  try {
+    await User.findById(req.user.id, { $pull: req.params.id });
+    await User.findById(req.params.id, { $pull: req.user.id });
+    res.status(200).json("unfriend successful");
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
+export const AcceptFriendRequest = async (req, res) => {
+  try {
+    await User.findById(req.user.id, { $push: { friends: req.params.id } });
+
+    await User.findById(req.params.id, { $push: { friends: req.user.id } });
+    res.status(200).json("request accepted");
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
