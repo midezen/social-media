@@ -3,7 +3,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Ayomide from "../img/Ayomide 2.png";
 import CameraAltOutlinedIcon from "@mui/icons-material/CameraAltOutlined";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CreatePost from "../components/CreatePost";
 import Post from "../components/Post";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
@@ -320,6 +320,7 @@ const ProfileRight = styled.div`
   width: 55%;
   display: flex;
   flex-direction: column;
+  margin-bottom: 20px;
   gap: 20px;
 `;
 
@@ -331,8 +332,14 @@ const Profile = () => {
     setTab(prop);
   };
 
+  const scrollY = window.scrollY;
+
+  useEffect(() => {
+    console.log(scrollY);
+  }, [scrollY]);
+
   return (
-    <Container style={{ height: tab === "friends" && "100vh" }}>
+    <Container style={{ height: tab === "friends" && "100%" }}>
       <Top>
         <Wrapper>
           <WrapperTop>
@@ -460,7 +467,9 @@ const Profile = () => {
                 <InfoItemDesc>Lagos, Nigeria</InfoItemDesc>
               </InfoItem>
             </ProfileLeftTopBottom>
-            <ProfileLeftMiddle>
+            <ProfileLeftMiddle
+              style={{ position: "sticky", top: "60px", marginBottom: "20px" }}
+            >
               <Heading>
                 <HeadingLeft>
                   <FriendsHead>Friends</FriendsHead>
@@ -481,10 +490,11 @@ const Profile = () => {
                 <Friend />
                 <Friend />
               </ProfileLeftMiddleItems>
+              <ProfileLeftBottom>
+                Privacy · Terms · Advertising · Ad Choices · Cookies · CTV ©
+                2024
+              </ProfileLeftBottom>
             </ProfileLeftMiddle>
-            <ProfileLeftBottom>
-              Privacy · Terms · Advertising · Ad Choices · Cookies · CTV © 2024
-            </ProfileLeftBottom>
           </ProfileLeft>
           <ProfileRight>
             <CreatePost />

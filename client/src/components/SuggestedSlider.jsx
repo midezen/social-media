@@ -6,11 +6,10 @@ import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
 const Container = styled.div`
   width: 100%;
-  border: 0.5px solid lightgray;
+  border: 0.5px solid ${({ theme }) => theme.bgSoft};
   background-color: ${({ theme }) => theme.bg};
   position: relative;
   border-radius: 10px;
-  transition: all 0.3s ease;
 `;
 
 const Wrapper = styled.div`
@@ -29,9 +28,9 @@ const Item = styled.div`
   display: flex;
   flex-direction: column;
   gap: 5px;
-  border: 0.5px solid lightgray;
   padding-bottom: 10px;
   border-radius: 10px;
+  border: 0.5px solid ${({ theme }) => theme.bgSoft};
 `;
 
 const FriendPicture = styled.img`

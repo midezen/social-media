@@ -28,6 +28,7 @@ const Container = styled.div`
 
   &::-webkit-scrollbar-thumb {
     background: gray;
+    border-radius: 20px;
   }
 `;
 

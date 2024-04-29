@@ -13,7 +13,7 @@ const Container = styled.div`
   color: ${({ theme }) => theme.text};
 `;
 const Wrapper = styled.div`
-  width: 70%;
+  width: 80%;
   display: flex;
   gap: 50px;
   align-items: center;
@@ -76,22 +76,22 @@ const RegisterSpan = styled.span`
 `;
 
 const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-gap: 10px;
   align-items: center;
 `;
 
 const FormTop = styled.div`
-  display: flex;
-  gap: 10px;
+  display: grid;
+  grid-gap: 10px;
+  grid-template-columns: 1fr 1fr;
   width: 100%;
 `;
 
 const Input = styled.input`
-  width: 100%;
   padding: 15px;
-  border: 1px solid ${({ theme }) => theme.divider};
+  border: 1px solid ${({ theme }) => theme.bgSoft};
   outline: 0;
   border-radius: 10px;
   background: transparent;

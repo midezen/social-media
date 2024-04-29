@@ -66,7 +66,7 @@ const Right = styled.div`
   gap: 30px;
   align-items: center;
   background-color: ${({ theme }) => theme.bg};
-  padding: 40px;
+  padding: 50px;
   border-radius: 10px;
   justify-content: center;
 `;
@@ -86,7 +86,7 @@ const Form = styled.form`
 const Input = styled.input`
   width: 100%;
   padding: 15px;
-  border: 1px solid ${({ theme }) => theme.divider};
+  border: 1px solid ${({ theme }) => theme.bgSoft};
   outline: 0;
   border-radius: 10px;
   background: transparent;
