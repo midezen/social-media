@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import AuthRoute from "./routes/Auth.js";
 import UserRoute from "./routes/User.js";
 import PostRoute from "./routes/Post.js";
+import CommentRoute from "./routes/Comment.js";
 
 const app = express();
 
