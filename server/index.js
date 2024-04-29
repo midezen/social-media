@@ -1,6 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import authRoute from "./routes/Auth.js";
 
 const app = express();
 
@@ -20,6 +21,8 @@ mongoose
 app.get("/health", (req, res) => {
   res.send("server is running");
 });
+
+app.use("/api/auth", authRoute);
 
 app.listen(8000, () => {
   console.log("app is connected and listen on port 8000");
