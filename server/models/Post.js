@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const PostSchema = new mongoose.Schema(
   {
     userId: { type: String, require: true },
-    postPic: { type: String },
+    fileUrl: { type: String },
     postDesc: { type: String },
     hashTags: { type: [String] },
     likes: { type: [String] },
