@@ -1,6 +1,6 @@
-import Post from "../models/Post";
-import User from "../models/User";
-import { verifyToken } from "../verifyToken";
+import Post from "../models/Post.js";
+import User from "../models/User.js";
+import { verifyToken } from "../verifyToken.js";
 
 export const createPost = async (req, res) => {
   try {
@@ -21,6 +21,7 @@ export const updatePost = async (req, res) => {
         { $set: req.body },
         { new: true }
       );
+      res.status(200).json(updatedPost);
     } catch (err) {
       res.status(500).json(err);
     }
@@ -34,6 +35,7 @@ export const deletePost = async (req, res) => {
   if (post.userId === req.user.id) {
     try {
       await Post.findByIdAndDelete(req.params.id);
+      res.status(200).json("Post deleted successfully");
     } catch (err) {
       res.status(500).json(err);
     }

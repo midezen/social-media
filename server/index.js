@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import AuthRoute from "./routes/Auth.js";
 import UserRoute from "./routes/User.js";
+import PostRoute from "./routes/Post.js";
 
 const app = express();
 
@@ -25,6 +26,7 @@ app.get("/health", (req, res) => {
 
 app.use("/api/auth", AuthRoute);
 app.use("/api/users", UserRoute);
+app.use("/api/posts", PostRoute);
 
 app.listen(8000, () => {
   console.log("app is connected and listen on port 8000");
