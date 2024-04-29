@@ -28,6 +28,7 @@ app.get("/health", (req, res) => {
 app.use("/api/auth", AuthRoute);
 app.use("/api/users", UserRoute);
 app.use("/api/posts", PostRoute);
+app.use("/api/comments", CommentRoute);
 
 app.listen(8000, () => {
   console.log("app is connected and listen on port 8000");
