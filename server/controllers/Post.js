@@ -1,4 +1,6 @@
 import Post from "../models/Post";
+import User from "../models/User";
+import { verifyToken } from "../verifyToken";
 
 export const createPost = async (req, res) => {
   try {
@@ -28,7 +30,7 @@ export const updatePost = async (req, res) => {
 };
 
 export const deletePost = async (req, res) => {
-  const post = await findById(req.params.id);
+  const post = await Post.findById(req.params.id);
   if (post.userId === req.user.id) {
     try {
       await Post.findByIdAndDelete(req.params.id);
@@ -37,5 +39,36 @@ export const deletePost = async (req, res) => {
     }
   } else {
     res.status(403).json("Permission denied");
+  }
+};
+
+export const getPosts = async (req, res) => {
+  try {
+    if (req.query.following) {
+      verifyToken();
+      const user = await User.findById(req.user.id);
+      const following = user.following;
+      const list = Promise.all(
+        following.map((userID) => {
+          return Post.find({ userId: userID });
+        })
+      );
+      res.status(200).json(list);
+    } else if (req.query.saved) {
+      verifyToken();
+      const user = await User.findById(req.user.id);
+      const savedPosts = user.savedPosts;
+      const list = Promise.all(
+        savedPosts.map((savedPostId) => {
+          return Post.findById(savedPostId);
+        })
+      );
+      res.status(200).json(list);
+    } else {
+      const posts = await Post.find();
+      res.status(200).json(posts);
+    }
+  } catch (err) {
+    res.status(500).json(err);
   }
 };

@@ -290,7 +290,7 @@ const Home = () => {
                 active={active}
                 onClick={() => handleActive("latest")}
               >
-                Latest
+                Following
               </FeedButton2>
             </Buttons>
           </TopContainer>
