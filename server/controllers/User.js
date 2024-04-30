@@ -2,43 +2,32 @@ import Post from "../models/Post.js";
 import User from "../models/User.js";
 
 export const updateUser = async (req, res) => {
-  if (req.user.id === req.params.id) {
-    try {
-      if (req.body.password) {
-        const ciphertext = CryptoJS.AES.encrypt(
-          req.body.password,
-          process.env.encKey
-        ).toString();
-        req.body.password === ciphertext;
-      }
-
+  try {
+    if (req.params.id === req.user.id) {
       const updatedUser = await User.findByIdAndUpdate(
         req.params.id,
-        {
-          $set: req.body,
-        },
+        { $set: req.body },
         { new: true }
       );
-      const { password, ...others } = updatedUser;
-      res.status(200).json(others);
-    } catch (err) {
-      res.status(500).json(err);
+      res.status(200).json(updatedUser);
+    } else {
+      return res.status(403).json("Permission denied");
     }
-  } else {
-    res.status(403).json("Permission denied");
+  } catch (err) {
+    res.status(500).json(err);
   }
 };
 
 export const deleteUser = async (req, res) => {
-  if (req.user.id === req.params.id) {
-    try {
+  try {
+    if (req.params.id === req.user.id) {
       await User.findByIdAndDelete(req.params.id);
-      res.status(200).json("User deleted successfully");
-    } catch (err) {
-      res.status(500).json(err);
+      res.status(200).json("Successfully deleted user");
+    } else {
+      return res.status(403).json("Permission denied");
     }
-  } else {
-    res.status(403).json("Permission denied");
+  } catch (err) {
+    res.status(500).json(err);
   }
 };
 

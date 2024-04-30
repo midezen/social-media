@@ -13,34 +13,34 @@ export const createPost = async (req, res) => {
 };
 
 export const updatePost = async (req, res) => {
-  const post = await Post.findById(req.params.id);
-  if (post.userId === req.user.id) {
-    try {
+  try {
+    const post = await Post.findById(req.params.id);
+    if (post.userId === req.user.id) {
       const updatedPost = await Post.findByIdAndUpdate(
         req.params.id,
         { $set: req.body },
         { new: true }
       );
       res.status(200).json(updatedPost);
-    } catch (err) {
-      res.status(500).json(err);
+    } else {
+      return res.status(403).json("Permission denied");
     }
-  } else {
-    res.status(403).json("Permission denied");
+  } catch (err) {
+    res.status(500).json(err);
   }
 };
 
 export const deletePost = async (req, res) => {
-  const post = await Post.findById(req.params.id);
-  if (post.userId === req.user.id) {
-    try {
+  try {
+    const post = await Post.findById(req.params.id);
+    if (post.userId === req.user.id) {
       await Post.findByIdAndDelete(req.params.id);
-      res.status(200).json("Post deleted successfully");
-    } catch (err) {
-      res.status(500).json(err);
+      res.status(200).json("successfully deleted post");
+    } else {
+      return res.status(403).json("Permission denied");
     }
-  } else {
-    res.status(403).json("Permission denied");
+  } catch (err) {
+    res.status(500).json(err);
   }
 };
 

@@ -1,11 +1,11 @@
 import express from "express";
-import { verifyToken } from "../verifyToken";
+import { verifyToken } from "../verifyToken.js";
 import {
   createReply,
   deleteReply,
   getReplies,
   updateReply,
-} from "../controllers/Reply";
+} from "../controllers/Reply.js";
 
 const router = express.Router();
 
