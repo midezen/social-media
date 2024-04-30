@@ -1,4 +1,6 @@
+import Comment from "../models/Comment.js";
 import Post from "../models/Post.js";
+import Reply from "../models/Reply.js";
 import User from "../models/User.js";
 
 export const updateUser = async (req, res) => {
@@ -45,7 +47,7 @@ export const likePost = async (req, res) => {
     await Post.findById(req.params.id, { $push: { likes: req.user.id } });
     res.status(200).json("successfully liked post");
   } catch (err) {
-    res.status(200).json(err);
+    res.status(500).json(err);
   }
 };
 
@@ -54,7 +56,43 @@ export const unlikePost = async (req, res) => {
     await Post.findById(req.params.id, { $pull: { likes: req.user.id } });
     res.status(200).json("successfully unliked post");
   } catch (err) {
-    res.status(200).json(err);
+    res.status(500).json(err);
+  }
+};
+
+export const likeComment = async (req, res) => {
+  try {
+    await Comment.findById(req.params.id, { $push: { likes: req.user.id } });
+    res.status(200).json("successfully liked comment");
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
+export const unlikeComment = async (req, res) => {
+  try {
+    await Comment.findById(req.params.id, { $pull: { likes: req.user.id } });
+    res.status(200).json("successfully unliked comment");
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
+export const likeReply = async (req, res) => {
+  try {
+    await Reply.findById(req.params.id, { $push: { likes: req.user.id } });
+    res.status(200).json("successfully liked reply");
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
+export const unlikeReply = async (req, res) => {
+  try {
+    await Reply.findById(req.params.id, { $pull: { likes: req.user.id } });
+    res.status(200).json("successfully unliked reply");
+  } catch (err) {
+    res.status(500).json(err);
   }
 };
 
@@ -93,7 +131,9 @@ export const sendFriendRequest = async (req, res) => {
 
 export const deleteFriendRequest = async (req, res) => {
   try {
-    await User.findById(req.user.id, { $pull: req.params.id });
+    await User.findById(req.user.id, {
+      $pull: { friendRequests: req.params.id },
+    });
     res.status(200).json("request deleted");
   } catch (err) {
     res.status(500).json(err);
@@ -102,8 +142,8 @@ export const deleteFriendRequest = async (req, res) => {
 
 export const unFriend = async (req, res) => {
   try {
-    await User.findById(req.user.id, { $pull: req.params.id });
-    await User.findById(req.params.id, { $pull: req.user.id });
+    await User.findById(req.user.id, { $pull: { friends: req.params.id } });
+    await User.findById(req.params.id, { $pull: { friends: req.user.id } });
     res.status(200).json("unfriend successful");
   } catch (err) {
     res.status(500).json(err);
