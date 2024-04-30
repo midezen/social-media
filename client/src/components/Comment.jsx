@@ -3,11 +3,13 @@ import Ayomide from "../img/Ayomide 2.png";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import { useState } from "react";
+import Reply from "./Reply";
 
 const Container = styled.div`
   margin-top: 10px;
   display: flex;
   flex-direction: column;
+  margin-right: 10px;
 `;
 
 const Top = styled.div`
@@ -30,7 +32,9 @@ const TopCenter = styled.span`
   gap: 8px;
 `;
 
-const Desc = styled.p``;
+const Desc = styled.p`
+  text-align: justify;
+`;
 
 const Username = styled.span`
   font-weight: bold;
@@ -87,6 +91,7 @@ const Replies = styled.div`
 `;
 const Comment = () => {
   const [liked, setLiked] = useState(false);
+  const [showReply, setShowReply] = useState(false);
   return (
     <Container>
       <Top>
@@ -123,8 +128,20 @@ const Comment = () => {
         )}
       </Top>
       <Bottom>
-        <BottomSpan>--- View replies</BottomSpan>
-        <Replies>Replies</Replies>
+        {showReply ? (
+          <BottomSpan onClick={() => setShowReply(false)}>
+            --- Hide replies
+          </BottomSpan>
+        ) : (
+          <BottomSpan onClick={() => setShowReply(true)}>
+            --- Show replies
+          </BottomSpan>
+        )}
+
+        <Replies style={{ display: showReply ? "flex" : "none" }}>
+          <Reply />
+          <Reply />
+        </Replies>
       </Bottom>
     </Container>
   );

@@ -288,7 +288,7 @@ const Post = () => {
             ) : (
               <BookmarkBorderOutlinedIcon
                 onClick={() => setSaved(!saved)}
-                style={{ fontSize: "24px", color: "#0000ff" }}
+                style={{ fontSize: "24px" }}
               />
             )}
           </ItemsRight>
@@ -340,6 +340,8 @@ const Post = () => {
               />
             </Top>
             <Comments>
+              <Comment />
+              <Comment />
               <Comment />
             </Comments>
             <InputContainer>
