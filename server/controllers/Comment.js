@@ -43,6 +43,6 @@ export const deleteComment = async (req, res) => {
 };
 
 export const getComments = async (req, res) => {
-  const comments = await Comment.find();
+  const comments = await Comment.find({ postId: req.params.postId });
   res.status(200).json(comments);
 };

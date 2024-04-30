@@ -44,7 +44,7 @@ export const deleteReply = async (req, res) => {
 
 export const getReplies = async (req, res) => {
   try {
-    const replies = await Reply.find();
+    const replies = await Reply.find({ commentId: req.params.commentId });
     res.status(200).json(replies);
   } catch (err) {
     res.status(500).json(err);
