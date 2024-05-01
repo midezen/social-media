@@ -44,7 +44,9 @@ export const getUser = async (req, res) => {
 
 export const likePost = async (req, res) => {
   try {
-    await Post.findById(req.params.id, { $push: { likes: req.user.id } });
+    await Post.findByIdAndUpdate(req.params.PostId, {
+      $push: { likes: req.user.id },
+    });
     res.status(200).json("successfully liked post");
   } catch (err) {
     res.status(500).json(err);
@@ -53,7 +55,9 @@ export const likePost = async (req, res) => {
 
 export const unlikePost = async (req, res) => {
   try {
-    await Post.findById(req.params.id, { $pull: { likes: req.user.id } });
+    await Post.findByIdAndUpdate(req.params.PostId, {
+      $pull: { likes: req.user.id },
+    });
     res.status(200).json("successfully unliked post");
   } catch (err) {
     res.status(500).json(err);
@@ -62,7 +66,9 @@ export const unlikePost = async (req, res) => {
 
 export const likeComment = async (req, res) => {
   try {
-    await Comment.findById(req.params.id, { $push: { likes: req.user.id } });
+    await Comment.findByIdAndUpdate(req.params.CommentId, {
+      $push: { likes: req.user.id },
+    });
     res.status(200).json("successfully liked comment");
   } catch (err) {
     res.status(500).json(err);
@@ -71,7 +77,9 @@ export const likeComment = async (req, res) => {
 
 export const unlikeComment = async (req, res) => {
   try {
-    await Comment.findById(req.params.id, { $pull: { likes: req.user.id } });
+    await Comment.findByIdAndUpdate(req.params.CommentId, {
+      $pull: { likes: req.user.id },
+    });
     res.status(200).json("successfully unliked comment");
   } catch (err) {
     res.status(500).json(err);
@@ -80,7 +88,9 @@ export const unlikeComment = async (req, res) => {
 
 export const likeReply = async (req, res) => {
   try {
-    await Reply.findById(req.params.id, { $push: { likes: req.user.id } });
+    await Reply.findByIdAndUpdate(req.params.ReplyId, {
+      $push: { likes: req.user.id },
+    });
     res.status(200).json("successfully liked reply");
   } catch (err) {
     res.status(500).json(err);
@@ -89,7 +99,9 @@ export const likeReply = async (req, res) => {
 
 export const unlikeReply = async (req, res) => {
   try {
-    await Reply.findById(req.params.id, { $pull: { likes: req.user.id } });
+    await Reply.findByIdAndUpdate(req.params.ReplyId, {
+      $pull: { likes: req.user.id },
+    });
     res.status(200).json("successfully unliked reply");
   } catch (err) {
     res.status(500).json(err);
@@ -98,8 +110,8 @@ export const unlikeReply = async (req, res) => {
 
 export const savePost = async (req, res) => {
   try {
-    await User.findById(req.user.id, {
-      $push: { savedPosts: req.params.id },
+    await User.findByIdAndUpdate(req.user.id, {
+      $push: { savedPosts: req.params.PostId },
     });
     res.status(200).json("Post saved successfully");
   } catch (err) {
@@ -109,7 +121,7 @@ export const savePost = async (req, res) => {
 
 export const unsavePost = async (req, res) => {
   try {
-    await User.findById(req.user.id, {
+    await User.findByIdAndUpdate(req.user.PostId, {
       $pull: { savedPosts: req.params.id },
     });
     res.status(200).json("successfully unsaved post");

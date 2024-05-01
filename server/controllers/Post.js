@@ -50,22 +50,22 @@ export const getPosts = async (req, res) => {
       verifyToken();
       const user = await User.findById(req.user.id);
       const following = user.following;
-      const list = Promise.all(
+      const list = await Promise.all(
         following.map((userID) => {
           return Post.find({ userId: userID });
         })
       );
-      res.status(200).json(list);
+      res.status(200).json(list.flat());
     } else if (req.query.saved) {
       verifyToken();
       const user = await User.findById(req.user.id);
       const savedPosts = user.savedPosts;
-      const list = Promise.all(
+      const list = await Promise.all(
         savedPosts.map((savedPostId) => {
           return Post.findById(savedPostId);
         })
       );
-      res.status(200).json(list);
+      res.status(200).json(list.flat());
     } else {
       const posts = await Post.find();
       res.status(200).json(posts);
