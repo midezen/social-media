@@ -3,7 +3,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Ayomide from "../img/Ayomide 2.png";
 import CameraAltOutlinedIcon from "@mui/icons-material/CameraAltOutlined";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
-import { useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import CreatePost from "../components/CreatePost";
 import Post from "../components/Post";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
@@ -13,6 +13,9 @@ import Friend from "../components/Friend";
 import SuggestedSlider from "../components/SuggestedSlider";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import FriendsComponent from "../components/FriendsComponent";
+import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
+import { DarkmodeContext } from "../contexts/darkmode";
 
 const Container = styled.div`
   background-color: ${({ theme }) => theme.bgSoft};
@@ -324,19 +327,93 @@ const ProfileRight = styled.div`
   gap: 20px;
 `;
 
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  boxShadow: 24,
+};
+
+const TopSpan = styled.span`
+  display: flex;
+  justify-content: center;
+  font-size: 16px;
+  color: ${({ theme }) => theme.text};
+  font-weight: bold;
+`;
+
+const ModalItem = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+`;
+
+const ModalText = styled.span`
+  font-size: 14px;
+`;
+
+const InputContainer = styled.div`
+  width: 90%;
+  color: ${({ theme }) => theme.text};
+  border-bottom: 1px solid ${({ theme }) => theme.text};
+  background-color: ${({ theme }) => theme.hover};
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const Input = styled.input`
+  display: flex;
+  padding: 7px;
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+  border: none;
+  outline: 0;
+  color: ${({ theme }) => theme.text};
+`;
+
+const UpdateButtonContainer = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const UpdateButton = styled.button`
+  padding: 10px;
+  border: none;
+  background-color: ${({ theme }) => theme.spT};
+  color: white;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40%;
+  border-radius: 12px;
+  font-weight: bold;
+  cursor: pointer;
+`;
+
 const Profile = () => {
   const [tab, setTab] = useState("posts");
   const [expand, setExpand] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const { darkmode } = useContext(DarkmodeContext);
+
+  const handleModalOpen = () => {
+    setModalOpen(true);
+  };
+  const handleModalClose = () => {
+    setModalOpen(false);
+  };
 
   const handleTabClick = (prop) => {
     setTab(prop);
   };
-
-  const scrollY = window.scrollY;
-
-  useEffect(() => {
-    console.log(scrollY);
-  }, [scrollY]);
 
   return (
     <Container style={{ height: tab === "friends" && "100%" }}>
@@ -428,7 +505,7 @@ const Profile = () => {
                   <FollowXCount>358</FollowXCount>
                   <FollowX>Posts</FollowX>
                 </ProfileLeftTopItem>
-                <ProfileLeftTopItem>
+                <ProfileLeftTopItem onClick={handleModalOpen}>
                   <PersonOutlineOutlinedIcon
                     style={{
                       fontSize: "30px",
@@ -509,6 +586,62 @@ const Profile = () => {
       ) : (
         <FriendsComponent />
       )}
+      <Modal
+        open={modalOpen}
+        onClose={handleModalClose}
+        aria-labelledby="parent-modal-title"
+        aria-describedby="parent-modal-description"
+      >
+        <Box
+          sx={{ ...style, width: "30%", height: "70%" }}
+          style={{
+            backgroundColor: darkmode ? "#202020" : "white",
+            border: darkmode ? "1px solid #181818" : "1px solid #f5f5f0",
+            borderRadius: "12px",
+            display: "flex",
+            flexDirection: "column",
+            gap: "20px",
+            color: darkmode ? "white" : "black",
+            padding: "30px",
+            justifyContent: "center",
+          }}
+        >
+          <TopSpan>Edit Profile</TopSpan>
+          <ModalItem>
+            <ModalText>About</ModalText>
+            <InputContainer>
+              <Input type="textarea" />
+            </InputContainer>
+          </ModalItem>
+          <ModalItem>
+            <ModalText>Mobile</ModalText>
+            <InputContainer>
+              <Input type="text" />
+            </InputContainer>
+          </ModalItem>
+          <ModalItem>
+            <ModalText>Email Address</ModalText>
+            <InputContainer>
+              <Input type="text" />
+            </InputContainer>
+          </ModalItem>
+          <ModalItem>
+            <ModalText>Province</ModalText>
+            <InputContainer>
+              <Input type="text" />
+            </InputContainer>
+          </ModalItem>
+          <ModalItem>
+            <ModalText>Country</ModalText>
+            <InputContainer>
+              <Input type="text" />
+            </InputContainer>
+          </ModalItem>
+          <UpdateButtonContainer>
+            <UpdateButton>Update</UpdateButton>
+          </UpdateButtonContainer>
+        </Box>
+      </Modal>
     </Container>
   );
 };

@@ -10,18 +10,34 @@ const Container = styled.div`
   background-color: ${({ theme }) => theme.bg};
   position: relative;
   border-radius: 10px;
+  display: flex;
+  flex-direction: column;
 `;
 
 const Wrapper = styled.div`
   display: flex;
-  gap: 7px;
+  gap: 10px;
+  padding: 20px;
   overflow-x: scroll;
   scroll-behavior: smooth;
-  padding: 20px;
-
+  margin-top: -10px;
   &::-webkit-scrollbar {
     display: none;
   }
+`;
+
+const Span = styled.span`
+  font-size: 16px;
+  color: ${({ theme }) => theme.text};
+  font-weight: bold;
+  width: fit-content;
+  margin-left: 10px;
+  margin-top: 10px;
+`;
+
+const Items = styled.div`
+  display: flex;
+  gap: 7px;
 `;
 
 const Item = styled.div`
@@ -93,83 +109,88 @@ const SuggestedSlider = ({ expand }) => {
     }
   };
   return (
-    <Container style={{ display: expand ? "flex" : "none" }}>
-      <Wrapper ref={scrollRef}>
-        <Item>
-          <FriendPicture src={Ayomide} alt="Friend's Picture" />
-          <FriendName>{friendNameStore.slice(0, 18)}</FriendName>
-          <Button>Add Friend</Button>
-        </Item>
-        <Item>
-          <FriendPicture src={Ayomide} alt="Friend's Picture" />
-          <FriendName>{friendNameStore.slice(0, 18)}</FriendName>
-          <Button>Add Friend</Button>
-        </Item>
-        <Item>
-          <FriendPicture src={Ayomide} alt="Friend's Picture" />
-          <FriendName>{friendNameStore.slice(0, 18)}</FriendName>
-          <Button>Add Friend</Button>
-        </Item>
-        <Item>
-          <FriendPicture src={Ayomide} alt="Friend's Picture" />
-          <FriendName>{friendNameStore.slice(0, 18)}</FriendName>
-          <Button>Add Friend</Button>
-        </Item>
-        <Item>
-          <FriendPicture src={Ayomide} alt="Friend's Picture" />
-          <FriendName>{friendNameStore.slice(0, 18)}</FriendName>
-          <Button>Add Friend</Button>
-        </Item>
-        <Item>
-          <FriendPicture src={Ayomide} alt="Friend's Picture" />
-          <FriendName>{friendNameStore.slice(0, 18)}</FriendName>
-          <Button>Add Friend</Button>
-        </Item>
-        <Item>
-          <FriendPicture src={Ayomide} alt="Friend's Picture" />
-          <FriendName>{friendNameStore.slice(0, 18)}</FriendName>
-          <Button>Add Friend</Button>
-        </Item>
-        <Item>
-          <FriendPicture src={Ayomide} alt="Friend's Picture" />
-          <FriendName>{friendNameStore.slice(0, 18)}</FriendName>
-          <Button>Add Friend</Button>
-        </Item>
-        <Item>
-          <FriendPicture src={Ayomide} alt="Friend's Picture" />
-          <FriendName>{friendNameStore.slice(0, 18)}</FriendName>
-          <Button>Add Friend</Button>
-        </Item>
-        <Item>
-          <FriendPicture src={Ayomide} alt="Friend's Picture" />
-          <FriendName>{friendNameStore.slice(0, 18)}</FriendName>
-          <Button>Add Friend</Button>
-        </Item>
-        <Item>
-          <FriendPicture src={Ayomide} alt="Friend's Picture" />
-          <FriendName>{friendNameStore.slice(0, 18)}</FriendName>
-          <Button>Add Friend</Button>
-        </Item>
-      </Wrapper>
-      <ArrowItem
-        style={{
-          left: "0",
-          // display: scrollRef.current.scrollLeft < 0 ? "none" : "flex",
-        }}
-        onClick={scrollLeft}
-      >
-        <KeyboardArrowLeftIcon />
-      </ArrowItem>
-      <ArrowItem
-        style={{
-          right: "0",
-          // display: scrollRef.current.scrollLeft > 0 ? "none" : "flex",
-        }}
-        onClick={scrollRight}
-      >
-        <KeyboardArrowRightIcon />
-      </ArrowItem>
-    </Container>
+    <>
+      <Container style={{ display: expand ? "flex" : "none" }}>
+        <Span>Suggested for you</Span>
+        <Wrapper ref={scrollRef}>
+          <Items>
+            <Item>
+              <FriendPicture src={Ayomide} alt="Friend's Picture" />
+              <FriendName>{friendNameStore.slice(0, 18)}</FriendName>
+              <Button>Add Friend</Button>
+            </Item>
+            <Item>
+              <FriendPicture src={Ayomide} alt="Friend's Picture" />
+              <FriendName>{friendNameStore.slice(0, 18)}</FriendName>
+              <Button>Add Friend</Button>
+            </Item>
+            <Item>
+              <FriendPicture src={Ayomide} alt="Friend's Picture" />
+              <FriendName>{friendNameStore.slice(0, 18)}</FriendName>
+              <Button>Add Friend</Button>
+            </Item>
+            <Item>
+              <FriendPicture src={Ayomide} alt="Friend's Picture" />
+              <FriendName>{friendNameStore.slice(0, 18)}</FriendName>
+              <Button>Add Friend</Button>
+            </Item>
+            <Item>
+              <FriendPicture src={Ayomide} alt="Friend's Picture" />
+              <FriendName>{friendNameStore.slice(0, 18)}</FriendName>
+              <Button>Add Friend</Button>
+            </Item>
+            <Item>
+              <FriendPicture src={Ayomide} alt="Friend's Picture" />
+              <FriendName>{friendNameStore.slice(0, 18)}</FriendName>
+              <Button>Add Friend</Button>
+            </Item>
+            <Item>
+              <FriendPicture src={Ayomide} alt="Friend's Picture" />
+              <FriendName>{friendNameStore.slice(0, 18)}</FriendName>
+              <Button>Add Friend</Button>
+            </Item>
+            <Item>
+              <FriendPicture src={Ayomide} alt="Friend's Picture" />
+              <FriendName>{friendNameStore.slice(0, 18)}</FriendName>
+              <Button>Add Friend</Button>
+            </Item>
+            <Item>
+              <FriendPicture src={Ayomide} alt="Friend's Picture" />
+              <FriendName>{friendNameStore.slice(0, 18)}</FriendName>
+              <Button>Add Friend</Button>
+            </Item>
+            <Item>
+              <FriendPicture src={Ayomide} alt="Friend's Picture" />
+              <FriendName>{friendNameStore.slice(0, 18)}</FriendName>
+              <Button>Add Friend</Button>
+            </Item>
+            <Item>
+              <FriendPicture src={Ayomide} alt="Friend's Picture" />
+              <FriendName>{friendNameStore.slice(0, 18)}</FriendName>
+              <Button>Add Friend</Button>
+            </Item>
+          </Items>
+        </Wrapper>
+        <ArrowItem
+          style={{
+            left: "0",
+            // display: scrollRef.current.scrollLeft < 0 ? "none" : "flex",
+          }}
+          onClick={scrollLeft}
+        >
+          <KeyboardArrowLeftIcon />
+        </ArrowItem>
+        <ArrowItem
+          style={{
+            right: "0",
+            // display: scrollRef.current.scrollLeft > 0 ? "none" : "flex",
+          }}
+          onClick={scrollRight}
+        >
+          <KeyboardArrowRightIcon />
+        </ArrowItem>
+      </Container>
+    </>
   );
 };
 
