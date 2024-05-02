@@ -2,7 +2,7 @@ import Reply from "../models/Reply.js";
 
 export const createReply = async (req, res) => {
   try {
-    const newReply = new Reply();
+    const newReply = new Reply({ ...req.body, userId: req.user.id });
     const savedReply = await newReply.save();
     res.status(200).json(savedReply);
   } catch (err) {
