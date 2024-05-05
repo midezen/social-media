@@ -6,12 +6,14 @@ import UserRoute from "./routes/User.js";
 import PostRoute from "./routes/Post.js";
 import CommentRoute from "./routes/Comment.js";
 import ReplyRoute from "./routes/Reply.js";
+import cookieParser from "cookie-parser";
 
 const app = express();
 
 dotenv.config();
 
 app.use(express.json());
+app.use(cookieParser());
 
 mongoose
   .connect(process.env.mongoUri)

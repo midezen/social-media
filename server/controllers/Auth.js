@@ -7,7 +7,7 @@ dotenv.config();
 
 export const register = async (req, res) => {
   try {
-    const findUsername = await User.findOne({ username: req.body.username });
+    const findUsername = await User.findOne({ userName: req.body.userName });
     findUsername && res.status(403).json("username has been taken");
 
     const findEmail = await User.findOne({ email: req.body.email });
@@ -48,6 +48,17 @@ export const login = async (req, res) => {
       })
       .status(200)
       .json(others);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
+export const logout = async (req, res) => {
+  try {
+    res
+      .clearCookie("access_token")
+      .status(200)
+      .json("user logged out successfully");
   } catch (err) {
     res.status(500).json(err);
   }
