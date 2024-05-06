@@ -12,6 +12,6 @@ const router = express.Router();
 router.post("/createReply", verifyToken, createReply);
 router.put("/:id", verifyToken, updateReply);
 router.delete("/:id", verifyToken, deleteReply);
-router.get("/commentId", getReplies);
+router.get("/:commentId", getReplies);
 
 export default router;

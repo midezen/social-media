@@ -2,9 +2,9 @@ import mongoose from "mongoose";
 
 const ReplySchema = new mongoose.Schema(
   {
-    userId: { type: String, require: true },
-    commentId: { type: String },
-    replyDesc: { type: String },
+    userId: { type: String, required: true },
+    commentId: { type: String, required: true },
+    replyDesc: { type: String, required: true },
     likes: { type: [String] },
   },
   { timestamps: true }

@@ -2,10 +2,22 @@ import Comment from "../models/Comment.js";
 import Post from "../models/Post.js";
 import Reply from "../models/Reply.js";
 import User from "../models/User.js";
+import CryptoJS from "crypto-js";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 export const updateUser = async (req, res) => {
   try {
     if (req.params.id === req.user.id) {
+      if (req.body.password) {
+        const ciphertext = CryptoJS.AES.encrypt(
+          req.body.password,
+          process.env.encKey
+        ).toString();
+        req.body.password = ciphertext;
+      }
+
       const updatedUser = await User.findByIdAndUpdate(
         req.params.id,
         { $set: req.body },
@@ -37,6 +49,28 @@ export const getUser = async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
     res.status(200).json(user);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
+export const followUser = async (req, res) => {
+  try {
+    await User.findByIdAndUpdate(req.user.id, {
+      $push: { following: req.params.id },
+    });
+    res.status(200).json("successfully followed User");
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
+export const unfollowUser = async (req, res) => {
+  try {
+    await User.findByIdAndUpdate(req.user.id, {
+      $pull: { following: req.params.id },
+    });
+    res.status(200).json("successfully unfollowed User");
   } catch (err) {
     res.status(500).json(err);
   }
@@ -121,8 +155,8 @@ export const savePost = async (req, res) => {
 
 export const unsavePost = async (req, res) => {
   try {
-    await User.findByIdAndUpdate(req.user.PostId, {
-      $pull: { savedPosts: req.params.id },
+    await User.findByIdAndUpdate(req.user.id, {
+      $pull: { savedPosts: req.params.PostId },
     });
     res.status(200).json("successfully unsaved post");
   } catch (err) {
@@ -132,7 +166,7 @@ export const unsavePost = async (req, res) => {
 
 export const sendFriendRequest = async (req, res) => {
   try {
-    await User.findById(req.params.id, {
+    await User.findByIdAndUpdate(req.params.id, {
       $push: { friendRequests: req.user.id },
     });
     res.status(200).json("request sent");
@@ -143,7 +177,7 @@ export const sendFriendRequest = async (req, res) => {
 
 export const deleteFriendRequest = async (req, res) => {
   try {
-    await User.findById(req.user.id, {
+    await User.findByIdAndUpdate(req.user.id, {
       $pull: { friendRequests: req.params.id },
     });
     res.status(200).json("request deleted");
@@ -154,8 +188,12 @@ export const deleteFriendRequest = async (req, res) => {
 
 export const unFriend = async (req, res) => {
   try {
-    await User.findById(req.user.id, { $pull: { friends: req.params.id } });
-    await User.findById(req.params.id, { $pull: { friends: req.user.id } });
+    await User.findByIdAndUpdate(req.user.id, {
+      $pull: { friends: req.params.id },
+    });
+    await User.findByIdAndUpdate(req.params.id, {
+      $pull: { friends: req.user.id },
+    });
     res.status(200).json("unfriend successful");
   } catch (err) {
     res.status(500).json(err);
@@ -164,9 +202,15 @@ export const unFriend = async (req, res) => {
 
 export const AcceptFriendRequest = async (req, res) => {
   try {
-    await User.findById(req.user.id, { $push: { friends: req.params.id } });
+    await User.findByIdAndUpdate(req.user.id, {
+      $push: { friends: req.params.id },
+      $pull: { friendRequests: req.params.id },
+    });
 
-    await User.findById(req.params.id, { $push: { friends: req.user.id } });
+    await User.findByIdAndUpdate(req.params.id, {
+      $push: { friends: req.user.id },
+    });
+
     res.status(200).json("request accepted");
   } catch (err) {
     res.status(500).json(err);

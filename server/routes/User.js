@@ -4,6 +4,7 @@ import {
   AcceptFriendRequest,
   deleteFriendRequest,
   deleteUser,
+  followUser,
   getUser,
   likeComment,
   likePost,
@@ -11,6 +12,7 @@ import {
   savePost,
   sendFriendRequest,
   unFriend,
+  unfollowUser,
   unlikeComment,
   unlikePost,
   unlikeReply,
@@ -22,7 +24,9 @@ const router = express.Router();
 
 router.put("/:id", verifyToken, updateUser);
 router.delete("/:id", verifyToken, deleteUser);
-router.get("/:id", getUser);
+router.get("/:id", verifyToken, getUser);
+router.put("/followUser/:id", verifyToken, followUser);
+router.put("/unfollowUser/:id", verifyToken, unfollowUser);
 router.put("/likePost/:PostId", verifyToken, likePost);
 router.put("/unlikePost/:PostId", verifyToken, unlikePost);
 router.put("/likeComment/:CommentId", verifyToken, likeComment);

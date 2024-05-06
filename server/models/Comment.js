@@ -2,9 +2,9 @@ import mongoose from "mongoose";
 
 const CommentSchema = new mongoose.Schema(
   {
-    userId: { type: String, require: true },
-    postId: { type: String, require: true },
-    commentDesc: { type: String, require: true },
+    userId: { type: String, required: true },
+    postId: { type: String, required: true },
+    commentDesc: { type: String, required: true },
     likes: { type: [String] },
   },
   { timestamps: true }

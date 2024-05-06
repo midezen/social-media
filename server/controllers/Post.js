@@ -66,6 +66,10 @@ export const getPosts = async (req, res) => {
         })
       );
       res.status(200).json(list.flat());
+    } else if (req.query.timeline) {
+      verifyToken();
+      const timelinePosts = await Post.find({ userId: req.user.id });
+      res.status(200).json(timelinePosts);
     } else {
       const posts = await Post.find();
       res.status(200).json(posts);
