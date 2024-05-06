@@ -1,7 +1,10 @@
 import styled from "styled-components";
-import loginPic from "../img/login_pic.png";
 import fire from "../img/fire.png";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { registerUser } from "../utils/apiCalls/Auth";
+import { Link, useNavigate } from "react-router-dom";
+import { Start, Rejected } from "../redux/userSlice";
 
 const Container = styled.div`
   width: 100vw;
@@ -117,9 +120,35 @@ const Button = styled.button`
   border-radius: 10px;
   cursor: pointer;
   font-weight: bold;
+
+  &:disabled {
+    cursor: not-allowed;
+    background: lightgray;
+    color: black;
+    opacity: 0.9;
+  }
 `;
 
 const Register = () => {
+  const [userInfo, setUserInfo] = useState({});
+  const dispatch = useDispatch();
+  const loading = useSelector((state) => state.user.loading);
+  const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    setUserInfo((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    dispatch(Start());
+    try {
+      await registerUser(userInfo, dispatch, navigate);
+    } catch (err) {
+      dispatch(Rejected());
+      alert(err);
+    }
+  };
   return (
     <Container>
       <Wrapper>
@@ -140,21 +169,52 @@ const Register = () => {
           <RegisterSpan>Register</RegisterSpan>
           <Form>
             <FormTop>
-              <Input type="text" placeholder="First Name" require />
-              <Input type="text" placeholder="Last Name" require />
+              <Input
+                type="text"
+                placeholder="First Name"
+                require
+                name="firstName"
+                onChange={handleChange}
+              />
+              <Input
+                type="text"
+                placeholder="Last Name"
+                require
+                name="lastName"
+                onChange={handleChange}
+              />
             </FormTop>
 
-            <Input type="email" placeholder="Email" require />
-            <Input type="text" placeholder="Username" require />
-            <Input type="password" placeholder="Password" require />
+            <Input
+              type="email"
+              placeholder="Email"
+              require
+              name="email"
+              onChange={handleChange}
+            />
+            <Input
+              type="text"
+              placeholder="Username"
+              require
+              name="userName"
+              onChange={handleChange}
+            />
+            <Input
+              type="password"
+              placeholder="Password"
+              require
+              name="password"
+              onChange={handleChange}
+            />
           </Form>
           <Bottom>
             <Link to="/login" style={{ color: "blue" }}>
               <BottomSpan>Have an account? Click to sign in</BottomSpan>
             </Link>
-            <Link to="/login">
-              <Button>Register</Button>
-            </Link>
+
+            <Button disabled={loading} onClick={handleRegister}>
+              {loading ? "Loading..." : "Register"}
+            </Button>
           </Bottom>
         </Right>
       </Wrapper>

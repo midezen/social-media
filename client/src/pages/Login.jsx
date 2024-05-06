@@ -1,7 +1,11 @@
 import styled from "styled-components";
 import loginPic from "../img/login_pic.png";
 import fire from "../img/fire.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Rejected, Start } from "../redux/userSlice";
+import { loginUser } from "../utils/apiCalls/Auth";
 
 const Container = styled.div`
   width: 100vw;
@@ -112,9 +116,35 @@ const Button = styled.button`
   border-radius: 10px;
   cursor: pointer;
   font-weight: bold;
+
+  &:disabled {
+    color: black;
+    background: lightgray;
+    opacity: 0.9;
+    cursor: not-allowed;
+  }
 `;
 
 const Login = () => {
+  const [userInfo, setUserInfo] = useState({});
+  const dispatch = useDispatch();
+  const loading = useSelector((state) => state.user.loading);
+  const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    setUserInfo((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleLogin = async () => {
+    dispatch(Start());
+    try {
+      await loginUser(userInfo, dispatch, navigate);
+    } catch (err) {
+      dispatch(Rejected());
+      alert(err);
+    }
+  };
+
   return (
     <Container>
       <Wrapper>
@@ -134,8 +164,20 @@ const Login = () => {
         <Right>
           <LoginSpan>Login</LoginSpan>
           <Form>
-            <Input type="text" placeholder="Username" require />
-            <Input type="password" placeholder="Password" require />
+            <Input
+              type="text"
+              placeholder="Username"
+              require
+              name="userName"
+              onChange={handleChange}
+            />
+            <Input
+              type="password"
+              placeholder="Password"
+              require
+              name="password"
+              onChange={handleChange}
+            />
           </Form>
           <Bottom>
             <Link to="/register" style={{ color: "blue" }}>
@@ -144,9 +186,10 @@ const Login = () => {
                 click here to sign up
               </BottomSpan>
             </Link>
-            <Link to="/">
-              <Button>Login</Button>
-            </Link>
+
+            <Button disabled={loading} onClick={handleLogin}>
+              {loading ? "Loading..." : "Login"}
+            </Button>
           </Bottom>
         </Right>
       </Wrapper>

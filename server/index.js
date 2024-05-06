@@ -7,6 +7,7 @@ import PostRoute from "./routes/Post.js";
 import CommentRoute from "./routes/Comment.js";
 import ReplyRoute from "./routes/Reply.js";
 import cookieParser from "cookie-parser";
+import cors from "cors";
 
 const app = express();
 
@@ -14,6 +15,12 @@ dotenv.config();
 
 app.use(express.json());
 app.use(cookieParser());
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
 
 mongoose
   .connect(process.env.mongoUri)
