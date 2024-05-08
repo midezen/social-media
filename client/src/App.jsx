@@ -10,6 +10,7 @@ import { useContext, useEffect, useState } from "react";
 import { DarkmodeContext } from "./contexts/darkmode.jsx";
 import Navbar from "./components/Navbar.jsx";
 import { useSelector } from "react-redux";
+import FindFriends from "./pages/findFriends.jsx";
 
 const Container = styled.div`
   display: flex;
@@ -50,6 +51,10 @@ function App() {
         {
           path: "/profile/:id",
           element: <Profile />,
+        },
+        {
+          path: "/findFriends",
+          element: <FindFriends />,
         },
       ],
     },

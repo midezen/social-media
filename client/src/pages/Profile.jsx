@@ -355,26 +355,27 @@ const Profile = () => {
 
   const { darkmode } = useContext(DarkmodeContext);
 
-  useEffect(() => {
-    const getUser = async () => {
-      dispatch(Start());
-      try {
-        const res = await axiosInstance.get(`/users/${userID}`, {
-          withCredentials: true,
-        });
-        localStorage.setItem("profilePageUser", JSON.stringify(res.data));
-        setUserData(JSON.parse(localStorage.getItem("profilePageUser")));
+  const getUser = async () => {
+    dispatch(Start());
+    try {
+      const res = await axiosInstance.get(`/users/${userID}`, {
+        withCredentials: true,
+      });
+      localStorage.setItem("profilePageUser", JSON.stringify(res.data));
+      setUserData(JSON.parse(localStorage.getItem("profilePageUser")));
 
-        dispatch(Success());
-      } catch (err) {
-        if (err.response.status === 500) {
-          alert("server/network error");
-        } else {
-          alert(err.response.data);
-        }
-        dispatch(Rejected());
+      dispatch(Success());
+    } catch (err) {
+      if (err.response.status === 500) {
+        alert("server/network error");
+      } else {
+        alert(err.response.data);
       }
-    };
+      dispatch(Rejected());
+    }
+  };
+
+  useEffect(() => {
     getUser();
   }, [userID]);
 
@@ -511,7 +512,7 @@ const Profile = () => {
                 <InfoItemDesc>
                   {userData.about
                     ? userData.about
-                    : "click on edit profile to add bio"}
+                    : "click on edit profile button to add bio"}
                 </InfoItemDesc>
               </InfoItem>
               <InfoItem>
@@ -519,7 +520,7 @@ const Profile = () => {
                 <InfoItemDesc>
                   {userData.mobileNo
                     ? userData.mobileNo
-                    : "click on edit profile to add mobile number"}
+                    : "click on edit profile button to add mobile number"}
                 </InfoItemDesc>
               </InfoItem>
               <InfoItem>
@@ -527,19 +528,19 @@ const Profile = () => {
                 <InfoItemDesc>
                   {userData.email
                     ? userData.email
-                    : "click on edit profile to add email"}
+                    : "click on edit profile button to add email"}
                 </InfoItemDesc>
               </InfoItem>
               <InfoItem>
                 <InfoItemHead>Location</InfoItemHead>
                 {userData.province || userData.country ? (
                   <InfoItemDesc>
-                    {userData.province ? userData.province + "," : ""}{" "}
+                    {userData.province ? userData.province : ""}{" "}
                     {userData.country ? userData.country : ""}
                   </InfoItemDesc>
                 ) : (
                   <InfoItemDesc>
-                    click on edit profile to add location
+                    click on edit profile button to add location
                   </InfoItemDesc>
                 )}
               </InfoItem>
@@ -606,7 +607,7 @@ const Profile = () => {
             justifyContent: "center",
           }}
         >
-          <EditProfile setModalOpen={setModalOpen} />
+          <EditProfile setModalOpen={setModalOpen} getUser={getUser} />
         </Box>
       </Modal>
     </Container>

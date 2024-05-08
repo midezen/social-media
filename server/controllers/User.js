@@ -217,3 +217,18 @@ export const AcceptFriendRequest = async (req, res) => {
     res.status(500).json(err);
   }
 };
+
+export const getUserFriends = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    const friends = user.friends;
+    const list = Promise.all(
+      friends.map((friendId) => {
+        return User.findById(friendId);
+      })
+    );
+    res.status(200).json(list);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};

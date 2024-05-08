@@ -26,6 +26,7 @@ const Container = styled.div`
   position: sticky;
   top: 0;
   z-index: 999;
+  border-bottom: 2px solid ${({ theme }) => theme.bgSoft};
 `;
 
 const Left = styled.div`
@@ -179,7 +180,7 @@ const Navbar = () => {
         <H1>CTV</H1>
         <SearchContainer>
           <SearchOutlinedIcon style={{ fontSize: "18px" }} />
-          <SearchInput type="text" placeholder="Search" />
+          <SearchInput type="text" placeholder="Ask me anything" />
         </SearchContainer>
       </Left>
       <Middle>
@@ -194,12 +195,14 @@ const Navbar = () => {
             </NotificationIcon>
           </NavItem>
         </Link>
-        <NavItem
-          onClick={() => handleActiveClick("friends")}
-          style={{ color: active === "friends" ? "#0000ff" : "inherit" }}
-        >
-          <PeopleAltOutlinedIcon style={{ fontSize: "25px" }} />
-        </NavItem>
+        <Link to="/findFriends" style={{ color: "inherit" }}>
+          <NavItem
+            onClick={() => handleActiveClick("friends")}
+            style={{ color: active === "friends" ? "#0000ff" : "inherit" }}
+          >
+            <PeopleAltOutlinedIcon style={{ fontSize: "25px" }} />
+          </NavItem>
+        </Link>
 
         {darkmode ? (
           <NavItem onClick={handleToggle}>

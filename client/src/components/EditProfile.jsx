@@ -62,10 +62,6 @@ const TextArea = styled.textarea`
   border: none;
   outline: 0;
   color: ${({ theme }) => theme.text};
-  &::placeholder {
-    color: ${({ theme }) => theme.text};
-    opacity: 0.7;
-  }
 `;
 
 const UpdateButtonContainer = styled.div`
@@ -95,7 +91,7 @@ const UpdateButton = styled.button`
   }
 `;
 
-const EditProfile = ({ setModalOpen }) => {
+const EditProfile = ({ setModalOpen, getUser }) => {
   const { userInfo, loading } = useSelector((state) => state.user);
   const [updatedUser, setUpdatedUser] = useState({
     firstName: userInfo.firstName,
@@ -124,6 +120,7 @@ const EditProfile = ({ setModalOpen }) => {
         { withCredentials: true }
       );
       dispatch(updateUserSuccess(res.data));
+      getUser();
       setModalOpen(false);
     } catch (err) {
       if (err.response.status === 500) {
@@ -144,7 +141,7 @@ const EditProfile = ({ setModalOpen }) => {
           <InputContainer>
             <Input
               type="text"
-              placeholder={updatedUser.firstName}
+              value={updatedUser.firstName}
               name="firstName"
               onChange={handleChange}
             />
@@ -155,7 +152,7 @@ const EditProfile = ({ setModalOpen }) => {
           <InputContainer>
             <Input
               type="text"
-              placeholder={updatedUser.lastName}
+              value={updatedUser.lastName}
               name="lastName"
               onChange={handleChange}
             />
@@ -167,7 +164,7 @@ const EditProfile = ({ setModalOpen }) => {
           <InputContainer>
             <Input
               type="text"
-              placeholder={updatedUser.userName}
+              value={updatedUser.userName}
               name="userName"
               onChange={handleChange}
             />
@@ -178,7 +175,7 @@ const EditProfile = ({ setModalOpen }) => {
           <InputContainer>
             <Input
               type="email"
-              placeholder={updatedUser.email}
+              value={updatedUser.email}
               name="email"
               onChange={handleChange}
             />
@@ -189,7 +186,7 @@ const EditProfile = ({ setModalOpen }) => {
           <InputContainer>
             <Input
               type="password"
-              placeholder={updatedUser.password}
+              value={updatedUser.password}
               name="password"
               onChange={handleChange}
             />
@@ -200,7 +197,7 @@ const EditProfile = ({ setModalOpen }) => {
           <InputContainer>
             <Input
               type="text"
-              placeholder={updatedUser.mobileNo}
+              value={updatedUser.mobileNo}
               name="mobileNo"
               onChange={handleChange}
             />
@@ -212,7 +209,7 @@ const EditProfile = ({ setModalOpen }) => {
           <InputContainer>
             <Input
               type="text"
-              placeholder={updatedUser.province}
+              value={updatedUser.province}
               name="province"
               onChange={handleChange}
             />
@@ -223,7 +220,7 @@ const EditProfile = ({ setModalOpen }) => {
           <InputContainer>
             <Input
               type="text"
-              placeholder={updatedUser.country}
+              value={updatedUser.country}
               name="country"
               onChange={handleChange}
             />
@@ -237,7 +234,7 @@ const EditProfile = ({ setModalOpen }) => {
             rows="3"
             maxLength="150"
             cols="120"
-            placeholder={updatedUser.about}
+            value={updatedUser.about}
             name="about"
             onChange={handleChange}
           />

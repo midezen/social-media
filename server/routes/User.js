@@ -6,6 +6,7 @@ import {
   deleteUser,
   followUser,
   getUser,
+  getUserFriends,
   likeComment,
   likePost,
   likeReply,
@@ -25,6 +26,7 @@ const router = express.Router();
 router.put("/:id", verifyToken, updateUser);
 router.delete("/:id", verifyToken, deleteUser);
 router.get("/:id", verifyToken, getUser);
+router.get("/getuserfriends", verifyToken, getUserFriends);
 router.put("/followUser/:id", verifyToken, followUser);
 router.put("/unfollowUser/:id", verifyToken, unfollowUser);
 router.put("/likePost/:PostId", verifyToken, likePost);

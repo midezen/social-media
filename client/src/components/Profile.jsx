@@ -80,9 +80,14 @@ const Profile = () => {
             <Span1>
               {userInfo.firstName} {userInfo.lastName}
             </Span1>
-            <Span2>
-              {userInfo.Province}, {userInfo.Country}
-            </Span2>
+            {userInfo.province || userInfo.country ? (
+              <Span2>
+                {userInfo.province ? userInfo.province : ""}{" "}
+                {userInfo.country ? userInfo.country : ""}
+              </Span2>
+            ) : (
+              ""
+            )}
           </TopTop>
           <TopBottom>
             <TopBottomItem>
