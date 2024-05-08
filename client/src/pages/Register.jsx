@@ -81,7 +81,7 @@ const RegisterSpan = styled.span`
 const Form = styled.form`
   display: grid;
   grid-template-columns: 1fr;
-  grid-gap: 10px;
+  grid-gap: 20px;
   align-items: center;
 `;
 
@@ -105,6 +105,7 @@ const Bottom = styled.div`
   display: flex;
   gap: 10px;
   align-items: center;
+  justify-content: space-around;
 `;
 
 const BottomSpan = styled.span`
@@ -145,8 +146,12 @@ const Register = () => {
     try {
       await registerUser(userInfo, dispatch, navigate);
     } catch (err) {
+      if (err.response.status === 500) {
+        alert("server/network error");
+      } else {
+        alert(err.response.data);
+      }
       dispatch(Rejected());
-      alert(err);
     }
   };
   return (
@@ -172,14 +177,14 @@ const Register = () => {
               <Input
                 type="text"
                 placeholder="First Name"
-                require
+                required
                 name="firstName"
                 onChange={handleChange}
               />
               <Input
                 type="text"
                 placeholder="Last Name"
-                require
+                required
                 name="lastName"
                 onChange={handleChange}
               />
@@ -188,34 +193,39 @@ const Register = () => {
             <Input
               type="email"
               placeholder="Email"
-              require
+              required
               name="email"
               onChange={handleChange}
             />
             <Input
               type="text"
               placeholder="Username"
-              require
+              required
               name="userName"
               onChange={handleChange}
             />
             <Input
               type="password"
               placeholder="Password"
-              require
+              required
               name="password"
               onChange={handleChange}
             />
-          </Form>
-          <Bottom>
-            <Link to="/login" style={{ color: "blue" }}>
-              <BottomSpan>Have an account? Click to sign in</BottomSpan>
-            </Link>
 
-            <Button disabled={loading} onClick={handleRegister}>
-              {loading ? "Loading..." : "Register"}
-            </Button>
-          </Bottom>
+            <Bottom>
+              <Link to="/" style={{ color: "blue" }}>
+                <BottomSpan>Have an account? Click to sign in</BottomSpan>
+              </Link>
+
+              <Button
+                disabled={loading}
+                onClick={handleRegister}
+                onSubmit={handleRegister}
+              >
+                {loading ? "Loading..." : "Register"}
+              </Button>
+            </Bottom>
+          </Form>
         </Right>
       </Wrapper>
     </Container>

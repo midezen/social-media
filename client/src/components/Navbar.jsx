@@ -11,6 +11,9 @@ import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
 import BookmarkBorderOutlinedIcon from "@mui/icons-material/BookmarkBorderOutlined";
 import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Rejected, Start } from "../redux/userSlice.js";
+import { logoutUser } from "../utils/apiCalls/Auth.js";
 
 const Container = styled.div`
   background-color: ${({ theme }) => theme.bg};
@@ -132,12 +135,22 @@ const ProfileImage = styled.img`
   height: 40px;
   border-radius: 50%;
   object-fit: cover;
+  cursor: pointer;
+`;
+
+const Logout = styled.span`
+  font-weight: bold;
+  color: ${({ theme }) => theme.text};
+  cursor: pointer;
+  font-size: 14px;
 `;
 
 const Navbar = () => {
   const { darkmode, setDarkmode } = useContext(DarkmodeContext);
+  const dispatch = useDispatch();
 
   const [active, setActive] = useState("home");
+  const userInfo = useSelector((state) => state.user.userInfo);
 
   const handleActiveClick = (prop) => {
     setActive(prop);
@@ -145,6 +158,20 @@ const Navbar = () => {
 
   const handleToggle = () => {
     setDarkmode(!darkmode);
+  };
+
+  const handleLogout = async () => {
+    try {
+      dispatch(Start());
+      await logoutUser(dispatch);
+    } catch (err) {
+      if (err.response.status === 500) {
+        alert("server/network error");
+      } else {
+        alert(err.response.data);
+      }
+      dispatch(Rejected());
+    }
   };
   return (
     <Container>
@@ -210,7 +237,11 @@ const Navbar = () => {
             <NotificationCount>8</NotificationCount>
           </NotificationIcon>
         </NavRightItem>
-        <ProfileImage src={Ayomide} alt="profileImage" />
+
+        <Link to={`/profile/${userInfo._id}`}>
+          <ProfileImage src={Ayomide} alt="profileImage" />
+        </Link>
+        <Logout onClick={handleLogout}>Logout</Logout>
       </Right>
     </Container>
   );

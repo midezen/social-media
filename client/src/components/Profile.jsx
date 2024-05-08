@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import Ayomide from "../img/Ayomide 2.png";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Container = styled.div`
   margin-right: 30px;
@@ -63,26 +64,37 @@ const Span4 = styled.span`
 `;
 
 const Profile = () => {
+  const userInfo = useSelector((state) => state.user.userInfo);
   return (
-    <Link to="/profile" style={{ textDecoration: "none", color: "inherit" }}>
+    <Link
+      to={`/profile/${userInfo._id}`}
+      style={{ textDecoration: "none", color: "inherit" }}
+    >
       <Container>
         <Top>
           <TopTop>
-            <Image src={Ayomide} alt="profilePic" />
-            <Span1>Ayomide Oluwadiya</Span1>
-            <Span2>Lagos, Nigeria</Span2>
+            <Image
+              src={userInfo.profilePic ? userInfo.profilePic : Ayomide}
+              alt="profilePic"
+            />
+            <Span1>
+              {userInfo.firstName} {userInfo.lastName}
+            </Span1>
+            <Span2>
+              {userInfo.Province}, {userInfo.Country}
+            </Span2>
           </TopTop>
           <TopBottom>
             <TopBottomItem>
-              <Span3>358 </Span3>
+              <Span3>{userInfo.posts.length}</Span3>
               <Span4>Posts</Span4>
             </TopBottomItem>
             <TopBottomItem>
-              <Span3>200k </Span3>
+              <Span3>{userInfo.followers.length} </Span3>
               <Span4>Followers</Span4>
             </TopBottomItem>
             <TopBottomItem>
-              <Span3>2.1k </Span3>
+              <Span3>{userInfo.following.length} </Span3>
               <Span4>Following</Span4>
             </TopBottomItem>
           </TopBottom>

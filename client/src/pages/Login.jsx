@@ -70,7 +70,7 @@ const Right = styled.div`
   gap: 30px;
   align-items: center;
   background-color: ${({ theme }) => theme.bg};
-  padding: 50px;
+  padding: 40px 50px;
   border-radius: 10px;
   justify-content: center;
 `;
@@ -83,7 +83,7 @@ const LoginSpan = styled.span`
 const Form = styled.form`
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 20px;
   align-items: center;
 `;
 
@@ -140,8 +140,13 @@ const Login = () => {
     try {
       await loginUser(userInfo, dispatch, navigate);
     } catch (err) {
+      if (err.response.status === 500) {
+        alert("server/network error");
+      } else {
+        alert(err.response.data);
+      }
+
       dispatch(Rejected());
-      alert(err);
     }
   };
 
@@ -167,30 +172,34 @@ const Login = () => {
             <Input
               type="text"
               placeholder="Username"
-              require
+              required
               name="userName"
               onChange={handleChange}
             />
             <Input
               type="password"
               placeholder="Password"
-              require
+              required
               name="password"
               onChange={handleChange}
             />
-          </Form>
-          <Bottom>
-            <Link to="/register" style={{ color: "blue" }}>
-              <BottomSpan>
-                Don't have an account? <br />
-                click here to sign up
-              </BottomSpan>
-            </Link>
+            <Bottom>
+              <Link to="/register" style={{ color: "blue" }}>
+                <BottomSpan>
+                  Don't have an account? <br />
+                  click here to sign up
+                </BottomSpan>
+              </Link>
 
-            <Button disabled={loading} onClick={handleLogin}>
-              {loading ? "Loading..." : "Login"}
-            </Button>
-          </Bottom>
+              <Button
+                disabled={loading}
+                onClick={handleLogin}
+                onSubmit={handleLogin}
+              >
+                {loading ? "Loading..." : "Login"}
+              </Button>
+            </Bottom>{" "}
+          </Form>
         </Right>
       </Wrapper>
     </Container>

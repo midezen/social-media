@@ -9,6 +9,7 @@ import { darkTheme, lightTheme } from "./utils/themeData";
 import { useContext, useEffect, useState } from "react";
 import { DarkmodeContext } from "./contexts/darkmode.jsx";
 import Navbar from "./components/Navbar.jsx";
+import { useSelector } from "react-redux";
 
 const Container = styled.div`
   display: flex;
@@ -24,38 +25,35 @@ const Layout = () => {
   );
 };
 
-const router = createBrowserRouter([
-  {
-    path: "/login",
-    element: <Login />,
-  },
-  {
-    path: "/register",
-    element: <Register />,
-  },
-  {
-    path: "/messages",
-    element: <Messages />,
-  },
-
-  {
-    path: "/",
-    element: <Layout />,
-    children: [
-      {
-        path: "/",
-        element: <Home />,
-      },
-      {
-        path: "/profile",
-        element: <Profile />,
-      },
-    ],
-  },
-]);
-
 function App() {
   const { darkmode } = useContext(DarkmodeContext);
+  const userInfo = useSelector((state) => state.user.userInfo);
+
+  const router = createBrowserRouter([
+    {
+      path: "/register",
+      element: <Register />,
+    },
+    {
+      path: "/messages",
+      element: <Messages />,
+    },
+
+    {
+      path: "/",
+      element: userInfo ? <Layout /> : <Login />,
+      children: [
+        {
+          path: "/",
+          element: <Home />,
+        },
+        {
+          path: "/profile/:id",
+          element: <Profile />,
+        },
+      ],
+    },
+  ]);
   return (
     <ThemeProvider theme={darkmode ? darkTheme : lightTheme}>
       <RouterProvider router={router} />

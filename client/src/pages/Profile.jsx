@@ -3,7 +3,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Ayomide from "../img/Ayomide 2.png";
 import CameraAltOutlinedIcon from "@mui/icons-material/CameraAltOutlined";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import CreatePost from "../components/CreatePost";
 import Post from "../components/Post";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
@@ -16,6 +16,10 @@ import FriendsComponent from "../components/FriendsComponent";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { DarkmodeContext } from "../contexts/darkmode";
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
+import { axiosInstance } from "../utils/axiosConfig";
+import { Rejected, Start, Success } from "../redux/userSlice";
 
 const Container = styled.div`
   background-color: ${({ theme }) => theme.bgSoft};
@@ -343,18 +347,22 @@ const TopSpan = styled.span`
   font-weight: bold;
 `;
 
+const ModalGrid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 15px;
+`;
+
 const ModalItem = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 5px;
 `;
 
 const ModalText = styled.span`
-  font-size: 14px;
+  font-size: 13px;
 `;
 
 const InputContainer = styled.div`
-  width: 90%;
   color: ${({ theme }) => theme.text};
   border-bottom: 1px solid ${({ theme }) => theme.text};
   background-color: ${({ theme }) => theme.hover};
@@ -365,6 +373,17 @@ const InputContainer = styled.div`
 `;
 
 const Input = styled.input`
+  display: flex;
+  padding: 7px;
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+  border: none;
+  outline: 0;
+  color: ${({ theme }) => theme.text};
+`;
+
+const TextArea = styled.textarea`
   display: flex;
   padding: 7px;
   width: 100%;
@@ -401,8 +420,39 @@ const Profile = () => {
   const [tab, setTab] = useState("posts");
   const [expand, setExpand] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
+  const userInfo = useSelector((state) => state.user.userInfo);
+  const location = useLocation();
+  const [userData, setUserData] = useState(
+    JSON.parse(localStorage.getItem("profilePageUser"))
+  );
+  const dispatch = useDispatch();
+
+  const userID = location.pathname.split("/")[2];
 
   const { darkmode } = useContext(DarkmodeContext);
+
+  useEffect(() => {
+    const getUser = async () => {
+      dispatch(Start());
+      try {
+        const res = await axiosInstance.get(`/users/${userID}`, {
+          withCredentials: true,
+        });
+        localStorage.setItem("profilePageUser", JSON.stringify(res.data));
+        setUserData(JSON.parse(localStorage.getItem("profilePageUser")));
+
+        dispatch(Success());
+      } catch (err) {
+        if (err.response.status === 500) {
+          alert("server/network error");
+        } else {
+          alert(err.response.data);
+        }
+        dispatch(Rejected());
+      }
+    };
+    getUser();
+  }, [userID]);
 
   const handleModalOpen = () => {
     setModalOpen(true);
@@ -422,14 +472,19 @@ const Profile = () => {
           <WrapperTop>
             <WrapperTopLeft>
               <ProfilePicContainer>
-                <ProfilePic src={Ayomide} alt="" />
+                <ProfilePic
+                  src={userData.profilePic ? userData.profilePic : Ayomide}
+                  alt="profile pic"
+                />
                 <CameraIconContainer>
                   <CameraAltOutlinedIcon />
                 </CameraIconContainer>
               </ProfilePicContainer>
               <WrapperTopLeftInfo>
-                <H1>Ayomide Oluwadiya</H1>
-                <FriendsCount>1.4k Friends</FriendsCount>
+                <H1>
+                  {userData.firstName} {userData.lastName}
+                </H1>
+                <FriendsCount>{userData.friends.length} Friends</FriendsCount>
                 <FriendsProfilePicContainer>
                   <FriendsProfilePic src={Ayomide} alt="friends profile pic" />
                   <FriendsProfilePic src={Ayomide} alt="friends profile pic" />
@@ -486,14 +541,14 @@ const Profile = () => {
                   <PersonOutlineOutlinedIcon
                     style={{ fontSize: "30px", color: "#0000ff" }}
                   />
-                  <FollowXCount>200k</FollowXCount>
+                  <FollowXCount>{userData.followers.length}</FollowXCount>
                   <FollowX>Followers</FollowX>
                 </ProfileLeftTopItem>
                 <ProfileLeftTopItem>
                   <PersonOutlineOutlinedIcon
                     style={{ fontSize: "30px", color: "#0000ff" }}
                   />
-                  <FollowXCount>2.1k</FollowXCount>
+                  <FollowXCount>{userData.following.length}</FollowXCount>
                   <FollowX>Following</FollowX>
                 </ProfileLeftTopItem>
               </ProfileLeftTopItems>
@@ -502,7 +557,7 @@ const Profile = () => {
                   <PersonOutlineOutlinedIcon
                     style={{ fontSize: "30px", color: "#0000ff" }}
                   />
-                  <FollowXCount>358</FollowXCount>
+                  <FollowXCount>{userData.posts.length}</FollowXCount>
                   <FollowX>Posts</FollowX>
                 </ProfileLeftTopItem>
                 <ProfileLeftTopItem onClick={handleModalOpen}>
@@ -529,19 +584,21 @@ const Profile = () => {
             <ProfileLeftTopBottom>
               <InfoItem>
                 <InfoItemHead>About</InfoItemHead>
-                <InfoItemDesc>I love to code 💻</InfoItemDesc>
+                <InfoItemDesc>{userData.about}</InfoItemDesc>
               </InfoItem>
               <InfoItem>
                 <InfoItemHead>Mobile</InfoItemHead>
-                <InfoItemDesc>+2348165553289</InfoItemDesc>
+                <InfoItemDesc>{userData.mobileNo}</InfoItemDesc>
               </InfoItem>
               <InfoItem>
                 <InfoItemHead>Email Address</InfoItemHead>
-                <InfoItemDesc>victordiya90@gmail.com</InfoItemDesc>
+                <InfoItemDesc>{userData.email}</InfoItemDesc>
               </InfoItem>
               <InfoItem>
                 <InfoItemHead>Location</InfoItemHead>
-                <InfoItemDesc>Lagos, Nigeria</InfoItemDesc>
+                <InfoItemDesc>
+                  {userData.province}, {userData.country}
+                </InfoItemDesc>
               </InfoItem>
             </ProfileLeftTopBottom>
             <ProfileLeftMiddle
@@ -607,34 +664,62 @@ const Profile = () => {
           }}
         >
           <TopSpan>Edit Profile</TopSpan>
+          <ModalGrid>
+            <ModalItem>
+              <ModalText>First Name</ModalText>
+              <InputContainer>
+                <Input type="text" />
+              </InputContainer>
+            </ModalItem>
+            <ModalItem>
+              <ModalText>Last Name</ModalText>
+              <InputContainer>
+                <Input type="text" />
+              </InputContainer>
+            </ModalItem>
+
+            <ModalItem>
+              <ModalText>Username</ModalText>
+              <InputContainer>
+                <Input type="text" />
+              </InputContainer>
+            </ModalItem>
+            <ModalItem>
+              <ModalText>Email Address</ModalText>
+              <InputContainer>
+                <Input type="email" />
+              </InputContainer>
+            </ModalItem>
+            <ModalItem>
+              <ModalText>Password</ModalText>
+              <InputContainer>
+                <Input type="password" />
+              </InputContainer>
+            </ModalItem>
+            <ModalItem>
+              <ModalText>Mobile Number</ModalText>
+              <InputContainer>
+                <Input type="text" />
+              </InputContainer>
+            </ModalItem>
+
+            <ModalItem>
+              <ModalText>Province</ModalText>
+              <InputContainer>
+                <Input type="text" />
+              </InputContainer>
+            </ModalItem>
+            <ModalItem>
+              <ModalText>Country</ModalText>
+              <InputContainer>
+                <Input type="text" />
+              </InputContainer>
+            </ModalItem>
+          </ModalGrid>
           <ModalItem>
             <ModalText>About</ModalText>
             <InputContainer>
-              <Input type="textarea" />
-            </InputContainer>
-          </ModalItem>
-          <ModalItem>
-            <ModalText>Mobile</ModalText>
-            <InputContainer>
-              <Input type="text" />
-            </InputContainer>
-          </ModalItem>
-          <ModalItem>
-            <ModalText>Email Address</ModalText>
-            <InputContainer>
-              <Input type="text" />
-            </InputContainer>
-          </ModalItem>
-          <ModalItem>
-            <ModalText>Province</ModalText>
-            <InputContainer>
-              <Input type="text" />
-            </InputContainer>
-          </ModalItem>
-          <ModalItem>
-            <ModalText>Country</ModalText>
-            <InputContainer>
-              <Input type="text" />
+              <TextArea rows="3" maxLength="150" cols="120" />
             </InputContainer>
           </ModalItem>
           <UpdateButtonContainer>
