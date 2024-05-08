@@ -20,6 +20,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { axiosInstance } from "../utils/axiosConfig";
 import { Rejected, Start, Success } from "../redux/userSlice";
+import EditProfile from "../components/EditProfile";
 
 const Container = styled.div`
   background-color: ${({ theme }) => theme.bgSoft};
@@ -339,92 +340,15 @@ const style = {
   boxShadow: 24,
 };
 
-const TopSpan = styled.span`
-  display: flex;
-  justify-content: center;
-  font-size: 16px;
-  color: ${({ theme }) => theme.text};
-  font-weight: bold;
-`;
-
-const ModalGrid = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-gap: 15px;
-`;
-
-const ModalItem = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-const ModalText = styled.span`
-  font-size: 13px;
-`;
-
-const InputContainer = styled.div`
-  color: ${({ theme }) => theme.text};
-  border-bottom: 1px solid ${({ theme }) => theme.text};
-  background-color: ${({ theme }) => theme.hover};
-  border-radius: 5px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const Input = styled.input`
-  display: flex;
-  padding: 7px;
-  width: 100%;
-  height: 100%;
-  background-color: transparent;
-  border: none;
-  outline: 0;
-  color: ${({ theme }) => theme.text};
-`;
-
-const TextArea = styled.textarea`
-  display: flex;
-  padding: 7px;
-  width: 100%;
-  height: 100%;
-  background-color: transparent;
-  border: none;
-  outline: 0;
-  color: ${({ theme }) => theme.text};
-`;
-
-const UpdateButtonContainer = styled.div`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const UpdateButton = styled.button`
-  padding: 10px;
-  border: none;
-  background-color: ${({ theme }) => theme.spT};
-  color: white;
-  font-size: 13px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40%;
-  border-radius: 12px;
-  font-weight: bold;
-  cursor: pointer;
-`;
-
 const Profile = () => {
   const [tab, setTab] = useState("posts");
   const [expand, setExpand] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
-  const userInfo = useSelector((state) => state.user.userInfo);
   const location = useLocation();
   const [userData, setUserData] = useState(
     JSON.parse(localStorage.getItem("profilePageUser"))
   );
+
   const dispatch = useDispatch();
 
   const userID = location.pathname.split("/")[2];
@@ -584,21 +508,40 @@ const Profile = () => {
             <ProfileLeftTopBottom>
               <InfoItem>
                 <InfoItemHead>About</InfoItemHead>
-                <InfoItemDesc>{userData.about}</InfoItemDesc>
+                <InfoItemDesc>
+                  {userData.about
+                    ? userData.about
+                    : "click on edit profile to add bio"}
+                </InfoItemDesc>
               </InfoItem>
               <InfoItem>
                 <InfoItemHead>Mobile</InfoItemHead>
-                <InfoItemDesc>{userData.mobileNo}</InfoItemDesc>
+                <InfoItemDesc>
+                  {userData.mobileNo
+                    ? userData.mobileNo
+                    : "click on edit profile to add mobile number"}
+                </InfoItemDesc>
               </InfoItem>
               <InfoItem>
                 <InfoItemHead>Email Address</InfoItemHead>
-                <InfoItemDesc>{userData.email}</InfoItemDesc>
+                <InfoItemDesc>
+                  {userData.email
+                    ? userData.email
+                    : "click on edit profile to add email"}
+                </InfoItemDesc>
               </InfoItem>
               <InfoItem>
                 <InfoItemHead>Location</InfoItemHead>
-                <InfoItemDesc>
-                  {userData.province}, {userData.country}
-                </InfoItemDesc>
+                {userData.province || userData.country ? (
+                  <InfoItemDesc>
+                    {userData.province ? userData.province + "," : ""}{" "}
+                    {userData.country ? userData.country : ""}
+                  </InfoItemDesc>
+                ) : (
+                  <InfoItemDesc>
+                    click on edit profile to add location
+                  </InfoItemDesc>
+                )}
               </InfoItem>
             </ProfileLeftTopBottom>
             <ProfileLeftMiddle
@@ -663,68 +606,7 @@ const Profile = () => {
             justifyContent: "center",
           }}
         >
-          <TopSpan>Edit Profile</TopSpan>
-          <ModalGrid>
-            <ModalItem>
-              <ModalText>First Name</ModalText>
-              <InputContainer>
-                <Input type="text" />
-              </InputContainer>
-            </ModalItem>
-            <ModalItem>
-              <ModalText>Last Name</ModalText>
-              <InputContainer>
-                <Input type="text" />
-              </InputContainer>
-            </ModalItem>
-
-            <ModalItem>
-              <ModalText>Username</ModalText>
-              <InputContainer>
-                <Input type="text" />
-              </InputContainer>
-            </ModalItem>
-            <ModalItem>
-              <ModalText>Email Address</ModalText>
-              <InputContainer>
-                <Input type="email" />
-              </InputContainer>
-            </ModalItem>
-            <ModalItem>
-              <ModalText>Password</ModalText>
-              <InputContainer>
-                <Input type="password" />
-              </InputContainer>
-            </ModalItem>
-            <ModalItem>
-              <ModalText>Mobile Number</ModalText>
-              <InputContainer>
-                <Input type="text" />
-              </InputContainer>
-            </ModalItem>
-
-            <ModalItem>
-              <ModalText>Province</ModalText>
-              <InputContainer>
-                <Input type="text" />
-              </InputContainer>
-            </ModalItem>
-            <ModalItem>
-              <ModalText>Country</ModalText>
-              <InputContainer>
-                <Input type="text" />
-              </InputContainer>
-            </ModalItem>
-          </ModalGrid>
-          <ModalItem>
-            <ModalText>About</ModalText>
-            <InputContainer>
-              <TextArea rows="3" maxLength="150" cols="120" />
-            </InputContainer>
-          </ModalItem>
-          <UpdateButtonContainer>
-            <UpdateButton>Update</UpdateButton>
-          </UpdateButtonContainer>
+          <EditProfile setModalOpen={setModalOpen} />
         </Box>
       </Modal>
     </Container>

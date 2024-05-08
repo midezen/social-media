@@ -23,7 +23,8 @@ export const updateUser = async (req, res) => {
         { $set: req.body },
         { new: true }
       );
-      res.status(200).json(updatedUser);
+      const { password, ...others } = updatedUser._doc;
+      res.status(200).json(others);
     } else {
       return res.status(403).json("Permission denied");
     }
