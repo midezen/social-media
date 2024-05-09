@@ -146,11 +146,7 @@ const Register = () => {
     try {
       await registerUser(userInfo, dispatch, navigate);
     } catch (err) {
-      if (err.response.status === 500) {
-        alert("server/network error");
-      } else {
-        alert(err.response.data);
-      }
+      alert(err);
       dispatch(Rejected());
     }
   };

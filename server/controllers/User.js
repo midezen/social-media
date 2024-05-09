@@ -170,6 +170,9 @@ export const sendFriendRequest = async (req, res) => {
     await User.findByIdAndUpdate(req.params.id, {
       $push: { friendRequests: req.user.id },
     });
+    await User.findByIdAndUpdate(req.user.id, {
+      $push: { sentRequests: req.params.id },
+    });
     res.status(200).json("request sent");
   } catch (err) {
     res.status(500).json(err);
@@ -180,6 +183,9 @@ export const deleteFriendRequest = async (req, res) => {
   try {
     await User.findByIdAndUpdate(req.user.id, {
       $pull: { friendRequests: req.params.id },
+    });
+    await User.findByIdAndUpdate(req.params.id, {
+      $pull: { sentRequests: req.user.id },
     });
     res.status(200).json("request deleted");
   } catch (err) {
@@ -210,6 +216,7 @@ export const AcceptFriendRequest = async (req, res) => {
 
     await User.findByIdAndUpdate(req.params.id, {
       $push: { friends: req.user.id },
+      $pull: { sentRequests: req.user.id },
     });
 
     res.status(200).json("request accepted");
@@ -222,7 +229,7 @@ export const getUserFriends = async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
     const friends = user.friends;
-    const list = Promise.all(
+    const list = await Promise.all(
       friends.map((friendId) => {
         return User.findById(friendId);
       })
@@ -237,12 +244,23 @@ export const getUserFriendRequests = async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
     const userFriendRequests = user.friendRequests;
-    const list = Promise.all(
+    if (userFriendRequests.length === 0) return res.status(200).json([]);
+
+    const list = await Promise.all(
       userFriendRequests.map((friendId) => {
         return User.findById(friendId);
       })
     );
     res.status(200).json(list);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
+export const getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find();
+    res.status(200).json(users);
   } catch (err) {
     res.status(500).json(err);
   }

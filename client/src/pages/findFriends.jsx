@@ -3,6 +3,9 @@ import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 import { useContext, useEffect, useState } from "react";
 import Card from "../components/Card";
+import { useDispatch, useSelector } from "react-redux";
+import { Rejected, Start, Success } from "../redux/userSlice";
+import { axiosInstance } from "../utils/axiosConfig";
 
 const Container = styled.div`
   display: flex;
@@ -52,7 +55,6 @@ const LeftBottomItem = styled.div`
 
 const Right = styled.div`
   width: 75%;
-  height: 100%;
   background-color: ${({ theme }) => theme.bgSoft};
   padding: 30px 50px;
 `;
@@ -69,6 +71,7 @@ const FriendRequests = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
   grid-gap: 25px;
+  height: 100%;
 `;
 
 const SuggestedFriendsContainer = styled.div`
@@ -81,12 +84,17 @@ const SuggestedFriends = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
   grid-gap: 25px;
+  height: 100%;
 `;
 
 const FindFriends = () => {
   const [tab, setTab] = useState("suggested");
   const [suggestedActive, setSuggestedActive] = useState(true);
   const [requestActive, setRequestActive] = useState(false);
+  const [resquestData, setResquestData] = useState([]);
+  const [suggestedData, setSuggestedData] = useState([]);
+  const userInfo = useSelector((state) => state.user.userInfo);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (tab === "suggested") {
@@ -96,6 +104,49 @@ const FindFriends = () => {
       setSuggestedActive(false);
       setRequestActive(true);
     }
+  }, [tab]);
+
+  const getSuggestedFriends = async () => {
+    dispatch(Start());
+    try {
+      const res = await axiosInstance.get("/users", {
+        withCredentials: true,
+      });
+      setSuggestedData(res.data);
+      dispatch(Success());
+    } catch (err) {
+      if (err.response.status === 500) {
+        alert("server/network error");
+      } else {
+        alert(err.response.data);
+      }
+      console.log(err);
+      dispatch(Rejected());
+    }
+  };
+
+  const getFriendRequests = async () => {
+    dispatch(Start());
+    try {
+      const res = await axiosInstance.get(
+        `/users/getuserfriendrequests/${userInfo._id}`,
+        { withCredentials: true }
+      );
+      console.log(res.data);
+      setResquestData(res.data);
+      dispatch(Success());
+    } catch (err) {
+      if (err.response.status === 500) {
+        alert("server/network error");
+      } else {
+        alert(err.response.data);
+      }
+      dispatch(Rejected());
+    }
+  };
+
+  useEffect(() => {
+    tab === "suggested" ? getSuggestedFriends() : getFriendRequests();
   }, [tab]);
 
   return (
@@ -124,13 +175,13 @@ const FindFriends = () => {
           <FriendRequestsContainer>
             <H3>Friend Requests</H3>
             <FriendRequests>
-              <Card />
-              <Card />
-              <Card />
-              <Card />
-              <Card />
-              <Card />
-              <Card />
+              {resquestData.length === 0 ? (
+                <></>
+              ) : (
+                resquestData.map((data) => {
+                  return <Card key={data._id} data={data} />;
+                })
+              )}
             </FriendRequests>
           </FriendRequestsContainer>
         )}
@@ -138,13 +189,9 @@ const FindFriends = () => {
           <SuggestedFriendsContainer>
             <H3>Suggested for You</H3>
             <SuggestedFriends>
-              <Card suggested />
-              <Card suggested />
-              <Card suggested />
-              <Card suggested />
-              <Card suggested />
-              <Card suggested />
-              <Card suggested />
+              {suggestedData.map((data) => {
+                return <Card key={data._id} suggested data={data} />;
+              })}
             </SuggestedFriends>
           </SuggestedFriendsContainer>
         )}

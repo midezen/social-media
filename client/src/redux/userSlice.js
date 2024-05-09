@@ -27,6 +27,12 @@ const userSlice = createSlice({
       state.error = false;
     },
 
+    addFriendSuccess: (state, action) => {
+      state.userInfo.sentRequests.push(action.payload);
+      state.loading = false;
+      state.error = false;
+    },
+
     logoutSuccess: (state) => {
       state.userInfo = null;
       state.loading = false;
@@ -46,5 +52,6 @@ export const {
   loginSuccess,
   logoutSuccess,
   updateUserSuccess,
+  addFriendSuccess,
 } = userSlice.actions;
 export default userSlice.reducer;

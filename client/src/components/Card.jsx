@@ -1,4 +1,10 @@
 import styled from "styled-components";
+import testImage from "../img/testImage.avif";
+import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Rejected, Start, Success, addFriendSuccess } from "../redux/userSlice";
+import { useEffect, useState } from "react";
+import { axiosInstance } from "../utils/axiosConfig";
 
 const Container = styled.div`
   height: 270px;
@@ -57,13 +63,28 @@ const ConfirmButton = styled.button`
   cursor: pointer;
 `;
 
+const AddFriendButton = styled.button`
+  background-color: ${({ theme }) => theme.spT};
+  width: 80%;
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+`;
+
 const DeleteButton = styled.button`
   background-color: lightgray;
   width: 80%;
   padding: 8px;
   border: none;
   border-radius: 6px;
-  display: ${({ suggested }) => (suggested ? "none" : "flex")};
+  display: flex;
   align-items: center;
   justify-content: center;
   color: black;
@@ -72,16 +93,71 @@ const DeleteButton = styled.button`
   cursor: pointer;
 `;
 
-const Card = ({ suggested }) => {
+const Card = ({ suggested, data }) => {
+  const cardName = data.firstName + " " + data.lastName;
+  const slicedName = cardName.slice(0, 19) + "...";
+  const checkName = () => {
+    if (cardName.length > 19) {
+      return slicedName;
+    } else {
+      return cardName;
+    }
+  };
+
+  const dispatch = useDispatch();
+  const [addFriendButton, setAddFriendButton] = useState("Add Friend");
+  const userInfo = useSelector((state) => state.user.userInfo);
+
+  useEffect(() => {
+    if (suggested) {
+      userInfo.sentRequests.includes(data._id) &&
+        setAddFriendButton("Cancel Request");
+    }
+  }, [data, userInfo]);
+
+  const handleAddFriend = async () => {
+    dispatch(Start());
+    try {
+      await axiosInstance.put(`/users/addfriend/${data._id}`, "", {
+        withCredentials: true,
+      });
+
+      dispatch(addFriendSuccess(data._id));
+    } catch (err) {
+      if (err.response.status === 500) {
+        alert("server/network error");
+      } else {
+        alert(err.response.data);
+      }
+      dispatch(Rejected());
+    }
+  };
+
   return (
     <Container suggested={suggested}>
       <CardTop suggested={suggested}>
-        <CardPic src="https://images.unsplash.com/photo-1715039730972-df8fd942ecee?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxMnx8fGVufDB8fHx8fA%3D%3D" />
+        <Link to={`/profile/${data._id}`} style={{ color: "inherit" }}>
+          <CardPic src={data.profilePic ? data.profilePic : testImage} />
+        </Link>
       </CardTop>
       <CardBottom suggested={suggested}>
-        <Name>Ayomide Oluwadiya</Name>
-        <ConfirmButton>{suggested ? "Add Friend" : "Confirm"}</ConfirmButton>
-        <DeleteButton suggested={suggested}>Delete</DeleteButton>
+        <Name>{checkName()}</Name>
+        {suggested && (
+          <AddFriendButton
+            style={{
+              backgroundColor:
+                addFriendButton === "Cancel Request" && "lightgray",
+              color: addFriendButton === "Cancel Request" && "black",
+            }}
+            onClick={handleAddFriend}
+          >
+            {addFriendButton}
+          </AddFriendButton>
+        )}
+        {!suggested && <ConfirmButton>Confirm</ConfirmButton>}
+        {!suggested && (
+          <DeleteButton suggested={suggested}>Delete</DeleteButton>
+        )}
       </CardBottom>
     </Container>
   );
