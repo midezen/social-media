@@ -232,3 +232,18 @@ export const getUserFriends = async (req, res) => {
     res.status(500).json(err);
   }
 };
+
+export const getUserFriendRequests = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    const userFriendRequests = user.friendRequests;
+    const list = Promise.all(
+      userFriendRequests.map((friendId) => {
+        return User.findById(friendId);
+      })
+    );
+    res.status(200).json(list);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
