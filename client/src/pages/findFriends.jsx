@@ -113,7 +113,9 @@ const FindFriends = () => {
         withCredentials: true,
       });
       const filteredResponse = res.data.filter(
-        (item) => item._id !== userInfo._id
+        (item) =>
+          item._id !== userInfo._id &&
+          !userInfo.friendRequests.includes(item._id)
       );
       setSuggestedData(filteredResponse);
       dispatch(Success());
@@ -135,7 +137,7 @@ const FindFriends = () => {
         `/users/getuserfriendrequests/${userInfo._id}`,
         { withCredentials: true }
       );
-      console.log(res.data);
+
       setResquestData(res.data);
       dispatch(Success());
     } catch (err) {
