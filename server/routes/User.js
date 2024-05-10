@@ -2,6 +2,7 @@ import express from "express";
 import { verifyToken } from "../verifyToken.js";
 import {
   AcceptFriendRequest,
+  cancelSentRequest,
   deleteFriendRequest,
   deleteUser,
   followUser,
@@ -45,5 +46,6 @@ router.put("/addfriend/:id", verifyToken, sendFriendRequest);
 router.put("/deleterequest/:id", verifyToken, deleteFriendRequest);
 router.put("/acceptrequest/:id", verifyToken, AcceptFriendRequest);
 router.put("/unfriend/:id", verifyToken, unFriend);
+router.put("/cancelsentrequest/:id", verifyToken, cancelSentRequest);
 
 export default router;

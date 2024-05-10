@@ -2,7 +2,13 @@ import styled from "styled-components";
 import testImage from "../img/testImage.avif";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { Rejected, Start, Success, addFriendSuccess } from "../redux/userSlice";
+import {
+  Rejected,
+  Start,
+  Success,
+  addFriendSuccess,
+  cancelSentRequestSuccess,
+} from "../redux/userSlice";
 import { useEffect, useState } from "react";
 import { axiosInstance } from "../utils/axiosConfig";
 
@@ -123,6 +129,7 @@ const Card = ({ suggested, data }) => {
       });
 
       dispatch(addFriendSuccess(data._id));
+      setAddFriendButton("Cancel Request");
     } catch (err) {
       if (err.response.status === 500) {
         alert("server/network error");
@@ -131,6 +138,28 @@ const Card = ({ suggested, data }) => {
       }
       dispatch(Rejected());
     }
+  };
+
+  const cancelSentRequest = async () => {
+    dispatch(Start());
+    try {
+      await axiosInstance.put(`/users/cancelsentrequest/${data._id}`, "", {
+        withCredentials: true,
+      });
+      dispatch(cancelSentRequestSuccess(data._id));
+      setAddFriendButton("Add Friend");
+    } catch (err) {
+      if (err.response.status === 500) {
+        alert("server/network error");
+      } else {
+        alert(err.response.data);
+      }
+      dispatch(Rejected());
+    }
+  };
+
+  const handleSuggestedClick = () => {
+    addFriendButton === "Add Friend" ? handleAddFriend() : cancelSentRequest();
   };
 
   return (
@@ -149,7 +178,7 @@ const Card = ({ suggested, data }) => {
                 addFriendButton === "Cancel Request" && "lightgray",
               color: addFriendButton === "Cancel Request" && "black",
             }}
-            onClick={handleAddFriend}
+            onClick={handleSuggestedClick}
           >
             {addFriendButton}
           </AddFriendButton>

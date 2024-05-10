@@ -179,6 +179,21 @@ export const sendFriendRequest = async (req, res) => {
   }
 };
 
+export const cancelSentRequest = async (req, res) => {
+  try {
+    await User.findByIdAndUpdate(req.user.id, {
+      $pull: { sentRequests: req.params.id },
+    });
+
+    await User.findByIdAndUpdate(req.params.id, {
+      $pull: { friendRequests: req.user.id },
+    });
+    res.status(200).json("successfully cancelled request");
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
 export const deleteFriendRequest = async (req, res) => {
   try {
     await User.findByIdAndUpdate(req.user.id, {

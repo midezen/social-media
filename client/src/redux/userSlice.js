@@ -33,6 +33,15 @@ const userSlice = createSlice({
       state.error = false;
     },
 
+    cancelSentRequestSuccess: (state, action) => {
+      const getIndex = state.userInfo.sentRequests.indexOf(action.payload);
+      if (getIndex !== -1) {
+        state.userInfo.sentRequests.splice(getIndex, 1);
+      }
+      state.loading = false;
+      state.error = false;
+    },
+
     logoutSuccess: (state) => {
       state.userInfo = null;
       state.loading = false;
@@ -53,5 +62,6 @@ export const {
   logoutSuccess,
   updateUserSuccess,
   addFriendSuccess,
+  cancelSentRequestSuccess,
 } = userSlice.actions;
 export default userSlice.reducer;
