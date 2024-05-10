@@ -112,7 +112,10 @@ const FindFriends = () => {
       const res = await axiosInstance.get("/users", {
         withCredentials: true,
       });
-      setSuggestedData(res.data);
+      const filteredResponse = res.data.filter(
+        (item) => item._id !== userInfo._id
+      );
+      setSuggestedData(filteredResponse);
       dispatch(Success());
     } catch (err) {
       if (err.response.status === 500) {
