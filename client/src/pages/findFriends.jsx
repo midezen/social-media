@@ -115,7 +115,8 @@ const FindFriends = () => {
       const filteredResponse = res.data.filter(
         (item) =>
           item._id !== userInfo._id &&
-          !userInfo.friendRequests.includes(item._id)
+          !userInfo.friendRequests.includes(item._id) &&
+          !userInfo.friends.includes(item._id)
       );
       setSuggestedData(filteredResponse);
       dispatch(Success());
