@@ -58,7 +58,11 @@ export const getUser = async (req, res) => {
 export const followUser = async (req, res) => {
   try {
     await User.findByIdAndUpdate(req.user.id, {
-      $push: { following: req.params.id },
+      $addToSet: { following: req.params.id },
+    });
+
+    await User.findByIdAndUpdate(req.params.id, {
+      $addToSet: { followers: req.user.id },
     });
     res.status(200).json("successfully followed User");
   } catch (err) {
@@ -70,6 +74,10 @@ export const unfollowUser = async (req, res) => {
   try {
     await User.findByIdAndUpdate(req.user.id, {
       $pull: { following: req.params.id },
+    });
+
+    await User.findByIdAndUpdate(req.params.id, {
+      $pull: { followers: req.user.id },
     });
     res.status(200).json("successfully unfollowed User");
   } catch (err) {
@@ -169,9 +177,11 @@ export const sendFriendRequest = async (req, res) => {
   try {
     await User.findByIdAndUpdate(req.params.id, {
       $push: { friendRequests: req.user.id },
+      $addToSet: { followers: req.user.id },
     });
     await User.findByIdAndUpdate(req.user.id, {
       $push: { sentRequests: req.params.id },
+      $addToSet: { following: req.params.id },
     });
     res.status(200).json("request sent");
   } catch (err) {
@@ -211,7 +221,7 @@ export const deleteFriendRequest = async (req, res) => {
 export const unFriend = async (req, res) => {
   try {
     await User.findByIdAndUpdate(req.user.id, {
-      $pull: { friends: req.params.id },
+      $pull: { friends: req.params.id, following: req.params.id },
     });
     await User.findByIdAndUpdate(req.params.id, {
       $pull: { friends: req.user.id },
@@ -227,11 +237,13 @@ export const AcceptFriendRequest = async (req, res) => {
     await User.findByIdAndUpdate(req.user.id, {
       $push: { friends: req.params.id },
       $pull: { friendRequests: req.params.id },
+      $addToSet: { followers: req.params.id, following: req.params.id },
     });
 
     await User.findByIdAndUpdate(req.params.id, {
       $push: { friends: req.user.id },
       $pull: { sentRequests: req.user.id },
+      $addToSet: { following: req.user.id, followers: req.user.id },
     });
 
     res.status(200).json("request accepted");

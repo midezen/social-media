@@ -4,6 +4,8 @@ import {
   Start,
   addFriendSuccess,
   cancelSentRequestSuccess,
+  followSuccess,
+  unfollowSuccess,
   unfriendSuccess,
 } from "../redux/userSlice";
 import EditProfile from "../components/EditProfile";
@@ -223,6 +225,7 @@ const ProfileLeftComponent = ({ userData, getUser }) => {
   const { darkmode } = useContext(DarkmodeContext);
   const [modalOpen, setModalOpen] = useState(false);
   const [unfriendOpen, setUnfriendOpen] = useState(false);
+  const [following, setFollowing] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -244,6 +247,8 @@ const ProfileLeftComponent = ({ userData, getUser }) => {
   useEffect(() => {
     userInfo.sentRequests.includes(userID) &&
       setAddFriendButton("Cancel Request");
+
+    userInfo.following.includes(userID) && setFollowing(true);
   }, [userID, userInfo]);
 
   const handleAddFriend = async () => {
@@ -300,6 +305,43 @@ const ProfileLeftComponent = ({ userData, getUser }) => {
       dispatch(unfriendSuccess(userID));
       getUser();
       setUnfriendOpen(false);
+    } catch (err) {
+      if (err.response.status === 500) {
+        alert("server/network error");
+      } else {
+        alert(err.response.data);
+      }
+      dispatch(Rejected());
+    }
+  };
+
+  const handleFollow = async () => {
+    dispatch(Start());
+    try {
+      await axiosInstance.put(`/users/followUser/${userID}`, "", {
+        withCredentials: true,
+      });
+      dispatch(followSuccess(userID));
+      getUser();
+    } catch (err) {
+      if (err.response.status === 500) {
+        alert("server/network error");
+      } else {
+        alert(err.response.data);
+      }
+      dispatch(Rejected());
+    }
+  };
+
+  const handleUnfollow = async () => {
+    dispatch(Start());
+    try {
+      await axiosInstance.put(`/users/unfollowUser/${userID}`, "", {
+        withCredentials: true,
+      });
+      dispatch(unfollowSuccess(userID));
+      setFollowing(false);
+      getUser();
     } catch (err) {
       if (err.response.status === 500) {
         alert("server/network error");
@@ -381,10 +423,20 @@ const ProfileLeftComponent = ({ userData, getUser }) => {
         </ProfileLeftTopItems>
         {userInfo._id !== userID && (
           <ButtonTwos>
-            <Button2>
-              <GroupAddOutlinedIcon />
-              Follow
-            </Button2>
+            {following ? (
+              <Button2
+                onClick={handleUnfollow}
+                style={{ backgroundColor: "lightgray", color: "black" }}
+              >
+                <DoneOutlineOutlinedIcon />
+                Following
+              </Button2>
+            ) : (
+              <Button2 onClick={handleFollow}>
+                <GroupAddOutlinedIcon />
+                Follow
+              </Button2>
+            )}
             <Button2>
               <SendOutlinedIcon />
               Message
