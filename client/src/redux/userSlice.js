@@ -66,8 +66,8 @@ const userSlice = createSlice({
       if (getIndex !== -1) {
         state.userInfo.friends.splice(getIndex, 1);
       }
-      // state.loading = false;
-      // state.error = false;
+      state.loading = false;
+      state.error = false;
     },
 
     logoutSuccess: (state) => {

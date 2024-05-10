@@ -244,7 +244,7 @@ const ProfileLeftComponent = ({ userData, getUser }) => {
   useEffect(() => {
     userInfo.sentRequests.includes(userID) &&
       setAddFriendButton("Cancel Request");
-  }, [userID]);
+  }, [userID, userInfo]);
 
   const handleAddFriend = async () => {
     dispatch(Start());
@@ -294,12 +294,12 @@ const ProfileLeftComponent = ({ userData, getUser }) => {
   const handleUnfriend = async () => {
     dispatch(Start());
     try {
-      // await axiosInstance.put(`/users/unfriend/${userID}`, "", {
-      //   withCredentials: true,
-      // });
-      unfriendSuccess(userID);
-      // getUser();
-      // setUnfriendOpen(false);
+      await axiosInstance.put(`/users/unfriend/${userID}`, "", {
+        withCredentials: true,
+      });
+      dispatch(unfriendSuccess(userID));
+      getUser();
+      setUnfriendOpen(false);
     } catch (err) {
       if (err.response.status === 500) {
         alert("server/network error");
