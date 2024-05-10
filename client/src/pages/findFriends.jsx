@@ -185,7 +185,13 @@ const FindFriends = () => {
                 <></>
               ) : (
                 resquestData.map((data) => {
-                  return <Card key={data._id} data={data} />;
+                  return (
+                    <Card
+                      key={data._id}
+                      data={data}
+                      getFriendRequests={getFriendRequests}
+                    />
+                  );
                 })
               )}
             </FriendRequests>

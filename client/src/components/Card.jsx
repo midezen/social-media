@@ -6,8 +6,10 @@ import {
   Rejected,
   Start,
   Success,
+  acceptRequestSuccess,
   addFriendSuccess,
   cancelSentRequestSuccess,
+  deleteRequestSuccess,
 } from "../redux/userSlice";
 import { useEffect, useState } from "react";
 import { axiosInstance } from "../utils/axiosConfig";
@@ -99,7 +101,7 @@ const DeleteButton = styled.button`
   cursor: pointer;
 `;
 
-const Card = ({ suggested, data }) => {
+const Card = ({ suggested, data, getFriendRequests }) => {
   const cardName = data.firstName + " " + data.lastName;
   const slicedName = cardName.slice(0, 19) + "...";
   const checkName = () => {
@@ -162,6 +164,42 @@ const Card = ({ suggested, data }) => {
     addFriendButton === "Add Friend" ? handleAddFriend() : cancelSentRequest();
   };
 
+  const handleAcceptRequest = async () => {
+    dispatch(Start());
+    try {
+      await axiosInstance.put(`/users/acceptrequest/${data._id}`, "", {
+        withCredentials: true,
+      });
+      dispatch(acceptRequestSuccess(data._id));
+      getFriendRequests();
+    } catch (err) {
+      if (err.response.status === 500) {
+        alert("server/network error");
+      } else {
+        alert(err.response.data);
+      }
+      dispatch(Rejected());
+    }
+  };
+
+  const handleDeleteRequest = async () => {
+    dispatch(Start());
+    try {
+      await axiosInstance.put(`/users/deleterequest/${data._id}`, "", {
+        withCredentials: true,
+      });
+      dispatch(deleteRequestSuccess(data._id));
+      getFriendRequests();
+    } catch (err) {
+      if (err.response.status === 500) {
+        alert("server/network error");
+      } else {
+        alert(err.response.data);
+      }
+      dispatch(Rejected());
+    }
+  };
+
   return (
     <Container suggested={suggested}>
       <CardTop suggested={suggested}>
@@ -183,9 +221,11 @@ const Card = ({ suggested, data }) => {
             {addFriendButton}
           </AddFriendButton>
         )}
-        {!suggested && <ConfirmButton>Confirm</ConfirmButton>}
         {!suggested && (
-          <DeleteButton suggested={suggested}>Delete</DeleteButton>
+          <ConfirmButton onClick={handleAcceptRequest}>Confirm</ConfirmButton>
+        )}
+        {!suggested && (
+          <DeleteButton onClick={handleDeleteRequest}>Delete</DeleteButton>
         )}
       </CardBottom>
     </Container>
