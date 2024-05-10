@@ -3,24 +3,17 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Ayomide from "../img/Ayomide 2.png";
 import CameraAltOutlinedIcon from "@mui/icons-material/CameraAltOutlined";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import CreatePost from "../components/CreatePost";
 import Post from "../components/Post";
-import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
-import GroupAddOutlinedIcon from "@mui/icons-material/GroupAddOutlined";
-import SendOutlinedIcon from "@mui/icons-material/SendOutlined";
-import Friend from "../components/Friend";
 import SuggestedSlider from "../components/SuggestedSlider";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import FriendsComponent from "../components/FriendsComponent";
-import Box from "@mui/material/Box";
-import Modal from "@mui/material/Modal";
-import { DarkmodeContext } from "../contexts/darkmode";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { axiosInstance } from "../utils/axiosConfig";
 import { Rejected, Start, Success } from "../redux/userSlice";
-import EditProfile from "../components/EditProfile";
+import ProfileLeftComponent from "../components/ProfileLeftComponent";
 
 const Container = styled.div`
   background-color: ${({ theme }) => theme.bgSoft};
@@ -178,152 +171,6 @@ const ProfileBottom = styled.div`
   margin-top: 20px;
 `;
 
-const ProfileLeft = styled.div`
-  width: 45%;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-`;
-
-const ProfileLeftTop = styled.div`
-  display: flex;
-  flex-direction: column;
-  background-color: ${({ theme }) => theme.bg};
-  padding-top: 25px;
-  align-items: center;
-  justify-content: center;
-  border-radius: 12px;
-  border-bottom-left-radius: 0px;
-  border-bottom-right-radius: 0px;
-`;
-
-const ProfileLeftTopItems = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 30px;
-  justify-content: center;
-  width: 80%;
-`;
-
-const ProfileLeftTopItem = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  align-items: center;
-  jusify-content: center;
-  background-color: ${({ theme }) => theme.bg};
-  box-shadow: 0px 1px 6px 3px ${({ theme }) => theme.bg};
-  -webkit-box-shadow: 0px 1px 6px 3px ${({ theme }) => theme.bg};
-  -moz-box-shadow: 0px 1px 6px 3px ${({ theme }) => theme.bg};
-  padding: 15px;
-  border-radius: 10px;
-  margin-bottom: 20px;
-  border: 1px solid ${({ theme }) => theme.bgSoft};
-  width: 70px;
-  cursor: pointer;
-  height: 70px;
-`;
-
-const FollowXCount = styled.span`
-  font-size: 16px;
-  font-weight: bold;
-  color: ${({ theme }) => theme.spT};
-`;
-
-const FollowX = styled.span`
-  font-size: 12px;
-  font-weight: bold;
-  color: ${({ theme }) => theme.textSoft};
-`;
-
-const Button2 = styled.button`
-  background: ${({ theme }) => theme.spT};
-  border: none;
-  border-radius: 10px;
-  padding: 8px;
-  display: flex;
-  align-items: center;
-  color: white;
-  font-weight: bold;
-  gap: 10px;
-  cursor: pointer;
-  justify-content: center;
-  margin-top: 20px;
-  width: 60%;
-`;
-
-const ProfileLeftTopBottom = styled.div`
-  display: flex;
-  flex-direction: column;
-  background-color: ${({ theme }) => theme.bg};
-  padding-top: 25px;
-  border-radius: 12px;
-  padding-left: 25px;
-  border-top-left-radius: 0px;
-  border-top-right-radius: 0px;
-  margin-top: -20px;
-`;
-
-const InfoItem = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-bottom: 20px;
-`;
-
-const InfoItemHead = styled.span`
-  font-size: 16px;
-  font-weight: bold;
-`;
-
-const InfoItemDesc = styled.p`
-  font-size: 14px;
-  color: ${({ theme }) => theme.textSoft};
-`;
-
-const ProfileLeftMiddle = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  padding: 20px 18px;
-  border-radius: 12px;
-  background-color: ${({ theme }) => theme.bg};
-`;
-
-const Heading = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
-
-const HeadingLeft = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-`;
-
-const FriendsHead = styled.span`
-  font-size: 18px;
-  font-weight: bold;
-`;
-
-const HeadingRight = styled.span`
-  font-size: 16px;
-  color: ${({ theme }) => theme.spT};
-  cursor: pointer;
-`;
-
-const ProfileLeftMiddleItems = styled.div`
-  display: grid;
-  grid-template-rows: 1fr 1fr 1fr;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-gap: 8px;
-`;
-
-const ProfileLeftBottom = styled.span`
-  font-size: 12px;
-  color: ${({ theme }) => theme.textSoft};
-`;
-
 const ProfileRight = styled.div`
   width: 55%;
   display: flex;
@@ -332,18 +179,10 @@ const ProfileRight = styled.div`
   gap: 20px;
 `;
 
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  boxShadow: 24,
-};
-
 const Profile = () => {
   const [tab, setTab] = useState("posts");
   const [expand, setExpand] = useState(false);
-  const [modalOpen, setModalOpen] = useState(false);
+
   const location = useLocation();
   const [userData, setUserData] = useState(
     JSON.parse(localStorage.getItem("profilePageUser"))
@@ -352,8 +191,6 @@ const Profile = () => {
   const dispatch = useDispatch();
 
   const userID = location.pathname.split("/")[2];
-
-  const { darkmode } = useContext(DarkmodeContext);
 
   const getUser = async () => {
     dispatch(Start());
@@ -378,13 +215,6 @@ const Profile = () => {
   useEffect(() => {
     getUser();
   }, [userID]);
-
-  const handleModalOpen = () => {
-    setModalOpen(true);
-  };
-  const handleModalClose = () => {
-    setModalOpen(false);
-  };
 
   const handleTabClick = (prop) => {
     setTab(prop);
@@ -459,121 +289,7 @@ const Profile = () => {
       </Top>
       {tab === "posts" ? (
         <ProfileBottom>
-          <ProfileLeft>
-            <ProfileLeftTop>
-              <ProfileLeftTopItems>
-                <ProfileLeftTopItem>
-                  <PersonOutlineOutlinedIcon
-                    style={{ fontSize: "30px", color: "#0000ff" }}
-                  />
-                  <FollowXCount>{userData.followers.length}</FollowXCount>
-                  <FollowX>Followers</FollowX>
-                </ProfileLeftTopItem>
-                <ProfileLeftTopItem>
-                  <PersonOutlineOutlinedIcon
-                    style={{ fontSize: "30px", color: "#0000ff" }}
-                  />
-                  <FollowXCount>{userData.following.length}</FollowXCount>
-                  <FollowX>Following</FollowX>
-                </ProfileLeftTopItem>
-              </ProfileLeftTopItems>
-              <ProfileLeftTopItems>
-                <ProfileLeftTopItem>
-                  <PersonOutlineOutlinedIcon
-                    style={{ fontSize: "30px", color: "#0000ff" }}
-                  />
-                  <FollowXCount>{userData.posts.length}</FollowXCount>
-                  <FollowX>Posts</FollowX>
-                </ProfileLeftTopItem>
-                <ProfileLeftTopItem onClick={handleModalOpen}>
-                  <PersonOutlineOutlinedIcon
-                    style={{
-                      fontSize: "30px",
-                      color: "#0000ff",
-                      marginTop: "9px",
-                    }}
-                  />
-
-                  <FollowX>Edit Profile</FollowX>
-                </ProfileLeftTopItem>
-              </ProfileLeftTopItems>
-              <Button2>
-                <GroupAddOutlinedIcon />
-                Follow Now
-              </Button2>
-              <Button2>
-                <SendOutlinedIcon />
-                Message
-              </Button2>
-            </ProfileLeftTop>{" "}
-            <ProfileLeftTopBottom>
-              <InfoItem>
-                <InfoItemHead>About</InfoItemHead>
-                <InfoItemDesc>
-                  {userData.about
-                    ? userData.about
-                    : "click on edit profile button to add bio"}
-                </InfoItemDesc>
-              </InfoItem>
-              <InfoItem>
-                <InfoItemHead>Mobile</InfoItemHead>
-                <InfoItemDesc>
-                  {userData.mobileNo
-                    ? userData.mobileNo
-                    : "click on edit profile button to add mobile number"}
-                </InfoItemDesc>
-              </InfoItem>
-              <InfoItem>
-                <InfoItemHead>Email Address</InfoItemHead>
-                <InfoItemDesc>
-                  {userData.email
-                    ? userData.email
-                    : "click on edit profile button to add email"}
-                </InfoItemDesc>
-              </InfoItem>
-              <InfoItem>
-                <InfoItemHead>Location</InfoItemHead>
-                {userData.province || userData.country ? (
-                  <InfoItemDesc>
-                    {userData.province ? userData.province : ""}{" "}
-                    {userData.country ? userData.country : ""}
-                  </InfoItemDesc>
-                ) : (
-                  <InfoItemDesc>
-                    click on edit profile button to add location
-                  </InfoItemDesc>
-                )}
-              </InfoItem>
-            </ProfileLeftTopBottom>
-            <ProfileLeftMiddle
-              style={{ position: "sticky", top: "60px", marginBottom: "20px" }}
-            >
-              <Heading>
-                <HeadingLeft>
-                  <FriendsHead>Friends</FriendsHead>
-                  <FriendsCount style={{ marginLeft: "0", fontWeight: "300" }}>
-                    4,305
-                  </FriendsCount>
-                </HeadingLeft>
-                <HeadingRight>See all</HeadingRight>
-              </Heading>
-              <ProfileLeftMiddleItems>
-                <Friend />
-                <Friend />
-                <Friend />
-                <Friend />
-                <Friend />
-                <Friend />
-                <Friend />
-                <Friend />
-                <Friend />
-              </ProfileLeftMiddleItems>
-              <ProfileLeftBottom>
-                Privacy · Terms · Advertising · Ad Choices · Cookies · CTV ©
-                2024
-              </ProfileLeftBottom>
-            </ProfileLeftMiddle>
-          </ProfileLeft>
+          <ProfileLeftComponent userData={userData} getUser={getUser} />
           <ProfileRight>
             <CreatePost />
             <Post />
@@ -587,29 +303,6 @@ const Profile = () => {
       ) : (
         <FriendsComponent />
       )}
-      <Modal
-        open={modalOpen}
-        onClose={handleModalClose}
-        aria-labelledby="parent-modal-title"
-        aria-describedby="parent-modal-description"
-      >
-        <Box
-          sx={{ ...style, width: "30%", height: "70%" }}
-          style={{
-            backgroundColor: darkmode ? "#202020" : "white",
-            border: darkmode ? "1px solid #181818" : "1px solid #f5f5f0",
-            borderRadius: "12px",
-            display: "flex",
-            flexDirection: "column",
-            gap: "20px",
-            color: darkmode ? "white" : "black",
-            padding: "30px",
-            justifyContent: "center",
-          }}
-        >
-          <EditProfile setModalOpen={setModalOpen} getUser={getUser} />
-        </Box>
-      </Modal>
     </Container>
   );
 };

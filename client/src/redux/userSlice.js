@@ -48,6 +48,8 @@ const userSlice = createSlice({
         state.userInfo.friendRequests.splice(getIndex, 1);
       }
       state.userInfo.friends.push(action.payload);
+      state.loading = false;
+      state.error = false;
     },
 
     deleteRequestSuccess: (state, action) => {
@@ -55,6 +57,17 @@ const userSlice = createSlice({
       if (getIndex !== -1) {
         state.userInfo.friendRequests.splice(getIndex, 1);
       }
+      state.loading = false;
+      state.error = false;
+    },
+
+    unfriendSuccess: (state, action) => {
+      const getIndex = state.userInfo.friends.indexOf(action.payload);
+      if (getIndex !== -1) {
+        state.userInfo.friends.splice(getIndex, 1);
+      }
+      // state.loading = false;
+      // state.error = false;
     },
 
     logoutSuccess: (state) => {
@@ -80,5 +93,6 @@ export const {
   cancelSentRequestSuccess,
   acceptRequestSuccess,
   deleteRequestSuccess,
+  unfriendSuccess,
 } = userSlice.actions;
 export default userSlice.reducer;
