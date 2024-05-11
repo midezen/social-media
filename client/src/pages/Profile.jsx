@@ -184,9 +184,7 @@ const Profile = () => {
   const [expand, setExpand] = useState(false);
 
   const location = useLocation();
-  const [userData, setUserData] = useState(
-    JSON.parse(localStorage.getItem("profilePageUser"))
-  );
+  const [userData, setUserData] = useState({});
 
   const dispatch = useDispatch();
 
@@ -198,8 +196,8 @@ const Profile = () => {
       const res = await axiosInstance.get(`/users/${userID}`, {
         withCredentials: true,
       });
-      localStorage.setItem("profilePageUser", JSON.stringify(res.data));
-      setUserData(JSON.parse(localStorage.getItem("profilePageUser")));
+      console.log(res.data);
+      setUserData(res.data);
 
       dispatch(Success());
     } catch (err) {
@@ -212,9 +210,13 @@ const Profile = () => {
     }
   };
 
+  // useEffect(() => {
+  //   getUser();
+  // }, [userID]);
+
   useEffect(() => {
     getUser();
-  }, [userID]);
+  }, []);
 
   const handleTabClick = (prop) => {
     setTab(prop);
@@ -301,7 +303,7 @@ const Profile = () => {
           </ProfileRight>
         </ProfileBottom>
       ) : (
-        <FriendsComponent />
+        <FriendsComponent tab={tab} />
       )}
     </Container>
   );

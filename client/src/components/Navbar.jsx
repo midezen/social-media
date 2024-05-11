@@ -10,7 +10,7 @@ import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNone
 import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
 import BookmarkBorderOutlinedIcon from "@mui/icons-material/BookmarkBorderOutlined";
 import { useContext, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Rejected, Start } from "../redux/userSlice.js";
 import { logoutUser } from "../utils/apiCalls/Auth.js";
@@ -152,6 +152,7 @@ const Navbar = () => {
 
   const [active, setActive] = useState("home");
   const userInfo = useSelector((state) => state.user.userInfo);
+  const navigate = useNavigate();
 
   const handleActiveClick = (prop) => {
     setActive(prop);
@@ -164,14 +165,14 @@ const Navbar = () => {
   const handleLogout = async () => {
     try {
       dispatch(Start());
-      await logoutUser(dispatch);
+      await logoutUser(dispatch, navigate);
     } catch (err) {
+      dispatch(Rejected());
       if (err.response.status === 500) {
         alert("server/network error");
       } else {
         alert(err.response.data);
       }
-      dispatch(Rejected());
     }
   };
   return (

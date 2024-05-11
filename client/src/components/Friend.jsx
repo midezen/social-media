@@ -19,11 +19,16 @@ const FriendName = styled.span`
   font-weight: bold;
 `;
 
-const Friend = () => {
+const Friend = ({ data }) => {
   return (
     <Container>
-      <FriendPicture src={Ayomide} alt="Friend's Picture" />
-      <FriendName>Ayomide Oluwadiya</FriendName>
+      <FriendPicture
+        src={data.profilePic ? data.profilePic : Ayomide}
+        alt="Friend's Picture"
+      />
+      <FriendName>
+        {data.firstName} {data.lastName}
+      </FriendName>
     </Container>
   );
 };

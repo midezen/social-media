@@ -16,7 +16,8 @@ export const loginUser = async (userInfo, dispatch, navigate) => {
   navigate("/");
 };
 
-export const logoutUser = async (dispatch) => {
+export const logoutUser = async (dispatch, navigate) => {
   await axiosInstance.post("/auth/logout", "", { withCredentials: true });
   dispatch(logoutSuccess());
+  navigate("/");
 };

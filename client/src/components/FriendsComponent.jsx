@@ -2,6 +2,11 @@ import styled from "styled-components";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import MoreHorizOutlinedIcon from "@mui/icons-material/MoreHorizOutlined";
 import Ayomide from "../img/Ayomide 2.png";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { Rejected, Start, Success } from "../redux/userSlice";
+import { axiosInstance } from "../utils/axiosConfig";
+import { Link, useLocation } from "react-router-dom";
 
 const Container = styled.div`
   display: flex;
@@ -110,14 +115,42 @@ const FriendItemRight = styled.div`
   background-color: ${({ theme }) => theme.hover};
 `;
 
-const FriendsComponent = () => {
+const FriendsComponent = ({ tab }) => {
+  const [data, setData] = useState([]);
+  const dispatch = useDispatch();
+  const location = useLocation();
+
+  const userID = location.pathname.split("/")[2];
+
+  const getUserFriends = async () => {
+    dispatch(Start());
+    try {
+      const res = await axiosInstance.get(`/users/getuserfriends/${userID}`, {
+        withCredentials: true,
+      });
+      setData(res.data);
+      dispatch(Success());
+    } catch (err) {
+      dispatch(Rejected());
+      if (err.response.status === 500) {
+        alert("server/network error");
+      } else {
+        alert(err.response.data);
+      }
+    }
+  };
+
+  useEffect(() => {
+    tab === "friends" && getUserFriends();
+  }, [tab]);
+
   return (
     <Container>
       <Heading>
         <HeadingLeft>
           <FriendsHead>Friends</FriendsHead>
           <FriendsCount style={{ marginLeft: "0", fontWeight: "300" }}>
-            4,305
+            {data.length}
           </FriendsCount>
         </HeadingLeft>
         <HeadingRight>
@@ -128,50 +161,31 @@ const FriendsComponent = () => {
         </HeadingRight>
       </Heading>
       <Friends>
-        <FriendItem>
-          <FriendItemLeft>
-            <FriendPicture src={Ayomide} alt="Friend's Picture" />
-            <FriendName>Ayomide Oluwadiya</FriendName>
-          </FriendItemLeft>
-          <FriendItemRight>
-            <MoreHorizOutlinedIcon
-              style={{ fontSize: "18px", cursor: "pointer" }}
-            />
-          </FriendItemRight>
-        </FriendItem>
-        <FriendItem>
-          <FriendItemLeft>
-            <FriendPicture src={Ayomide} alt="Friend's Picture" />
-            <FriendName>Ayomide Oluwadiya</FriendName>
-          </FriendItemLeft>
-          <FriendItemRight>
-            <MoreHorizOutlinedIcon
-              style={{ fontSize: "18px", cursor: "pointer" }}
-            />
-          </FriendItemRight>
-        </FriendItem>
-        <FriendItem>
-          <FriendItemLeft>
-            <FriendPicture src={Ayomide} alt="Friend's Picture" />
-            <FriendName>Ayomide Oluwadiya</FriendName>
-          </FriendItemLeft>
-          <FriendItemRight>
-            <MoreHorizOutlinedIcon
-              style={{ fontSize: "18px", cursor: "pointer" }}
-            />
-          </FriendItemRight>
-        </FriendItem>
-        <FriendItem>
-          <FriendItemLeft>
-            <FriendPicture src={Ayomide} alt="Friend's Picture" />
-            <FriendName>Ayomide Oluwadiya</FriendName>
-          </FriendItemLeft>
-          <FriendItemRight>
-            <MoreHorizOutlinedIcon
-              style={{ fontSize: "18px", cursor: "pointer" }}
-            />
-          </FriendItemRight>
-        </FriendItem>
+        {data.map((item) => {
+          return (
+            <Link
+              to={`/profile/${item._id}`}
+              style={{ color: "inherit", textDecoration: "none" }}
+            >
+              <FriendItem key={item._id}>
+                <FriendItemLeft>
+                  <FriendPicture
+                    src={item.profilePic ? item.profilePic : Ayomide}
+                    alt="Friend's Picture"
+                  />
+                  <FriendName>
+                    {item.firstName} {item.lastName}
+                  </FriendName>
+                </FriendItemLeft>
+                <FriendItemRight>
+                  <MoreHorizOutlinedIcon
+                    style={{ fontSize: "18px", cursor: "pointer" }}
+                  />
+                </FriendItemRight>
+              </FriendItem>
+            </Link>
+          );
+        })}
       </Friends>
     </Container>
   );

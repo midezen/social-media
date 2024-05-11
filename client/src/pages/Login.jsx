@@ -140,13 +140,12 @@ const Login = () => {
     try {
       await loginUser(userInfo, dispatch, navigate);
     } catch (err) {
+      dispatch(Rejected());
       if (err.response.status === 500) {
         alert("server/network error");
       } else {
         alert(err.response.data);
       }
-
-      dispatch(Rejected());
     }
   };
 

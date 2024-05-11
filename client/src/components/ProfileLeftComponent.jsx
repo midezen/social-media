@@ -2,6 +2,7 @@ import styled from "styled-components";
 import {
   Rejected,
   Start,
+  Success,
   addFriendSuccess,
   cancelSentRequestSuccess,
   followSuccess,
@@ -9,6 +10,7 @@ import {
   unfriendSuccess,
 } from "../redux/userSlice";
 import EditProfile from "../components/EditProfile";
+import GppBadOutlinedIcon from "@mui/icons-material/GppBadOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DoneOutlineOutlinedIcon from "@mui/icons-material/DoneOutlineOutlined";
 import Box from "@mui/material/Box";
@@ -137,6 +139,7 @@ const ProfileLeftMiddle = styled.div`
   padding: 20px 18px;
   border-radius: 12px;
   background-color: ${({ theme }) => theme.bg};
+  height: fit-content;
 `;
 
 const Heading = styled.div`
@@ -163,8 +166,8 @@ const HeadingRight = styled.span`
 
 const ProfileLeftMiddleItems = styled.div`
   display: grid;
-  grid-template-rows: 1fr 1fr 1fr;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: ${({ length }) =>
+    length === 0 ? "none" : "1fr 1fr 1fr"};
   grid-gap: 8px;
 `;
 
@@ -211,6 +214,11 @@ const UnfriendUserButton = styled.button`
   }
 `;
 
+const FriendsAppearSpan = styled.span`
+  font-size: 18px;
+  font-weight: bold;
+`;
+
 const style = {
   position: "absolute",
   top: "50%",
@@ -226,6 +234,7 @@ const ProfileLeftComponent = ({ userData, getUser }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [unfriendOpen, setUnfriendOpen] = useState(false);
   const [following, setFollowing] = useState(false);
+  const [userFriendsData, setUserFriendsData] = useState([]);
 
   const dispatch = useDispatch();
 
@@ -260,6 +269,8 @@ const ProfileLeftComponent = ({ userData, getUser }) => {
 
       dispatch(addFriendSuccess(userID));
       setAddFriendButton("Cancel Request");
+      getUser();
+      getUserFriends();
     } catch (err) {
       if (err.response.status === 500) {
         alert("server/network error");
@@ -352,6 +363,30 @@ const ProfileLeftComponent = ({ userData, getUser }) => {
     }
   };
 
+  const getUserFriends = async () => {
+    dispatch(Start());
+    try {
+      const res = await axiosInstance.get(`/users/getuserfriends/${userID}`, {
+        withCredentials: true,
+      });
+
+      const response = res.data.slice(0, 9);
+      setUserFriendsData(response);
+      dispatch(Success());
+    } catch (err) {
+      dispatch(Rejected());
+      if (err.response.status === 500) {
+        alert("server/network error");
+      } else {
+        alert(err.response.data);
+      }
+    }
+  };
+
+  useEffect(() => {
+    getUserFriends();
+  }, []);
+
   return (
     <ProfileLeft>
       <ProfileLeftTop>
@@ -402,6 +437,25 @@ const ProfileLeftComponent = ({ userData, getUser }) => {
               />
               <FollowX style={{ marginTop: "13px" }}>Friends ✅</FollowX>
             </ProfileLeftTopItem>
+          ) : addFriendButton === "Cancel Request" ? (
+            <ProfileLeftTopItem onClick={handleRequestClick}>
+              <GppBadOutlinedIcon
+                style={{
+                  fontSize: "30px",
+                  color: "#0000ff",
+                  marginTop: "3px",
+                }}
+              />
+
+              <FollowX
+                style={{
+                  marginTop: "5px",
+                }}
+              >
+                Cancel
+                <br /> Request
+              </FollowX>
+            </ProfileLeftTopItem>
           ) : (
             <ProfileLeftTopItem
               onClick={handleRequestClick}
@@ -411,12 +465,17 @@ const ProfileLeftComponent = ({ userData, getUser }) => {
                 style={{
                   fontSize: "30px",
                   color: "white",
-                  marginTop: "9px",
+                  marginTop: "5px",
                 }}
               />
 
-              <FollowX style={{ marginTop: "13px", color: "white" }}>
-                {addFriendButton}
+              <FollowX
+                style={{
+                  marginTop: "3px",
+                  color: "white",
+                }}
+              >
+                Add Friend
               </FollowX>
             </ProfileLeftTopItem>
           )}
@@ -490,21 +549,19 @@ const ProfileLeftComponent = ({ userData, getUser }) => {
           <HeadingLeft>
             <FriendsHead>Friends</FriendsHead>
             <FriendsCount style={{ marginLeft: "0", fontWeight: "300" }}>
-              4,305
+              {userFriendsData.length}
             </FriendsCount>
           </HeadingLeft>
-          <HeadingRight>See all</HeadingRight>
+          {userFriendsData.length > 9 && <HeadingRight>See all</HeadingRight>}
         </Heading>
-        <ProfileLeftMiddleItems>
-          <Friend />
-          <Friend />
-          <Friend />
-          <Friend />
-          <Friend />
-          <Friend />
-          <Friend />
-          <Friend />
-          <Friend />
+        <ProfileLeftMiddleItems length={userFriendsData.length}>
+          {userFriendsData.length === 0 ? (
+            <FriendsAppearSpan>Your friends will appear here</FriendsAppearSpan>
+          ) : (
+            userFriendsData.map((data) => {
+              return <Friend key={data._id} data={data} />;
+            })
+          )}
         </ProfileLeftMiddleItems>
         <ProfileLeftBottom>
           Privacy · Terms · Advertising · Ad Choices · Cookies · CTV © 2024
