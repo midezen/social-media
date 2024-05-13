@@ -2,6 +2,10 @@ import styled from "styled-components";
 import Ayomide from "../img/Ayomide 2.png";
 import GroupAddOutlinedIcon from "@mui/icons-material/GroupAddOutlined";
 import { Link } from "react-router-dom";
+import { Rejected, Start, Success } from "../redux/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { axiosInstance } from "../utils/axiosConfig";
+import { useEffect, useState } from "react";
 
 const Container = styled.div`
   width: 30%;
@@ -49,6 +53,7 @@ const RightItem = styled.div`
   justify-content: space-between;
   cursor: pointer;
   padding: 12px;
+  color: ${({ theme }) => theme.text};
 `;
 
 const Info = styled.div`
@@ -176,88 +181,142 @@ const Pre = styled.pre`
 const P = styled.p``;
 
 const HomeRight = () => {
+  const userInfo = useSelector((state) => state.user.userInfo);
+  const dispatch = useDispatch();
+  const [suggestedData, setSuggestedData] = useState([]);
+  const [resquestData, setResquestData] = useState([]);
+
+  const getSuggestedFriends = async () => {
+    dispatch(Start());
+    try {
+      const res = await axiosInstance.get("/users", {
+        withCredentials: true,
+      });
+      const filteredResponse = res.data.filter(
+        (item) =>
+          item._id !== userInfo._id &&
+          !userInfo.friendRequests.includes(item._id) &&
+          !userInfo.friends.includes(item._id)
+      );
+      const responseData = filteredResponse.slice(0, 3);
+      setSuggestedData(responseData);
+      dispatch(Success());
+    } catch (err) {
+      if (err.response.data === 500) {
+        alert("server/network error");
+      } else {
+        alert(err.response.data);
+      }
+      dispatch(Rejected());
+    }
+  };
+
+  const getFriendRequests = async () => {
+    dispatch(Start());
+    try {
+      const res = await axiosInstance.get(
+        `/users/getuserfriendrequests/${userInfo._id}`,
+        { withCredentials: true }
+      );
+      const responseData = res.data.slice(0, 2);
+      setResquestData(responseData);
+      dispatch(Success());
+    } catch (err) {
+      if (err.response.data === 500) {
+        alert("server/network error");
+      } else {
+        alert(err.response.data);
+      }
+    }
+  };
+
+  useEffect(() => {
+    getFriendRequests();
+    getSuggestedFriends();
+  }, []);
+
   return (
     <Container>
       {/* THE RIGHT SIDE OF THE HOME PAGE CONSIST OF THREE SECTIONS: THE TOP, THE
       MIDDLE AND THE BOTTOM SECTION */}
 
       {/* THIS IS THE TOP SECTION, IT CONTAINS USER'S FRIEND REQUESTS */}
-      <RightHeadSpan>
-        Requests
-        <RightHeadSpanb>5</RightHeadSpanb>
-      </RightHeadSpan>
-      <RightItem>
-        <Info>
-          <ProfileImage src={Ayomide} alt="profilepic" />
-          <Spans>
-            <Span1>
-              Ayomide Oluwadiya <Span1b>wants to add you to friends</Span1b>
-            </Span1>
-            <Buttons>
-              <Button>Accept</Button>
-              <Button>Decline</Button>
-            </Buttons>
-          </Spans>
-        </Info>
-      </RightItem>
-      <RightItem>
-        <Info>
-          <ProfileImage src={Ayomide} alt="profilepic" />
-          <Spans>
-            <Span1>
-              Ayomide Oluwadiya <Span1b>wants to add you to friends</Span1b>
-            </Span1>
-            <Buttons>
-              <Button>Accept</Button>
-              <Button>Decline</Button>
-            </Buttons>
-          </Spans>
-        </Info>
-      </RightItem>
+      {resquestData.length > 0 && (
+        <RightHeadSpan>
+          Requests
+          <RightHeadSpanb>5</RightHeadSpanb>
+        </RightHeadSpan>
+      )}
+      {resquestData.length > 0 &&
+        resquestData.map((item) => {
+          return (
+            <Link
+              to={`/profile/${item._id}`}
+              style={{ color: "inherit", textDecoration: "none" }}
+            >
+              <RightItem key={item._id}>
+                <Info>
+                  <ProfileImage
+                    src={item.profilePic ? item.profilePic : Ayomide}
+                    alt="profilepic"
+                  />
+                  <Spans>
+                    <Span1>
+                      {item.firstName} {item.lastName}{" "}
+                      <Span1b>wants to be your friend</Span1b>
+                    </Span1>
+                    <Buttons>
+                      <Button>Accept</Button>
+                      <Button>Decline</Button>
+                    </Buttons>
+                  </Spans>
+                </Info>
+              </RightItem>
+            </Link>
+          );
+        })}
+
       <Link
         to="/findFriends?tab=requests"
-        style={{ color: "none", textDecoration: "none" }}
+        style={{ color: "inherit", textDecoration: "none" }}
       >
-        <Button2>View All</Button2>
+        {resquestData.length > 0 && <Button2>View All</Button2>}
       </Link>
 
-      <Divider />
+      {resquestData.length > 0 && <Divider />}
 
       {/* THIS IS THE MIDDLE SECTION, AND IT IS DIVIDED INTO TWO SECTIONS */}
       {/* --------------------------------------------------------------- */}
       {/* THIS IS THE FIRST SECTION OF THE MIDDLE SECTION,
        IT CONTAINS SUGGESTIONS ON USERS TO FRIEND */}
       <RightHeadSpan>Suggestions for you</RightHeadSpan>
-      <RightItem>
-        <Info>
-          <ProfileImage src={Ayomide} alt="profilepic" />
-          <Spans>
-            <Span1>Ayomide Oluwadiya</Span1>
-            <Span2>Lagos, Nigeria</Span2>
-          </Spans>
-        </Info>
-        <GroupAddOutlinedIcon style={{ color: "#0000ff" }} />
-      </RightItem>
-      <RightItem>
-        <Info>
-          <ProfileImage src={Ayomide} alt="profilepic" />
-          <Spans>
-            <Span1>Ayomide Oluwadiya</Span1>
-            <Span2>Lagos, Nigeria</Span2>
-          </Spans>
-        </Info>
-        <GroupAddOutlinedIcon style={{ color: "#0000ff" }} />
-      </RightItem>
-      <RightItem>
-        <Info>
-          <ProfileImage src={Ayomide} alt="profilepic" />
-          <Spans>
-            <Span1>Ayomide Oluwadiya</Span1>
-            <Span2>Lagos, Nigeria</Span2>
-          </Spans>
-        </Info>
-        <GroupAddOutlinedIcon style={{ color: "#0000ff" }} />
-      </RightItem>
+      {suggestedData.map((item) => {
+        return (
+          <Link
+            to={`/profile/${item._id}`}
+            style={{ color: "none", textDecoration: "none" }}
+          >
+            <RightItem key={item._id}>
+              <Info>
+                <ProfileImage
+                  src={item.profilePic ? item.profilePic : Ayomide}
+                  alt="profilepic"
+                />
+                <Spans>
+                  <Span1>
+                    {item.firstName} {item.lastName}
+                  </Span1>
+                  <Span2>
+                    {item.province} {item.country}
+                  </Span2>
+                </Spans>
+              </Info>
+              <GroupAddOutlinedIcon style={{ color: "#0000ff" }} />
+            </RightItem>
+          </Link>
+        );
+      })}
+
       <Link
         to="/findFriends?tab=suggested"
         style={{ color: "inherit", textDecoration: "none" }}

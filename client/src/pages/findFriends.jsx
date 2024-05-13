@@ -134,7 +134,7 @@ const FindFriends = () => {
       } else {
         alert(err.response.data);
       }
-      console.log(err);
+
       dispatch(Rejected());
     }
   };
