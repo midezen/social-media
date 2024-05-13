@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import Ayomide from "../img/Ayomide 2.png";
 import GroupAddOutlinedIcon from "@mui/icons-material/GroupAddOutlined";
+import { Link } from "react-router-dom";
 
 const Container = styled.div`
   width: 30%;
@@ -174,7 +175,7 @@ const Pre = styled.pre`
 
 const P = styled.p``;
 
-const HomeRight = ({ theme }) => {
+const HomeRight = () => {
   return (
     <Container>
       {/* THE RIGHT SIDE OF THE HOME PAGE CONSIST OF THREE SECTIONS: THE TOP, THE
@@ -213,7 +214,13 @@ const HomeRight = ({ theme }) => {
           </Spans>
         </Info>
       </RightItem>
-      <Button2>View All</Button2>
+      <Link
+        to="/findFriends?tab=requests"
+        style={{ color: "none", textDecoration: "none" }}
+      >
+        <Button2>View All</Button2>
+      </Link>
+
       <Divider />
 
       {/* THIS IS THE MIDDLE SECTION, AND IT IS DIVIDED INTO TWO SECTIONS */}
@@ -251,7 +258,13 @@ const HomeRight = ({ theme }) => {
         </Info>
         <GroupAddOutlinedIcon style={{ color: "#0000ff" }} />
       </RightItem>
-      <Button2>View All</Button2>
+      <Link
+        to="/findFriends?tab=suggested"
+        style={{ color: "inherit", textDecoration: "none" }}
+      >
+        <Button2>View All</Button2>
+      </Link>
+
       <Divider />
 
       {/* THIS IS THE SECOND SECTION IN THE MIDDLE SECTION, IT CONTAINS PRESENTLY ACTIVE FRIENDS */}

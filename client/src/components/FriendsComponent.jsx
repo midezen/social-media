@@ -18,6 +18,7 @@ const Container = styled.div`
   margin-top: 20px;
   border-radius: 12px;
   background-color: ${({ theme }) => theme.bg};
+  margin-bottom: 10px;
 `;
 
 const Heading = styled.div`

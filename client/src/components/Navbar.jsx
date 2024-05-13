@@ -178,7 +178,9 @@ const Navbar = () => {
   return (
     <Container>
       <Left>
-        <H1>CTV</H1>
+        <Link to="/" style={{ color: "none", textDecoration: "none" }}>
+          <H1>CTV</H1>
+        </Link>
         <SearchContainer>
           <SearchOutlinedIcon style={{ fontSize: "18px" }} />
           <SearchInput type="text" placeholder="Ask me anything" />
@@ -196,7 +198,7 @@ const Navbar = () => {
             </NotificationIcon>
           </NavItem>
         </Link>
-        <Link to="/findFriends" style={{ color: "inherit" }}>
+        <Link to="/findFriends?tab=suggested" style={{ color: "inherit" }}>
           <NavItem
             onClick={() => handleActiveClick("friends")}
             style={{ color: active === "friends" ? "#0000ff" : "inherit" }}

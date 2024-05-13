@@ -23,6 +23,7 @@ import Friend from "../components/Friend";
 import { useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { axiosInstance } from "../utils/axiosConfig";
+import { Link, useNavigate } from "react-router-dom";
 
 const ProfileLeft = styled.div`
   width: 45%;
@@ -235,6 +236,7 @@ const ProfileLeftComponent = ({ userData, getUser }) => {
   const [unfriendOpen, setUnfriendOpen] = useState(false);
   const [following, setFollowing] = useState(false);
   const [userFriendsData, setUserFriendsData] = useState([]);
+  const navigate = useNavigate();
 
   const dispatch = useDispatch();
 
@@ -316,6 +318,7 @@ const ProfileLeftComponent = ({ userData, getUser }) => {
       dispatch(unfriendSuccess(userID));
       getUser();
       setUnfriendOpen(false);
+      setFollowing(false);
     } catch (err) {
       if (err.response.status === 500) {
         alert("server/network error");
@@ -385,7 +388,7 @@ const ProfileLeftComponent = ({ userData, getUser }) => {
 
   useEffect(() => {
     getUserFriends();
-  }, []);
+  }, [userID]);
 
   return (
     <ProfileLeft>
@@ -559,7 +562,15 @@ const ProfileLeftComponent = ({ userData, getUser }) => {
             <FriendsAppearSpan>Your friends will appear here</FriendsAppearSpan>
           ) : (
             userFriendsData.map((data) => {
-              return <Friend key={data._id} data={data} />;
+              return (
+                <Link
+                  to={`/profile/${data._id}`}
+                  style={{ color: "inherit", textDecoration: "none" }}
+                  onClick={() => window.scrollTo(0, 0)}
+                >
+                  <Friend key={data._id} data={data} />
+                </Link>
+              );
             })
           )}
         </ProfileLeftMiddleItems>

@@ -149,6 +149,8 @@ const WrapperBottom = styled.div`
   align-items: center;
   font-size: 14px;
   gap: 20px;
+  margin-bottom: 15px;
+  margin-top: 8px;
 `;
 
 const Posts = styled.span`
@@ -198,7 +200,7 @@ const Profile = () => {
       });
 
       dispatch(Success());
-      console.log(res.data);
+
       setUserData(res.data);
     } catch (err) {
       if (err.response.status === 500) {
@@ -214,6 +216,8 @@ const Profile = () => {
     getUser();
     if (search === "friends") {
       setTab("friends");
+    } else {
+      setTab("posts");
     }
   }, [location]);
 

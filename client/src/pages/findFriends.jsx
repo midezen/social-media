@@ -6,6 +6,7 @@ import Card from "../components/Card";
 import { useDispatch, useSelector } from "react-redux";
 import { Rejected, Start, Success } from "../redux/userSlice";
 import { axiosInstance } from "../utils/axiosConfig";
+import { Link, useLocation } from "react-router-dom";
 
 const Container = styled.div`
   display: flex;
@@ -88,13 +89,20 @@ const SuggestedFriends = styled.div`
 `;
 
 const FindFriends = () => {
-  const [tab, setTab] = useState("suggested");
+  const location = useLocation();
+  const search = location.search.split("=")[1];
+  console.log(search);
+  const [tab, setTab] = useState(search);
   const [suggestedActive, setSuggestedActive] = useState(true);
   const [requestActive, setRequestActive] = useState(false);
   const [resquestData, setResquestData] = useState([]);
   const [suggestedData, setSuggestedData] = useState([]);
   const userInfo = useSelector((state) => state.user.userInfo);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    setTab(search);
+  }, [search]);
 
   useEffect(() => {
     if (tab === "suggested") {
@@ -160,20 +168,30 @@ const FindFriends = () => {
       <Left>
         <H2>Find Friends</H2>
         <LeftBottom>
-          <LeftBottomItem
-            onClick={() => setTab("suggested")}
-            suggestedActive={suggestedActive}
+          <Link
+            to="/findFriends?tab=suggested"
+            style={{ color: "inherit", textDecoration: "none" }}
           >
-            <PersonOutlineOutlinedIcon style={{ fontSize: "25px" }} />
-            Suggested Friends
-          </LeftBottomItem>
-          <LeftBottomItem
-            onClick={() => setTab("requests")}
-            requestActive={requestActive}
-          >
-            <PeopleAltOutlinedIcon style={{ fontSize: "25px" }} /> Friend
-            Requests
-          </LeftBottomItem>
+            <LeftBottomItem
+              // onClick={() => setTab("suggested")}
+              suggestedActive={suggestedActive}
+            >
+              <PersonOutlineOutlinedIcon style={{ fontSize: "25px" }} />
+              Suggested Friends
+            </LeftBottomItem>
+            <Link
+              to="/findFriends?tab=requests"
+              style={{ color: "inherit", textDecoration: "none" }}
+            >
+              <LeftBottomItem
+                // onClick={() => setTab("requests")}
+                requestActive={requestActive}
+              >
+                <PeopleAltOutlinedIcon style={{ fontSize: "25px" }} /> Friend
+                Requests
+              </LeftBottomItem>
+            </Link>
+          </Link>
         </LeftBottom>
       </Left>
       <Right>

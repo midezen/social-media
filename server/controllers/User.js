@@ -224,7 +224,7 @@ export const unFriend = async (req, res) => {
       $pull: { friends: req.params.id, following: req.params.id },
     });
     await User.findByIdAndUpdate(req.params.id, {
-      $pull: { friends: req.user.id },
+      $pull: { friends: req.user.id, followers: req.user.id },
     });
     res.status(200).json("unfriend successful");
   } catch (err) {
