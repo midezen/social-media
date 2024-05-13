@@ -115,7 +115,7 @@ const FriendItemRight = styled.div`
   background-color: ${({ theme }) => theme.hover};
 `;
 
-const FriendsComponent = ({ tab }) => {
+const FriendsComponent = ({ tab, setTab }) => {
   const [data, setData] = useState([]);
   const dispatch = useDispatch();
   const location = useLocation();
@@ -166,6 +166,7 @@ const FriendsComponent = ({ tab }) => {
             <Link
               to={`/profile/${item._id}`}
               style={{ color: "inherit", textDecoration: "none" }}
+              onClick={() => setTab("posts")}
             >
               <FriendItem key={item._id}>
                 <FriendItemLeft>

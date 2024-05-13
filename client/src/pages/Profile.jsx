@@ -185,7 +185,7 @@ const Profile = () => {
   const [userData, setUserData] = useState();
 
   const location = useLocation();
-  console.log(location.search.split("=")[1]);
+  const search = location.search.split("=")[1];
   const userID = location.pathname.split("/")[2];
 
   const dispatch = useDispatch();
@@ -212,7 +212,10 @@ const Profile = () => {
 
   useEffect(() => {
     getUser();
-  }, []);
+    if (search === "friends") {
+      setTab("friends");
+    }
+  }, [location]);
 
   const handleTabClick = (prop) => {
     setTab(prop);
@@ -266,7 +269,10 @@ const Profile = () => {
           <Divider />
           <SuggestedSlider expand={expand} />
           <WrapperBottom>
-            <Link to={`/profile/${userID}?tab=posts`}>
+            <Link
+              to={`/profile/${userID}`}
+              style={{ color: "inherit", textDecoration: "none" }}
+            >
               <Posts
                 style={{
                   borderBottom: tab === "posts" ? "2px solid #0000ff" : "none",
@@ -276,7 +282,11 @@ const Profile = () => {
                 Posts
               </Posts>
             </Link>
-            <Link to={`/profile/${userID}?tab=friends`}>
+
+            <Link
+              to={`/profile/${userID}?tab=friends`}
+              style={{ color: "inherit", textDecoration: "none" }}
+            >
               <Friends
                 onClick={() => handleTabClick("friends")}
                 style={{
@@ -304,7 +314,7 @@ const Profile = () => {
           </ProfileRight>
         </ProfileBottom>
       ) : (
-        <FriendsComponent tab={tab} />
+        <FriendsComponent tab={tab} setTab={setTab} />
       )}
     </Container>
   );
