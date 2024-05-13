@@ -10,7 +10,7 @@ import SuggestedSlider from "../components/SuggestedSlider";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import FriendsComponent from "../components/FriendsComponent";
 import { useDispatch } from "react-redux";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { axiosInstance } from "../utils/axiosConfig";
 import { Rejected, Start, Success } from "../redux/userSlice";
 import ProfileLeftComponent from "../components/ProfileLeftComponent";
@@ -182,13 +182,13 @@ const ProfileRight = styled.div`
 const Profile = () => {
   const [tab, setTab] = useState("posts");
   const [expand, setExpand] = useState(false);
+  const [userData, setUserData] = useState();
 
   const location = useLocation();
-  const [userData, setUserData] = useState({});
+  console.log(location.search.split("=")[1]);
+  const userID = location.pathname.split("/")[2];
 
   const dispatch = useDispatch();
-
-  const userID = location.pathname.split("/")[2];
 
   const getUser = async () => {
     dispatch(Start());
@@ -196,10 +196,10 @@ const Profile = () => {
       const res = await axiosInstance.get(`/users/${userID}`, {
         withCredentials: true,
       });
-      console.log(res.data);
-      setUserData(res.data);
 
       dispatch(Success());
+      console.log(res.data);
+      setUserData(res.data);
     } catch (err) {
       if (err.response.status === 500) {
         alert("server/network error");
@@ -209,10 +209,6 @@ const Profile = () => {
       dispatch(Rejected());
     }
   };
-
-  // useEffect(() => {
-  //   getUser();
-  // }, [userID]);
 
   useEffect(() => {
     getUser();
@@ -230,7 +226,7 @@ const Profile = () => {
             <WrapperTopLeft>
               <ProfilePicContainer>
                 <ProfilePic
-                  src={userData.profilePic ? userData.profilePic : Ayomide}
+                  src={userData?.profilePic ? userData.profilePic : Ayomide}
                   alt="profile pic"
                 />
                 <CameraIconContainer>
@@ -239,9 +235,9 @@ const Profile = () => {
               </ProfilePicContainer>
               <WrapperTopLeftInfo>
                 <H1>
-                  {userData.firstName} {userData.lastName}
+                  {userData?.firstName} {userData?.lastName}
                 </H1>
-                <FriendsCount>{userData.friends.length} Friends</FriendsCount>
+                <FriendsCount>{userData?.friends.length} Friends</FriendsCount>
                 <FriendsProfilePicContainer>
                   <FriendsProfilePic src={Ayomide} alt="friends profile pic" />
                   <FriendsProfilePic src={Ayomide} alt="friends profile pic" />
@@ -270,22 +266,27 @@ const Profile = () => {
           <Divider />
           <SuggestedSlider expand={expand} />
           <WrapperBottom>
-            <Posts
-              onClick={() => handleTabClick("posts")}
-              style={{
-                borderBottom: tab === "posts" ? "2px solid #0000ff" : "none",
-              }}
-            >
-              Posts
-            </Posts>
-            <Friends
-              onClick={() => handleTabClick("friends")}
-              style={{
-                borderBottom: tab === "friends" ? "2px solid #0000ff" : "none",
-              }}
-            >
-              Friends
-            </Friends>
+            <Link to={`/profile/${userID}?tab=posts`}>
+              <Posts
+                style={{
+                  borderBottom: tab === "posts" ? "2px solid #0000ff" : "none",
+                }}
+                onClick={() => handleTabClick("posts")}
+              >
+                Posts
+              </Posts>
+            </Link>
+            <Link to={`/profile/${userID}?tab=friends`}>
+              <Friends
+                onClick={() => handleTabClick("friends")}
+                style={{
+                  borderBottom:
+                    tab === "friends" ? "2px solid #0000ff" : "none",
+                }}
+              >
+                Friends
+              </Friends>
+            </Link>
           </WrapperBottom>
         </Wrapper>
       </Top>

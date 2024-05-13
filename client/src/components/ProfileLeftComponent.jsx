@@ -395,14 +395,14 @@ const ProfileLeftComponent = ({ userData, getUser }) => {
             <PersonOutlineOutlinedIcon
               style={{ fontSize: "30px", color: "#0000ff" }}
             />
-            <FollowXCount>{userData.followers.length}</FollowXCount>
+            <FollowXCount>{userData?.followers.length}</FollowXCount>
             <FollowX>Followers</FollowX>
           </ProfileLeftTopItem>
           <ProfileLeftTopItem>
             <PersonOutlineOutlinedIcon
               style={{ fontSize: "30px", color: "#0000ff" }}
             />
-            <FollowXCount>{userData.following.length}</FollowXCount>
+            <FollowXCount>{userData?.following.length}</FollowXCount>
             <FollowX>Following</FollowX>
           </ProfileLeftTopItem>
         </ProfileLeftTopItems>
@@ -411,7 +411,7 @@ const ProfileLeftComponent = ({ userData, getUser }) => {
             <PersonOutlineOutlinedIcon
               style={{ fontSize: "30px", color: "#0000ff" }}
             />
-            <FollowXCount>{userData.posts.length}</FollowXCount>
+            <FollowXCount>{userData?.posts.length}</FollowXCount>
             <FollowX>Posts</FollowX>
           </ProfileLeftTopItem>
           {userInfo._id === userID ? (
@@ -507,7 +507,7 @@ const ProfileLeftComponent = ({ userData, getUser }) => {
         <InfoItem>
           <InfoItemHead>About</InfoItemHead>
           <InfoItemDesc>
-            {userData.about
+            {userData?.about
               ? userData.about
               : "click on edit profile button to add bio"}
           </InfoItemDesc>
@@ -515,25 +515,25 @@ const ProfileLeftComponent = ({ userData, getUser }) => {
         <InfoItem>
           <InfoItemHead>Mobile</InfoItemHead>
           <InfoItemDesc>
-            {userData.mobileNo
-              ? userData.mobileNo
+            {userData?.mobileNo
+              ? userData?.mobileNo
               : "click on edit profile button to add mobile number"}
           </InfoItemDesc>
         </InfoItem>
         <InfoItem>
           <InfoItemHead>Email Address</InfoItemHead>
           <InfoItemDesc>
-            {userData.email
-              ? userData.email
+            {userData?.email
+              ? userData?.email
               : "click on edit profile button to add email"}
           </InfoItemDesc>
         </InfoItem>
         <InfoItem>
           <InfoItemHead>Location</InfoItemHead>
-          {userData.province || userData.country ? (
+          {userData?.province || userData?.country ? (
             <InfoItemDesc>
-              {userData.province ? userData.province : ""}{" "}
-              {userData.country ? userData.country : ""}
+              {userData?.province ? userData.province : ""}{" "}
+              {userData?.country ? userData.country : ""}
             </InfoItemDesc>
           ) : (
             <InfoItemDesc>
@@ -611,7 +611,7 @@ const ProfileLeftComponent = ({ userData, getUser }) => {
           }}
         >
           <UnfriendUserSpan>
-            Are you sure you want to unfriend {userData.firstName}?
+            Are you sure you want to unfriend {userData?.firstName}?
           </UnfriendUserSpan>
           <UnfriendUserButtons>
             <UnfriendUserButton onClick={handleUnfriend}>
