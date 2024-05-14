@@ -19,6 +19,19 @@ const Container = styled.div`
   border-radius: 12px;
   background-color: ${({ theme }) => theme.bg};
   margin-bottom: 10px;
+  height: 40vh;
+  overflow-y: scroll;
+  &::-webkit-scrollbar {
+    width: 7px;
+  }
+  &::-webkit-scrollbar-track {
+    background: lightgray;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: gray;
+    border-radius: 20px;
+  }
 `;
 
 const Heading = styled.div`
@@ -116,6 +129,14 @@ const FriendItemRight = styled.div`
   background-color: ${({ theme }) => theme.hover};
 `;
 
+const FriendsAppear = styled.span`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 const FriendsComponent = ({ tab, setTab }) => {
   const [data, setData] = useState([]);
   const dispatch = useDispatch();
@@ -161,34 +182,39 @@ const FriendsComponent = ({ tab, setTab }) => {
           </SearchContainer>
         </HeadingRight>
       </Heading>
-      <Friends>
-        {data.map((item) => {
-          return (
-            <Link
-              to={`/profile/${item._id}`}
-              style={{ color: "inherit", textDecoration: "none" }}
-              onClick={() => setTab("posts")}
-            >
-              <FriendItem key={item._id}>
-                <FriendItemLeft>
-                  <FriendPicture
-                    src={item.profilePic ? item.profilePic : Ayomide}
-                    alt="Friend's Picture"
-                  />
-                  <FriendName>
-                    {item.firstName} {item.lastName}
-                  </FriendName>
-                </FriendItemLeft>
-                <FriendItemRight>
-                  <MoreHorizOutlinedIcon
-                    style={{ fontSize: "18px", cursor: "pointer" }}
-                  />
-                </FriendItemRight>
-              </FriendItem>
-            </Link>
-          );
-        })}
-      </Friends>
+      {data.length > 0 && (
+        <Friends>
+          {data.map((item) => {
+            return (
+              <Link
+                to={`/profile/${item._id}`}
+                style={{ color: "inherit", textDecoration: "none" }}
+                onClick={() => setTab("posts")}
+              >
+                <FriendItem key={item._id}>
+                  <FriendItemLeft>
+                    <FriendPicture
+                      src={item.profilePic ? item.profilePic : Ayomide}
+                      alt="Friend's Picture"
+                    />
+                    <FriendName>
+                      {item.firstName} {item.lastName}
+                    </FriendName>
+                  </FriendItemLeft>
+                  <FriendItemRight>
+                    <MoreHorizOutlinedIcon
+                      style={{ fontSize: "18px", cursor: "pointer" }}
+                    />
+                  </FriendItemRight>
+                </FriendItem>
+              </Link>
+            );
+          })}
+        </Friends>
+      )}
+      {!data.length > 0 && (
+        <FriendsAppear>Your Friends will Appear Here</FriendsAppear>
+      )}
     </Container>
   );
 };

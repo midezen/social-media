@@ -165,16 +165,7 @@ const HomeLeft = () => {
         </NotificationIcon>
         Messages
       </LeftMiddleItem>
-      <LeftMiddleItem
-        onClick={() => handleActiveClick("notifications")}
-        style={{ color: active === "notifications" ? "#0000ff" : "inherit" }}
-      >
-        <NotificationIcon>
-          <NotificationsNoneOutlinedIcon style={{ fontSize: "25px" }} />
-          <NotificationCount>8</NotificationCount>
-        </NotificationIcon>
-        Notifications
-      </LeftMiddleItem>
+
       {darkmode ? (
         <LeftMiddleItem onClick={handleToggle}>
           <LightModeOutlinedIcon /> Light mode

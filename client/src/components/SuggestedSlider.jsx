@@ -1,8 +1,17 @@
 import styled from "styled-components";
 import Ayomide from "../img/Ayomide 2.png";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  Rejected,
+  Start,
+  Success,
+  addFriendSuccess,
+  cancelSentRequestSuccess,
+} from "../redux/userSlice";
+import { axiosInstance } from "../utils/axiosConfig";
 
 const Container = styled.div`
   width: 100%;
@@ -96,6 +105,10 @@ const ArrowItem = styled.div`
 const SuggestedSlider = ({ expand }) => {
   const scrollRef = useRef(null);
   const [friendNameStore, setFriendNameStore] = useState("Ayomide Oluwadiya");
+  const dispatch = useDispatch();
+  const [suggestedData, setSuggestedData] = useState([]);
+  const userInfo = useSelector((state) => state.user.userInfo);
+  const [addFriendButton, setAddFriendButton] = useState(true);
 
   const scrollLeft = () => {
     if (scrollRef.current) {
@@ -108,67 +121,115 @@ const SuggestedSlider = ({ expand }) => {
       scrollRef.current.scrollLeft += 250;
     }
   };
+
+  const getSuggestedFriends = async () => {
+    dispatch(Start());
+    try {
+      const res = await axiosInstance.get("/users", {
+        withCredentials: true,
+      });
+      const filteredResponse = res.data.filter(
+        (item) =>
+          item._id !== userInfo._id &&
+          !userInfo.friendRequests.includes(item._id) &&
+          !userInfo.friends.includes(item._id)
+      );
+
+      setSuggestedData(filteredResponse);
+      dispatch(Success());
+    } catch (err) {
+      if (err.response.data === 500) {
+        alert("server/network error");
+      } else {
+        alert(err.response.data);
+      }
+      dispatch(Rejected());
+    }
+  };
+
+  const handleName = (firstName, lastName) => {
+    const name = `${firstName} ${lastName}`;
+    const slicedName = `${name.slice(0, 15)}...`;
+
+    if (name.length > 18) {
+      return slicedName;
+    } else {
+      return name;
+    }
+  };
+
+  useEffect(() => {
+    getSuggestedFriends();
+  }, []);
+
+  const handleAddFriend = async (id) => {
+    dispatch(Start());
+    try {
+      await axiosInstance.put(`/users/addfriend/${id}`, "", {
+        withCredentials: true,
+      });
+
+      dispatch(addFriendSuccess(id));
+      getSuggestedFriends();
+    } catch (err) {
+      if (err.response.status === 500) {
+        alert("server/network error");
+      } else {
+        alert(err.response.data);
+      }
+      dispatch(Rejected());
+    }
+  };
+
+  const handleCancelRequest = async (id) => {
+    dispatch(Start());
+    try {
+      await axiosInstance.put(`/users/cancelsentrequest/${id}`, "", {
+        withCredentials: true,
+      });
+      dispatch(cancelSentRequestSuccess(id));
+      getSuggestedFriends();
+    } catch (err) {
+      if (err.response.status === 500) {
+        alert("server/network error");
+      } else {
+        alert(err.response.data);
+      }
+      dispatch(Rejected());
+    }
+  };
+
   return (
     <>
       <Container style={{ display: expand ? "flex" : "none" }}>
         <Span>Suggested for you</Span>
         <Wrapper ref={scrollRef}>
           <Items>
-            <Item>
-              <FriendPicture src={Ayomide} alt="Friend's Picture" />
-              <FriendName>{friendNameStore.slice(0, 18)}</FriendName>
-              <Button>Add Friend</Button>
-            </Item>
-            <Item>
-              <FriendPicture src={Ayomide} alt="Friend's Picture" />
-              <FriendName>{friendNameStore.slice(0, 18)}</FriendName>
-              <Button>Add Friend</Button>
-            </Item>
-            <Item>
-              <FriendPicture src={Ayomide} alt="Friend's Picture" />
-              <FriendName>{friendNameStore.slice(0, 18)}</FriendName>
-              <Button>Add Friend</Button>
-            </Item>
-            <Item>
-              <FriendPicture src={Ayomide} alt="Friend's Picture" />
-              <FriendName>{friendNameStore.slice(0, 18)}</FriendName>
-              <Button>Add Friend</Button>
-            </Item>
-            <Item>
-              <FriendPicture src={Ayomide} alt="Friend's Picture" />
-              <FriendName>{friendNameStore.slice(0, 18)}</FriendName>
-              <Button>Add Friend</Button>
-            </Item>
-            <Item>
-              <FriendPicture src={Ayomide} alt="Friend's Picture" />
-              <FriendName>{friendNameStore.slice(0, 18)}</FriendName>
-              <Button>Add Friend</Button>
-            </Item>
-            <Item>
-              <FriendPicture src={Ayomide} alt="Friend's Picture" />
-              <FriendName>{friendNameStore.slice(0, 18)}</FriendName>
-              <Button>Add Friend</Button>
-            </Item>
-            <Item>
-              <FriendPicture src={Ayomide} alt="Friend's Picture" />
-              <FriendName>{friendNameStore.slice(0, 18)}</FriendName>
-              <Button>Add Friend</Button>
-            </Item>
-            <Item>
-              <FriendPicture src={Ayomide} alt="Friend's Picture" />
-              <FriendName>{friendNameStore.slice(0, 18)}</FriendName>
-              <Button>Add Friend</Button>
-            </Item>
-            <Item>
-              <FriendPicture src={Ayomide} alt="Friend's Picture" />
-              <FriendName>{friendNameStore.slice(0, 18)}</FriendName>
-              <Button>Add Friend</Button>
-            </Item>
-            <Item>
-              <FriendPicture src={Ayomide} alt="Friend's Picture" />
-              <FriendName>{friendNameStore.slice(0, 18)}</FriendName>
-              <Button>Add Friend</Button>
-            </Item>
+            {suggestedData.map((item) => {
+              return (
+                <Item key={item._id}>
+                  <FriendPicture
+                    src={item.profilePic ? item.profilePic : Ayomide}
+                    alt="Friend's Picture"
+                  />
+                  <FriendName>
+                    {handleName(item.firstName, item.lastName)}
+                  </FriendName>
+                  {userInfo.sentRequests.includes(item._id) ? (
+                    <Button
+                      style={{ color: "black", backgroundColor: "lightgray" }}
+                      onClick={() => handleCancelRequest(item._id)}
+                    >
+                      Cancel Request
+                    </Button>
+                  ) : (
+                    <Button onClick={() => handleAddFriend(item._id)}>
+                      Add Friend
+                    </Button>
+                  )}
+                </Item>
+              );
+            })}
           </Items>
         </Wrapper>
         <ArrowItem

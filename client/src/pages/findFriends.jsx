@@ -73,6 +73,7 @@ const FriendRequests = styled.div`
   grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
   grid-gap: 25px;
   height: 100%;
+  position: relative;
 `;
 
 const SuggestedFriendsContainer = styled.div`
@@ -86,6 +87,16 @@ const SuggestedFriends = styled.div`
   grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
   grid-gap: 25px;
   height: 100%;
+`;
+
+const Span = styled.span`
+  width: 100%;
+  height: 60vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  right: 0;
 `;
 
 const FindFriends = () => {
@@ -199,7 +210,7 @@ const FindFriends = () => {
             <H3>Friend Requests</H3>
             <FriendRequests>
               {resquestData.length === 0 ? (
-                <></>
+                <Span>Your Friend Requests will Appear Here</Span>
               ) : (
                 resquestData.map((data) => {
                   return (

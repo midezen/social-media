@@ -21,6 +21,7 @@ const Container = styled.div`
   color: ${({ theme }) => theme.text};
   position: sticky;
   top: 0;
+  height: 100%;
 `;
 
 const Top = styled.div`
