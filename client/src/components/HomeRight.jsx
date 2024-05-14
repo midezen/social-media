@@ -200,8 +200,8 @@ const HomeRight = () => {
           !userInfo.friends.includes(item._id) &&
           !userInfo.sentRequests.includes(item._id)
       );
-      const responseData = filteredResponse.slice(0, 3);
-      setSuggestedData(responseData);
+
+      setSuggestedData(filteredResponse);
       dispatch(Success());
     } catch (err) {
       if (err.response.data === 500) {
@@ -232,18 +232,12 @@ const HomeRight = () => {
     }
   };
 
-  useEffect(() => {
-    getFriendRequests();
-    getSuggestedFriends();
-  }, []);
-
   const handleAddFriend = async (data) => {
     dispatch(Start());
     try {
       await axiosInstance.put(`/users/addfriend/${data}`, "", {
         withCredentials: true,
       });
-
       dispatch(addFriendSuccess(data));
       getSuggestedFriends();
     } catch (err) {
@@ -291,6 +285,16 @@ const HomeRight = () => {
       dispatch(Rejected());
     }
   };
+
+  useEffect(() => {
+    getFriendRequests();
+    getSuggestedFriends();
+  }, [userInfo]);
+
+  useEffect(() => {
+    getFriendRequests();
+    getSuggestedFriends();
+  }, []);
 
   return (
     <Container>
@@ -346,7 +350,7 @@ const HomeRight = () => {
         to="/findFriends?tab=requests"
         style={{ color: "inherit", textDecoration: "none" }}
       >
-        {resquestData.length > 0 && <Button2>View All</Button2>}
+        {resquestData.length > 2 && <Button2>View All</Button2>}
       </Link>
 
       {resquestData.length > 0 && <Divider />}
@@ -355,45 +359,48 @@ const HomeRight = () => {
       {/* --------------------------------------------------------------- */}
       {/* THIS IS THE FIRST SECTION OF THE MIDDLE SECTION,
        IT CONTAINS SUGGESTIONS ON USERS TO FRIEND */}
-      <RightHeadSpan>Suggestions for you</RightHeadSpan>
-      {suggestedData.map((item) => {
-        return (
-          <RightItem key={item._id}>
-            <Link
-              to={`/profile/${item._id}`}
-              style={{ color: "inherit", textDecoration: "none" }}
-            >
-              <Info>
-                <ProfileImage
-                  src={item.profilePic ? item.profilePic : Ayomide}
-                  alt="profilepic"
-                />
-                <Spans>
-                  <Span1>
-                    {item.firstName} {item.lastName}
-                  </Span1>
-                  <Span2>
-                    {item.province} {item.country}
-                  </Span2>
-                </Spans>
-              </Info>
-            </Link>
-            <GroupAddOutlinedIcon
-              style={{ color: "#0000ff" }}
-              onClick={() => handleAddFriend(item._id)}
-            />
-          </RightItem>
-        );
-      })}
+      {suggestedData.length > 0 && (
+        <RightHeadSpan>Suggestions for you</RightHeadSpan>
+      )}
+      {suggestedData.length > 0 &&
+        suggestedData.slice(0, 3).map((item) => {
+          return (
+            <RightItem key={item._id}>
+              <Link
+                to={`/profile/${item._id}`}
+                style={{ color: "inherit", textDecoration: "none" }}
+              >
+                <Info>
+                  <ProfileImage
+                    src={item.profilePic ? item.profilePic : Ayomide}
+                    alt="profilepic"
+                  />
+                  <Spans>
+                    <Span1>
+                      {item.firstName} {item.lastName}
+                    </Span1>
+                    <Span2>
+                      {item.province} {item.country}
+                    </Span2>
+                  </Spans>
+                </Info>
+              </Link>
+              <GroupAddOutlinedIcon
+                style={{ color: "#0000ff" }}
+                onClick={() => handleAddFriend(item._id)}
+              />
+            </RightItem>
+          );
+        })}
 
       <Link
         to="/findFriends?tab=suggested"
         style={{ color: "inherit", textDecoration: "none" }}
       >
-        <Button2>View All</Button2>
+        {suggestedData.length > 3 && <Button2>View All</Button2>}
       </Link>
 
-      <Divider />
+      {suggestedData.length > 0 && <Divider />}
 
       {/* THIS IS THE SECOND SECTION IN THE MIDDLE SECTION, IT CONTAINS PRESENTLY ACTIVE FRIENDS */}
       <ActiveNowContainer>
