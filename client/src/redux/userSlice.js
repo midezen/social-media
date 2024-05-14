@@ -28,7 +28,13 @@ const userSlice = createSlice({
     },
 
     addFriendSuccess: (state, action) => {
-      state.userInfo.sentRequests.push(action.payload);
+      const findItem = state.userInfo.sentRequests.find(
+        (item) => item === action.payload
+      );
+      if (!findItem) {
+        state.userInfo.sentRequests.push(action.payload);
+      }
+
       const findUser = state.userInfo.following.find(
         (item) => item === action.payload
       );

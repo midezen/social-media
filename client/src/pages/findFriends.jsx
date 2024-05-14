@@ -91,7 +91,6 @@ const SuggestedFriends = styled.div`
 const FindFriends = () => {
   const location = useLocation();
   const search = location.search.split("=")[1];
-  console.log(search);
   const [tab, setTab] = useState(search);
   const [suggestedActive, setSuggestedActive] = useState(true);
   const [requestActive, setRequestActive] = useState(false);

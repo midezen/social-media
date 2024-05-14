@@ -76,7 +76,8 @@ const BottomItem = styled.div`
 
   &:hover {
     scale: 1.1;
-    background-color: lightgray;
+    background-color: ${({ theme }) => theme.bgSoft};
+    border-radius: 12px;
   }
 `;
 

@@ -176,11 +176,11 @@ export const unsavePost = async (req, res) => {
 export const sendFriendRequest = async (req, res) => {
   try {
     await User.findByIdAndUpdate(req.params.id, {
-      $push: { friendRequests: req.user.id },
+      $addToSet: { friendRequests: req.user.id },
       $addToSet: { followers: req.user.id },
     });
     await User.findByIdAndUpdate(req.user.id, {
-      $push: { sentRequests: req.params.id },
+      $addToSet: { sentRequests: req.params.id },
       $addToSet: { following: req.params.id },
     });
     res.status(200).json("request sent");

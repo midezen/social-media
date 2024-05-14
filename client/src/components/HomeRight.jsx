@@ -2,7 +2,14 @@ import styled from "styled-components";
 import Ayomide from "../img/Ayomide 2.png";
 import GroupAddOutlinedIcon from "@mui/icons-material/GroupAddOutlined";
 import { Link } from "react-router-dom";
-import { Rejected, Start, Success } from "../redux/userSlice";
+import {
+  Rejected,
+  Start,
+  Success,
+  acceptRequestSuccess,
+  addFriendSuccess,
+  deleteRequestSuccess,
+} from "../redux/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { axiosInstance } from "../utils/axiosConfig";
 import { useEffect, useState } from "react";
@@ -80,24 +87,18 @@ const Buttons = styled.div`
   gap: 20px;
   align-items: center;
   margin-top: 5px;
-  &:first-child {
-    color: ${({ theme }) => theme.spT};
-  }
-  &:last-child {
-    color: ${({ theme }) => theme.textSoft};
-  }
 `;
 
 const Button = styled.button`
   border: none;
   background: transparent;
-  font-weight: bold;
+  font-weight: bolder;
   cursor: pointer;
   &:first-child {
     color: ${({ theme }) => theme.spT};
   }
   &:last-child {
-    color: ${({ theme }) => theme.textSoft};
+    color: red;
   }
 `;
 
@@ -196,7 +197,8 @@ const HomeRight = () => {
         (item) =>
           item._id !== userInfo._id &&
           !userInfo.friendRequests.includes(item._id) &&
-          !userInfo.friends.includes(item._id)
+          !userInfo.friends.includes(item._id) &&
+          !userInfo.sentRequests.includes(item._id)
       );
       const responseData = filteredResponse.slice(0, 3);
       setSuggestedData(responseData);
@@ -218,7 +220,7 @@ const HomeRight = () => {
         `/users/getuserfriendrequests/${userInfo._id}`,
         { withCredentials: true }
       );
-      const responseData = res.data.slice(0, 2);
+      const responseData = res.data;
       setResquestData(responseData);
       dispatch(Success());
     } catch (err) {
@@ -235,6 +237,61 @@ const HomeRight = () => {
     getSuggestedFriends();
   }, []);
 
+  const handleAddFriend = async (data) => {
+    dispatch(Start());
+    try {
+      await axiosInstance.put(`/users/addfriend/${data}`, "", {
+        withCredentials: true,
+      });
+
+      dispatch(addFriendSuccess(data));
+      getSuggestedFriends();
+    } catch (err) {
+      if (err.response.status === 500) {
+        alert("server/network error");
+      } else {
+        alert(err.response.data);
+      }
+      dispatch(Rejected());
+    }
+  };
+
+  const handleAcceptRequest = async (data) => {
+    dispatch(Start());
+    try {
+      await axiosInstance.put(`/users/acceptrequest/${data}`, "", {
+        withCredentials: true,
+      });
+      dispatch(acceptRequestSuccess(data));
+      getFriendRequests();
+    } catch (err) {
+      if (err.response.status === 500) {
+        alert("server/network error");
+      } else {
+        alert(err.response.data);
+      }
+      dispatch(Rejected());
+    }
+  };
+
+  const handleDeleteRequest = async (data) => {
+    dispatch(Start());
+    try {
+      await axiosInstance.put(`/users/deleterequest/${data}`, "", {
+        withCredentials: true,
+      });
+      dispatch(deleteRequestSuccess(data));
+      getFriendRequests();
+    } catch (err) {
+      if (err.response.status === 500) {
+        alert("server/network error");
+      } else {
+        alert(err.response.data);
+      }
+      dispatch(Rejected());
+    }
+  };
+
   return (
     <Container>
       {/* THE RIGHT SIDE OF THE HOME PAGE CONSIST OF THREE SECTIONS: THE TOP, THE
@@ -244,35 +301,44 @@ const HomeRight = () => {
       {resquestData.length > 0 && (
         <RightHeadSpan>
           Requests
-          <RightHeadSpanb>5</RightHeadSpanb>
+          <RightHeadSpanb>{resquestData.length}</RightHeadSpanb>
         </RightHeadSpan>
       )}
       {resquestData.length > 0 &&
-        resquestData.map((item) => {
+        resquestData.slice(0, 2).map((item) => {
           return (
-            <Link
-              to={`/profile/${item._id}`}
-              style={{ color: "inherit", textDecoration: "none" }}
-            >
-              <RightItem key={item._id}>
-                <Info>
+            <RightItem key={item._id}>
+              <Info>
+                <Link
+                  to={`/profile/${item._id}`}
+                  style={{ color: "inherit", textDecoration: "none" }}
+                >
                   <ProfileImage
                     src={item.profilePic ? item.profilePic : Ayomide}
                     alt="profilepic"
                   />
-                  <Spans>
+                </Link>
+                <Spans>
+                  <Link
+                    to={`/profile/${item._id}`}
+                    style={{ color: "inherit", textDecoration: "none" }}
+                  >
                     <Span1>
                       {item.firstName} {item.lastName}{" "}
                       <Span1b>wants to be your friend</Span1b>
                     </Span1>
-                    <Buttons>
-                      <Button>Accept</Button>
-                      <Button>Decline</Button>
-                    </Buttons>
-                  </Spans>
-                </Info>
-              </RightItem>
-            </Link>
+                  </Link>
+                  <Buttons>
+                    <Button onClick={() => handleAcceptRequest(item._id)}>
+                      Accept
+                    </Button>
+                    <Button onClick={() => handleDeleteRequest(item._id)}>
+                      Decline
+                    </Button>
+                  </Buttons>
+                </Spans>
+              </Info>
+            </RightItem>
           );
         })}
 
@@ -292,11 +358,11 @@ const HomeRight = () => {
       <RightHeadSpan>Suggestions for you</RightHeadSpan>
       {suggestedData.map((item) => {
         return (
-          <Link
-            to={`/profile/${item._id}`}
-            style={{ color: "none", textDecoration: "none" }}
-          >
-            <RightItem key={item._id}>
+          <RightItem key={item._id}>
+            <Link
+              to={`/profile/${item._id}`}
+              style={{ color: "inherit", textDecoration: "none" }}
+            >
               <Info>
                 <ProfileImage
                   src={item.profilePic ? item.profilePic : Ayomide}
@@ -311,9 +377,12 @@ const HomeRight = () => {
                   </Span2>
                 </Spans>
               </Info>
-              <GroupAddOutlinedIcon style={{ color: "#0000ff" }} />
-            </RightItem>
-          </Link>
+            </Link>
+            <GroupAddOutlinedIcon
+              style={{ color: "#0000ff" }}
+              onClick={() => handleAddFriend(item._id)}
+            />
+          </RightItem>
         );
       })}
 
