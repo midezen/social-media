@@ -272,7 +272,7 @@ const Profile = () => {
             </WrapperTopRight>
           </WrapperTop>
           <Divider />
-          <SuggestedSlider expand={expand} />
+          <SuggestedSlider expand={expand} setExpand={setExpand} />
           <WrapperBottom>
             <Link
               to={`/profile/${userID}`}

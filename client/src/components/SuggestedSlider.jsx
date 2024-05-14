@@ -12,6 +12,7 @@ import {
   cancelSentRequestSuccess,
 } from "../redux/userSlice";
 import { axiosInstance } from "../utils/axiosConfig";
+import { Link } from "react-router-dom";
 
 const Container = styled.div`
   width: 100%;
@@ -71,6 +72,7 @@ const FriendName = styled.span`
   display: flex;
   align-items: center;
   justify-content: center;
+  color: ${({ theme }) => theme.text};
 `;
 
 const Button = styled.button`
@@ -102,13 +104,11 @@ const ArrowItem = styled.div`
   padding: 12px;
 `;
 
-const SuggestedSlider = ({ expand }) => {
+const SuggestedSlider = ({ expand, setExpand }) => {
   const scrollRef = useRef(null);
-  const [friendNameStore, setFriendNameStore] = useState("Ayomide Oluwadiya");
   const dispatch = useDispatch();
   const [suggestedData, setSuggestedData] = useState([]);
   const userInfo = useSelector((state) => state.user.userInfo);
-  const [addFriendButton, setAddFriendButton] = useState(true);
 
   const scrollLeft = () => {
     if (scrollRef.current) {
@@ -208,13 +208,19 @@ const SuggestedSlider = ({ expand }) => {
             {suggestedData.map((item) => {
               return (
                 <Item key={item._id}>
-                  <FriendPicture
-                    src={item.profilePic ? item.profilePic : Ayomide}
-                    alt="Friend's Picture"
-                  />
-                  <FriendName>
-                    {handleName(item.firstName, item.lastName)}
-                  </FriendName>
+                  <Link
+                    to={`/profile/${item._id}`}
+                    style={{ color: "inherit", textDecoration: "none" }}
+                  >
+                    <FriendPicture
+                      src={item.profilePic ? item.profilePic : Ayomide}
+                      alt="Friend's Picture"
+                      onClick={() => setExpand(false)}
+                    />
+                    <FriendName onClick={() => setExpand(false)}>
+                      {handleName(item.firstName, item.lastName)}
+                    </FriendName>
+                  </Link>
                   {userInfo.sentRequests.includes(item._id) ? (
                     <Button
                       style={{ color: "black", backgroundColor: "lightgray" }}
