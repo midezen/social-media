@@ -9,11 +9,12 @@ import Ayomide from "../img/Ayomide 2.png";
 import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
 import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
 import BookmarkBorderOutlinedIcon from "@mui/icons-material/BookmarkBorderOutlined";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Rejected, Start } from "../redux/userSlice.js";
 import { logoutUser } from "../utils/apiCalls/Auth.js";
+import { ActiveContext } from "../contexts/active.jsx";
 
 const Container = styled.div`
   background-color: ${({ theme }) => theme.bg};
@@ -150,13 +151,14 @@ const Navbar = () => {
   const { darkmode, setDarkmode } = useContext(DarkmodeContext);
   const dispatch = useDispatch();
 
-  const [active, setActive] = useState("home");
+  const { navActive, setNavActive } = useContext(ActiveContext);
+  const [active, setActive] = useState(navActive);
   const userInfo = useSelector((state) => state.user.userInfo);
   const navigate = useNavigate();
 
-  const handleActiveClick = (prop) => {
-    setActive(prop);
-  };
+  useEffect(() => {
+    setActive(navActive);
+  }, [navActive]);
 
   const handleToggle = () => {
     setDarkmode(!darkmode);
@@ -179,7 +181,7 @@ const Navbar = () => {
     <Container>
       <Left>
         <Link to="/" style={{ color: "none", textDecoration: "none" }}>
-          <H1>CTV</H1>
+          <H1 onClick={() => setNavActive("home")}>CTV</H1>
         </Link>
         <SearchContainer>
           <SearchOutlinedIcon style={{ fontSize: "18px" }} />
@@ -189,7 +191,7 @@ const Navbar = () => {
       <Middle>
         <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
           <NavItem
-            onClick={() => handleActiveClick("home")}
+            onClick={() => setNavActive("home")}
             style={{ color: active === "home" ? "#0000ff" : "inherit" }}
           >
             <NotificationIcon>
@@ -200,7 +202,7 @@ const Navbar = () => {
         </Link>
         <Link to="/findFriends?tab=suggested" style={{ color: "inherit" }}>
           <NavItem
-            onClick={() => handleActiveClick("friends")}
+            onClick={() => setNavActive("friends")}
             style={{ color: active === "friends" ? "#0000ff" : "inherit" }}
           >
             <PeopleAltOutlinedIcon style={{ fontSize: "25px" }} />
@@ -217,7 +219,7 @@ const Navbar = () => {
           </NavItem>
         )}
         <NavItem
-          onClick={() => handleActiveClick("saved posts")}
+          onClick={() => setNavActive("saved posts")}
           style={{ color: active === "saved posts" ? "#0000ff" : "inherit" }}
         >
           <BookmarkBorderOutlinedIcon style={{ fontSize: "25px" }} />
@@ -225,7 +227,7 @@ const Navbar = () => {
       </Middle>
       <Right>
         <NavRightItem
-          onClick={() => handleActiveClick("messages")}
+          onClick={() => setNavActive("messages")}
           style={{ color: active === "messages" ? "#0000ff" : "inherit" }}
         >
           <NotificationIcon>
@@ -235,7 +237,7 @@ const Navbar = () => {
         </NavRightItem>
 
         <NavRightItem
-          onClick={() => handleActiveClick("notifications")}
+          onClick={() => setNavActive("notifications")}
           style={{ color: active === "notifications" ? "#0000ff" : "inherit" }}
         >
           <NotificationIcon>
@@ -245,7 +247,11 @@ const Navbar = () => {
         </NavRightItem>
 
         <Link to={`/profile/${userInfo._id}`}>
-          <ProfileImage src={Ayomide} alt="profileImage" />
+          <ProfileImage
+            src={Ayomide}
+            alt="profileImage"
+            onClick={() => setNavActive(null)}
+          />
         </Link>
         <Logout onClick={handleLogout}>Logout</Logout>
       </Right>

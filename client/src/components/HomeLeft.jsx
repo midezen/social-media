@@ -1,16 +1,16 @@
 import styled from "styled-components";
 import Profile from "../components/Profile";
-import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import SendOutlinedIcon from "@mui/icons-material/SendOutlined";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
 import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
 import BookmarkBorderOutlinedIcon from "@mui/icons-material/BookmarkBorderOutlined";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { DarkmodeContext } from "../contexts/darkmode.jsx";
 import Ayomide from "../img/Ayomide 2.png";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
-import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
+import { ActiveContext } from "../contexts/active.jsx";
+import { Link } from "react-router-dom";
 
 const Container = styled.div`
   width: 30%;
@@ -128,11 +128,7 @@ const Button = styled.button`
 
 const HomeLeft = () => {
   const { darkmode, setDarkmode } = useContext(DarkmodeContext);
-  const [active, setActive] = useState("feed");
-
-  const handleActiveClick = (prop) => {
-    setActive(prop);
-  };
+  const { setNavActive } = useContext(ActiveContext);
 
   const handleToggle = () => {
     setDarkmode(!darkmode);
@@ -145,20 +141,8 @@ const HomeLeft = () => {
       <Divider />
 
       {/* Left-Middle items */}
-      <LeftMiddleItem
-        onClick={() => handleActiveClick("feed")}
-        style={{ color: active === "feed" ? "#0000ff" : "inherit" }}
-      >
-        <NotificationIcon>
-          <HomeOutlinedIcon style={{ fontSize: "25px" }} />
-          <NotificationCount>9+</NotificationCount>
-        </NotificationIcon>
-        Feed
-      </LeftMiddleItem>
-      <LeftMiddleItem
-        onClick={() => handleActiveClick("messages")}
-        style={{ color: active === "messages" ? "#0000ff" : "inherit" }}
-      >
+
+      <LeftMiddleItem onClick={() => setNavActive("messages")}>
         <NotificationIcon>
           <SendOutlinedIcon />
           <NotificationCount>3</NotificationCount>
@@ -175,17 +159,16 @@ const HomeLeft = () => {
           <DarkModeOutlinedIcon /> Dark mode
         </LeftMiddleItem>
       )}
-      <LeftMiddleItem
-        onClick={() => handleActiveClick("friends")}
-        style={{ color: active === "friends" ? "#0000ff" : "inherit" }}
+      <Link
+        to="/findFriends?tab=suggested"
+        style={{ color: "inherit", textDecoration: "none" }}
       >
-        <PeopleAltOutlinedIcon />
-        Find Friends
-      </LeftMiddleItem>
-      <LeftMiddleItem
-        onClick={() => handleActiveClick("saved posts")}
-        style={{ color: active === "saved posts" ? "#0000ff" : "inherit" }}
-      >
+        <LeftMiddleItem onClick={() => setNavActive("friends")}>
+          <PeopleAltOutlinedIcon />
+          Find Friends
+        </LeftMiddleItem>
+      </Link>
+      <LeftMiddleItem onClick={() => setNavActive("saved posts")}>
         <BookmarkBorderOutlinedIcon />
         Saved Posts
       </LeftMiddleItem>

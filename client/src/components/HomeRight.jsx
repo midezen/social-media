@@ -12,7 +12,8 @@ import {
 } from "../redux/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { axiosInstance } from "../utils/axiosConfig";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { ActiveContext } from "../contexts/active";
 
 const Container = styled.div`
   width: 30%;
@@ -186,6 +187,7 @@ const HomeRight = () => {
   const dispatch = useDispatch();
   const [suggestedData, setSuggestedData] = useState([]);
   const [resquestData, setResquestData] = useState([]);
+  const { setNavActive } = useContext(ActiveContext);
 
   const getSuggestedFriends = async () => {
     dispatch(Start());
@@ -350,7 +352,9 @@ const HomeRight = () => {
         to="/findFriends?tab=requests"
         style={{ color: "inherit", textDecoration: "none" }}
       >
-        {resquestData.length > 2 && <Button2>View All</Button2>}
+        {resquestData.length > 2 && (
+          <Button2 onClick={() => setNavActive("friends")}>View All</Button2>
+        )}
       </Link>
 
       {resquestData.length > 0 && <Divider />}
@@ -397,7 +401,9 @@ const HomeRight = () => {
         to="/findFriends?tab=suggested"
         style={{ color: "inherit", textDecoration: "none" }}
       >
-        {suggestedData.length > 3 && <Button2>View All</Button2>}
+        {suggestedData.length > 3 && (
+          <Button2 onClick={() => setNavActive("friends")}>View All</Button2>
+        )}
       </Link>
 
       {suggestedData.length > 0 && <Divider />}

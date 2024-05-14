@@ -2,6 +2,8 @@ import styled from "styled-components";
 import Ayomide from "../img/Ayomide 2.png";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { useContext } from "react";
+import { ActiveContext } from "../contexts/active";
 
 const Container = styled.div`
   margin-right: 30px;
@@ -65,12 +67,13 @@ const Span4 = styled.span`
 
 const Profile = () => {
   const userInfo = useSelector((state) => state.user.userInfo);
+  const { setNavActive } = useContext(ActiveContext);
   return (
     <Link
       to={`/profile/${userInfo._id}`}
       style={{ textDecoration: "none", color: "inherit" }}
     >
-      <Container>
+      <Container onClick={() => setNavActive(null)}>
         <Top>
           <TopTop>
             <Image

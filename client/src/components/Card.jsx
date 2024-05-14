@@ -11,8 +11,9 @@ import {
   cancelSentRequestSuccess,
   deleteRequestSuccess,
 } from "../redux/userSlice";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { axiosInstance } from "../utils/axiosConfig";
+import { ActiveContext } from "../contexts/active";
 
 const Container = styled.div`
   height: 270px;
@@ -116,6 +117,8 @@ const Card = ({ suggested, data, getFriendRequests }) => {
   const [addFriendButton, setAddFriendButton] = useState("Add Friend");
   const userInfo = useSelector((state) => state.user.userInfo);
 
+  const { setNavActive } = useContext(ActiveContext);
+
   useEffect(() => {
     if (suggested) {
       userInfo.sentRequests.includes(data._id) &&
@@ -204,7 +207,10 @@ const Card = ({ suggested, data, getFriendRequests }) => {
     <Container suggested={suggested}>
       <CardTop suggested={suggested}>
         <Link to={`/profile/${data._id}`} style={{ color: "inherit" }}>
-          <CardPic src={data.profilePic ? data.profilePic : testImage} />
+          <CardPic
+            src={data.profilePic ? data.profilePic : testImage}
+            onClick={() => setNavActive(null)}
+          />
         </Link>
       </CardTop>
       <CardBottom suggested={suggested}>
