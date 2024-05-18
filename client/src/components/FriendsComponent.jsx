@@ -141,6 +141,7 @@ const FriendsComponent = ({ tab, setTab }) => {
   const [data, setData] = useState([]);
   const dispatch = useDispatch();
   const location = useLocation();
+  const [open, setOpen] = useState(false);
 
   const userID = location.pathname.split("/")[2];
 
@@ -166,6 +167,14 @@ const FriendsComponent = ({ tab, setTab }) => {
     tab === "friends" && getUserFriends();
   }, [tab]);
 
+  const handleTooltipClose = () => {
+    setOpen(false);
+  };
+
+  const handleTooltipOpen = () => {
+    setOpen(true);
+  };
+
   return (
     <Container>
       <Heading>
@@ -186,12 +195,14 @@ const FriendsComponent = ({ tab, setTab }) => {
         <Friends>
           {data.map((item) => {
             return (
-              <Link
-                to={`/profile/${item._id}`}
-                style={{ color: "inherit", textDecoration: "none" }}
-                onClick={() => setTab("posts")}
-              >
-                <FriendItem key={item._id}>
+              // <ClickAwayListener onClickAway={handleTooltipClose}>
+
+              <FriendItem key={item._id}>
+                <Link
+                  to={`/profile/${item._id}`}
+                  style={{ color: "inherit", textDecoration: "none" }}
+                  onClick={() => setTab("posts")}
+                >
                   <FriendItemLeft>
                     <FriendPicture
                       src={item.profilePic ? item.profilePic : Ayomide}
@@ -201,13 +212,14 @@ const FriendsComponent = ({ tab, setTab }) => {
                       {item.firstName} {item.lastName}
                     </FriendName>
                   </FriendItemLeft>
-                  <FriendItemRight>
-                    <MoreHorizOutlinedIcon
-                      style={{ fontSize: "18px", cursor: "pointer" }}
-                    />
-                  </FriendItemRight>
-                </FriendItem>
-              </Link>
+                </Link>
+
+                <FriendItemRight onClick={handleTooltipOpen}>
+                  <MoreHorizOutlinedIcon
+                    style={{ fontSize: "18px", cursor: "pointer" }}
+                  />
+                </FriendItemRight>
+              </FriendItem>
             );
           })}
         </Friends>
