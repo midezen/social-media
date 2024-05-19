@@ -100,6 +100,7 @@ const FriendItem = styled.div`
   border: 0.5px solid ${({ theme }) => theme.bgSoft};
   padding: 8px;
   border-radius: 12px;
+  position: relative;
 `;
 
 const FriendItemLeft = styled.div`
@@ -127,6 +128,7 @@ const FriendItemRight = styled.div`
   padding: 13px;
   border-radius: 50%;
   background-color: ${({ theme }) => theme.hover};
+  cursor: pointer;
 `;
 
 const FriendsAppear = styled.span`
@@ -137,11 +139,50 @@ const FriendsAppear = styled.span`
   align-items: center;
 `;
 
+const ArrowDiv = styled.div`
+  height: fit-content;
+  width: 200px;
+  background-color: ${({ theme }) => theme.bg};
+  border-radius: 10px;
+  box-shadow: 0px 0px 11px 1px rgba(0, 0, 0, 0.75);
+  -webkit-box-shadow: 0px 0px 11px 1px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 0px 0px 11px 1px rgba(0, 0, 0, 0.75);
+  position: absolute;
+  right: 30px;
+  top: 90px;
+  z-index: 99;
+  display: flex;
+  flex-direction: column;
+`;
+
+const ArrowDivSpan = styled.span`
+  display: flex;
+  width: 90%;
+  justify-content: center;
+  padding: 10px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+
+  &:first-child {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+  }
+  &:last-child {
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+  }
+
+  &:hover {
+    background-color: ${({ theme }) => theme.bgSoft};
+  }
+`;
+
 const FriendsComponent = ({ tab, setTab }) => {
   const [data, setData] = useState([]);
   const dispatch = useDispatch();
   const location = useLocation();
-  const [open, setOpen] = useState(false);
+  const [activeItemId, setActiveItemId] = useState(null);
 
   const userID = location.pathname.split("/")[2];
 
@@ -167,12 +208,8 @@ const FriendsComponent = ({ tab, setTab }) => {
     tab === "friends" && getUserFriends();
   }, [tab]);
 
-  const handleTooltipClose = () => {
-    setOpen(false);
-  };
-
-  const handleTooltipOpen = () => {
-    setOpen(true);
+  const handleFriendItemRightClick = (id) => {
+    activeItemId !== null ? setActiveItemId(null) : setActiveItemId(id);
   };
 
   return (
@@ -195,8 +232,6 @@ const FriendsComponent = ({ tab, setTab }) => {
         <Friends>
           {data.map((item) => {
             return (
-              // <ClickAwayListener onClickAway={handleTooltipClose}>
-
               <FriendItem key={item._id}>
                 <Link
                   to={`/profile/${item._id}`}
@@ -214,11 +249,17 @@ const FriendsComponent = ({ tab, setTab }) => {
                   </FriendItemLeft>
                 </Link>
 
-                <FriendItemRight onClick={handleTooltipOpen}>
-                  <MoreHorizOutlinedIcon
-                    style={{ fontSize: "18px", cursor: "pointer" }}
-                  />
+                <FriendItemRight
+                  onClick={() => handleFriendItemRightClick(item._id)}
+                >
+                  <MoreHorizOutlinedIcon style={{ fontSize: "18px" }} />
                 </FriendItemRight>
+                {item._id === activeItemId && (
+                  <ArrowDiv key={item._id}>
+                    <ArrowDivSpan>Unfollow</ArrowDivSpan>
+                    <ArrowDivSpan>Unfriend</ArrowDivSpan>
+                  </ArrowDiv>
+                )}
               </FriendItem>
             );
           })}

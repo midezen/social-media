@@ -193,6 +193,7 @@ const Navbar = () => {
           <NavItem
             onClick={() => setNavActive("home")}
             style={{ color: active === "home" ? "#0000ff" : "inherit" }}
+            title="Home"
           >
             <NotificationIcon>
               <HomeOutlinedIcon style={{ fontSize: "25px" }} />
@@ -204,23 +205,25 @@ const Navbar = () => {
           <NavItem
             onClick={() => setNavActive("friends")}
             style={{ color: active === "friends" ? "#0000ff" : "inherit" }}
+            title="Find Friends"
           >
             <PeopleAltOutlinedIcon style={{ fontSize: "25px" }} />
           </NavItem>
         </Link>
 
         {darkmode ? (
-          <NavItem onClick={handleToggle}>
+          <NavItem onClick={handleToggle} title="Theme">
             <LightModeOutlinedIcon style={{ fontSize: "25px" }} />
           </NavItem>
         ) : (
-          <NavItem onClick={handleToggle}>
+          <NavItem onClick={handleToggle} title="Theme">
             <DarkModeOutlinedIcon style={{ fontSize: "25px" }} />
           </NavItem>
         )}
         <NavItem
           onClick={() => setNavActive("saved posts")}
           style={{ color: active === "saved posts" ? "#0000ff" : "inherit" }}
+          title="Saved Posts"
         >
           <BookmarkBorderOutlinedIcon style={{ fontSize: "25px" }} />
         </NavItem>
