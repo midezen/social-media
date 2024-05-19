@@ -3,8 +3,15 @@ import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import MoreHorizOutlinedIcon from "@mui/icons-material/MoreHorizOutlined";
 import Ayomide from "../img/Ayomide 2.png";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { Rejected, Start, Success } from "../redux/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  Rejected,
+  Start,
+  Success,
+  followSuccess,
+  unfollowSuccess,
+  unfriendSuccess,
+} from "../redux/userSlice";
 import { axiosInstance } from "../utils/axiosConfig";
 import { Link, useLocation } from "react-router-dom";
 
@@ -183,6 +190,7 @@ const FriendsComponent = ({ tab, setTab }) => {
   const dispatch = useDispatch();
   const location = useLocation();
   const [activeItemId, setActiveItemId] = useState(null);
+  const userInfo = useSelector((state) => state.user.userInfo);
 
   const userID = location.pathname.split("/")[2];
 
@@ -210,6 +218,59 @@ const FriendsComponent = ({ tab, setTab }) => {
 
   const handleFriendItemRightClick = (id) => {
     activeItemId !== null ? setActiveItemId(null) : setActiveItemId(id);
+  };
+
+  const handleUnfriend = async (id) => {
+    dispatch(Start());
+    try {
+      await axiosInstance.put(`/users/unfriend/${id}`, "", {
+        withCredentials: true,
+      });
+      dispatch(unfriendSuccess(id));
+      getUserFriends();
+      setFollowing(false);
+    } catch (err) {
+      if (err.response.status === 500) {
+        alert("server/network error");
+      } else {
+        alert(err.response.data);
+      }
+      dispatch(Rejected());
+    }
+  };
+
+  const handleUnfollow = async (id) => {
+    dispatch(Start());
+    try {
+      await axiosInstance.put(`/users/unfollowUser/${id}`, "", {
+        withCredentials: true,
+      });
+      dispatch(unfollowSuccess(id));
+    } catch (err) {
+      if (err.response.status === 500) {
+        alert("server/network error");
+      } else {
+        alert(err.response.data);
+      }
+      dispatch(Rejected());
+    }
+  };
+
+  const handleFollow = async (id) => {
+    dispatch(Start());
+    try {
+      await axiosInstance.put(`/users/followUser/${id}`, "", {
+        withCredentials: true,
+      });
+      dispatch(followSuccess(id));
+    } catch (err) {
+      if (err.response.status === 500) {
+        alert("server/network error");
+      } else {
+        alert(err.response.data);
+      }
+      dispatch(Rejected());
+    }
   };
 
   return (
@@ -256,8 +317,18 @@ const FriendsComponent = ({ tab, setTab }) => {
                 </FriendItemRight>
                 {item._id === activeItemId && (
                   <ArrowDiv key={item._id}>
-                    <ArrowDivSpan>Unfollow</ArrowDivSpan>
-                    <ArrowDivSpan>Unfriend</ArrowDivSpan>
+                    {userInfo.following.includes(item._id) ? (
+                      <ArrowDivSpan onClick={() => handleUnfollow(item._id)}>
+                        Unfollow
+                      </ArrowDivSpan>
+                    ) : (
+                      <ArrowDivSpan onClick={() => handleFollow(item._id)}>
+                        Follow
+                      </ArrowDivSpan>
+                    )}
+                    <ArrowDivSpan onClick={() => handleUnfriend(item._id)}>
+                      Unfriend
+                    </ArrowDivSpan>
                   </ArrowDiv>
                 )}
               </FriendItem>
