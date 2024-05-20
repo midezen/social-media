@@ -229,15 +229,20 @@ const Navbar = () => {
         </NavItem>
       </Middle>
       <Right>
-        <NavRightItem
-          onClick={() => setNavActive("messages")}
-          style={{ color: active === "messages" ? "#0000ff" : "inherit" }}
+        <Link
+          to="/messages"
+          style={{ textDecoration: "none", color: "inherit" }}
         >
-          <NotificationIcon>
-            <SendOutlinedIcon style={{ fontSize: "25px" }} />
-            <NotificationCount>8</NotificationCount>
-          </NotificationIcon>
-        </NavRightItem>
+          <NavRightItem
+            onClick={() => setNavActive("messages")}
+            style={{ color: active === "messages" ? "#0000ff" : "inherit" }}
+          >
+            <NotificationIcon>
+              <SendOutlinedIcon style={{ fontSize: "25px" }} />
+              <NotificationCount>8</NotificationCount>
+            </NotificationIcon>
+          </NavRightItem>
+        </Link>
 
         <NavRightItem
           onClick={() => setNavActive("notifications")}

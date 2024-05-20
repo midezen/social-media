@@ -35,10 +35,6 @@ function App() {
       path: "/register",
       element: <Register />,
     },
-    {
-      path: "/messages",
-      element: <Messages />,
-    },
 
     {
       path: "/",
@@ -55,6 +51,10 @@ function App() {
         {
           path: "/findFriends",
           element: <FindFriends />,
+        },
+        {
+          path: "/messages",
+          element: <Messages />,
         },
       ],
     },
