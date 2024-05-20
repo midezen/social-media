@@ -1,4 +1,4 @@
-import styled, { ThemeContext } from "styled-components";
+import styled from "styled-components";
 import MoreHorizOutlinedIcon from "@mui/icons-material/MoreHorizOutlined";
 import Ayomide from "../img/Ayomide 2.png";
 import { useContext, useState } from "react";

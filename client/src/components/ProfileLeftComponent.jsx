@@ -797,7 +797,7 @@ const ProfileLeftComponent = ({ userData, getUser }) => {
         aria-describedby="parent-modal-description"
       >
         <Box
-          sx={{ ...style, width: "20%", maxHeight: "50%" }}
+          sx={{ ...style, width: "25%", maxHeight: "50%" }}
           style={{
             backgroundColor: darkmode ? "#202020" : "white",
             border: darkmode ? "1px solid #181818" : "1px solid #f5f5f0",
@@ -863,7 +863,7 @@ const ProfileLeftComponent = ({ userData, getUser }) => {
         aria-describedby="parent-modal-description"
       >
         <Box
-          sx={{ ...style, width: "20%", maxHeight: "50%" }}
+          sx={{ ...style, width: "25%", maxHeight: "50%" }}
           style={{
             backgroundColor: darkmode ? "#202020" : "white",
             border: darkmode ? "1px solid #181818" : "1px solid #f5f5f0",
