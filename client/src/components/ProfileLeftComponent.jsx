@@ -468,6 +468,19 @@ const ProfileLeftComponent = ({ userData, getUser }) => {
     getUserFriends();
   }, [userID]);
 
+  const getFollowers = async () => {
+    dispatch(Start());
+    try {
+    } catch (err) {
+      if (err.response.status === 500) {
+        alert("server/network error");
+      } else {
+        alert(err.response.data);
+      }
+      dispatch(Rejected());
+    }
+  };
+
   return (
     <ProfileLeft>
       <ProfileLeftTop>
@@ -732,7 +745,7 @@ const ProfileLeftComponent = ({ userData, getUser }) => {
           }}
         >
           <ModalTop>
-            <CloseIcon>
+            <CloseIcon onClick={handleFollowersClose}>
               <CloseOutlinedIcon />
               <ModalItems>
                 <ModalItem>
@@ -771,7 +784,7 @@ const ProfileLeftComponent = ({ userData, getUser }) => {
           }}
         >
           <ModalTop>
-            <CloseIcon>
+            <CloseIcon onClick={handleFollowingClose}>
               <CloseOutlinedIcon />
               <ModalItems>
                 <ModalItem>

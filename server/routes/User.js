@@ -7,6 +7,8 @@ import {
   deleteUser,
   followUser,
   getAllUsers,
+  getFollowers,
+  getFollowings,
   getUser,
   getUserFriendRequests,
   getUserFriends,
@@ -32,6 +34,8 @@ router.get("/:id", verifyToken, getUser);
 router.get("/getuserfriends/:id", verifyToken, getUserFriends);
 router.get("/getuserfriendrequests/:id", verifyToken, getUserFriendRequests);
 router.get("/", verifyToken, getAllUsers);
+router.get("/followers/:id", verifyToken, getFollowers);
+router.get("/following/:id", verifyToken, getFollowings);
 router.put("/followUser/:id", verifyToken, followUser);
 router.put("/unfollowUser/:id", verifyToken, unfollowUser);
 router.put("/likePost/:PostId", verifyToken, likePost);

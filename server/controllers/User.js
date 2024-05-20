@@ -292,3 +292,33 @@ export const getAllUsers = async (req, res) => {
     res.status(500).json(err);
   }
 };
+
+export const getFollowers = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    const followers = user.followers;
+    const list = await Promise.all(
+      followers.map((item) => {
+        return User.findById(item);
+      })
+    );
+    res.status(200).json(list);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
+export const getFollowings = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    const following = user.following;
+    const list = await Promise.all(
+      following.map((item) => {
+        return User.findById(item);
+      })
+    );
+    res.status(200).json(list);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
