@@ -23,7 +23,9 @@ import Friend from "../components/Friend";
 import { useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { axiosInstance } from "../utils/axiosConfig";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
+import Ayomide from "../img/Ayomide 2.png";
 
 const ProfileLeft = styled.div`
   width: 45%;
@@ -220,6 +222,63 @@ const FriendsAppearSpan = styled.span`
   font-weight: bold;
 `;
 
+const ModalTop = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`;
+
+const CloseIcon = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: fit-content;
+  height: fit-content;
+  padding: 3px;
+  background-color: ${({ theme }) => theme.bgSoft};
+  color: ${({ theme }) => theme.text};
+  border-radius: 50%;
+`;
+
+const ModalItems = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+`;
+
+const ModalItem = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0px 20px;
+`;
+
+const ModalUserInfo = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+`;
+
+const ModalProfilePic = styled.img`
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 50%;
+`;
+
+const ModalName = styled.span`
+  font-size: 14px;
+  font-weight: bold;
+`;
+
+const ModalButton = styled.button`
+  border: none;
+  border-radius: 5px;
+  color: white;
+  background-color: ${({ theme }) => theme.spT};
+  display: flex;
+  justify-content: center;
+`;
+
 const style = {
   position: "absolute",
   top: "50%",
@@ -236,7 +295,10 @@ const ProfileLeftComponent = ({ userData, getUser }) => {
   const [unfriendOpen, setUnfriendOpen] = useState(false);
   const [following, setFollowing] = useState(false);
   const [userFriendsData, setUserFriendsData] = useState([]);
-  const navigate = useNavigate();
+  const [followingOpen, setFollowingOpen] = useState(false);
+  const [followersOpen, setFollowersOpen] = useState(false);
+  const [followersData, setFollowersData] = useState([]);
+  const [followingData, setFollowingData] = useState([]);
 
   const dispatch = useDispatch();
 
@@ -253,6 +315,22 @@ const ProfileLeftComponent = ({ userData, getUser }) => {
   };
   const handleUnfriendClose = () => {
     setUnfriendOpen(false);
+  };
+
+  const displayFollowers = () => {
+    setFollowersOpen(true);
+  };
+
+  const handleFollowersClose = () => {
+    setFollowersOpen(false);
+  };
+
+  const displayFollowing = () => {
+    setFollowingOpen(true);
+  };
+
+  const handleFollowingClose = () => {
+    setFollowingOpen(false);
   };
 
   useEffect(() => {
@@ -394,14 +472,14 @@ const ProfileLeftComponent = ({ userData, getUser }) => {
     <ProfileLeft>
       <ProfileLeftTop>
         <ProfileLeftTopItems>
-          <ProfileLeftTopItem>
+          <ProfileLeftTopItem onClick={displayFollowers}>
             <PersonOutlineOutlinedIcon
               style={{ fontSize: "30px", color: "#0000ff" }}
             />
             <FollowXCount>{userData?.followers.length}</FollowXCount>
             <FollowX>Followers</FollowX>
           </ProfileLeftTopItem>
-          <ProfileLeftTopItem>
+          <ProfileLeftTopItem onClick={displayFollowing}>
             <PersonOutlineOutlinedIcon
               style={{ fontSize: "30px", color: "#0000ff" }}
             />
@@ -505,7 +583,7 @@ const ProfileLeftComponent = ({ userData, getUser }) => {
             </Button2>
           </ButtonTwos>
         )}
-      </ProfileLeftTop>{" "}
+      </ProfileLeftTop>
       <ProfileLeftTopBottom>
         <InfoItem>
           <InfoItemHead>About</InfoItemHead>
@@ -632,6 +710,84 @@ const ProfileLeftComponent = ({ userData, getUser }) => {
               No
             </UnfriendUserButton>
           </UnfriendUserButtons>
+        </Box>
+      </Modal>
+      <Modal
+        open={followersOpen}
+        onClose={handleFollowersClose}
+        aria-labelledby="parent-modal-title"
+        aria-describedby="parent-modal-description"
+      >
+        <Box
+          sx={{ ...style, width: "20%" }}
+          style={{
+            backgroundColor: darkmode ? "#202020" : "white",
+            border: darkmode ? "1px solid #181818" : "1px solid #f5f5f0",
+            borderRadius: "12px",
+            display: "flex",
+            flexDirection: "column",
+            gap: "40px",
+            color: darkmode ? "white" : "black",
+            padding: "10px 20px",
+          }}
+        >
+          <ModalTop>
+            <CloseIcon>
+              <CloseOutlinedIcon />
+              <ModalItems>
+                <ModalItem>
+                  <ModalUserInfo>
+                    <ModalProfilePic src={Ayomide} alt="profilePic" />
+                    <ModalName>Ayomide Oluwadiya</ModalName>
+                  </ModalUserInfo>
+                  {userInfo.following.includes(item._id) ? (
+                    <ModalButton>unfollow</ModalButton>
+                  ) : (
+                    <ModalButton>follow</ModalButton>
+                  )}
+                </ModalItem>
+              </ModalItems>
+            </CloseIcon>
+          </ModalTop>
+        </Box>
+      </Modal>
+      <Modal
+        open={followingOpen}
+        onClose={handleFollowingClose}
+        aria-labelledby="parent-modal-title"
+        aria-describedby="parent-modal-description"
+      >
+        <Box
+          sx={{ ...style, width: "20%" }}
+          style={{
+            backgroundColor: darkmode ? "#202020" : "white",
+            border: darkmode ? "1px solid #181818" : "1px solid #f5f5f0",
+            borderRadius: "12px",
+            display: "flex",
+            flexDirection: "column",
+            gap: "40px",
+            color: darkmode ? "white" : "black",
+            padding: "20px",
+          }}
+        >
+          <ModalTop>
+            <CloseIcon>
+              <CloseOutlinedIcon />
+              <ModalItems>
+                <ModalItem>
+                  <ModalUserInfo>
+                    <ModalProfilePic src={Ayomide} alt="profilePic" />
+                    <ModalName>Ayomide Oluwadiya</ModalName>
+                  </ModalUserInfo>
+                  {userInfo.following.includes(item._id) ? (
+                    <ModalButton>unfollow</ModalButton>
+                  ) : (
+                    <ModalButton>follow</ModalButton>
+                  )}
+                </ModalItem>
+              </ModalItems>
+            </CloseIcon>
+          </ModalTop>
         </Box>
       </Modal>
     </ProfileLeft>

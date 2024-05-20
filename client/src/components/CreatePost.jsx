@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import Ayomide from "../img/Ayomide 2.png";
 import ImageIcon from "../img/image.png";
-import SmileIcon from "../img/smile.png";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { useContext, useState } from "react";
