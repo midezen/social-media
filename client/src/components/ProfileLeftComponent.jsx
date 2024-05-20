@@ -672,43 +672,34 @@ const ProfileLeftComponent = ({ userData, getUser }) => {
         )}
       </ProfileLeftTop>
       <ProfileLeftTopBottom>
-        <InfoItem>
-          <InfoItemHead>About</InfoItemHead>
-          <InfoItemDesc>
-            {userData?.about
-              ? userData.about
-              : "click on edit profile button to add bio"}
-          </InfoItemDesc>
-        </InfoItem>
-        <InfoItem>
-          <InfoItemHead>Mobile</InfoItemHead>
-          <InfoItemDesc>
-            {userData?.mobileNo
-              ? userData?.mobileNo
-              : "click on edit profile button to add mobile number"}
-          </InfoItemDesc>
-        </InfoItem>
-        <InfoItem>
-          <InfoItemHead>Email Address</InfoItemHead>
-          <InfoItemDesc>
-            {userData?.email
-              ? userData?.email
-              : "click on edit profile button to add email"}
-          </InfoItemDesc>
-        </InfoItem>
-        <InfoItem>
-          <InfoItemHead>Location</InfoItemHead>
-          {userData?.province || userData?.country ? (
+        {userData?.about && (
+          <InfoItem>
+            <InfoItemHead>About</InfoItemHead>
+            <InfoItemDesc>{userData?.about}</InfoItemDesc>
+          </InfoItem>
+        )}
+        {userData?.mobileNo && (
+          <InfoItem>
+            <InfoItemHead>Mobile</InfoItemHead>
+            <InfoItemDesc>{userData?.mobileNo}</InfoItemDesc>
+          </InfoItem>
+        )}
+        {userData?.email && (
+          <InfoItem>
+            <InfoItemHead>Email Address</InfoItemHead>
+            <InfoItemDesc>{userData?.email}</InfoItemDesc>
+          </InfoItem>
+        )}
+        {userData?.province || userData?.country ? (
+          <InfoItem>
+            <InfoItemHead>Location</InfoItemHead>
             <InfoItemDesc>
-              {userData?.province ? userData.province : ""}{" "}
-              {userData?.country ? userData.country : ""}
+              {userData?.province} {userData?.country}
             </InfoItemDesc>
-          ) : (
-            <InfoItemDesc>
-              click on edit profile button to add location
-            </InfoItemDesc>
-          )}
-        </InfoItem>
+          </InfoItem>
+        ) : (
+          ""
+        )}
       </ProfileLeftTopBottom>
       <ProfileLeftMiddle
         style={{ position: "sticky", top: "60px", marginBottom: "20px" }}
