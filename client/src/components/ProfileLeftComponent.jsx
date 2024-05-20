@@ -225,6 +225,7 @@ const FriendsAppearSpan = styled.span`
 const ModalTop = styled.div`
   display: flex;
   justify-content: flex-end;
+  margin-bottom: 10px;
 `;
 
 const CloseIcon = styled.div`
@@ -237,6 +238,7 @@ const CloseIcon = styled.div`
   background-color: ${({ theme }) => theme.bgSoft};
   color: ${({ theme }) => theme.text};
   border-radius: 50%;
+  cursor: pointer;
 `;
 
 const ModalItems = styled.div`
@@ -248,14 +250,15 @@ const ModalItems = styled.div`
 const ModalItem = styled.div`
   display: flex;
   align-items: center;
-  justify-content: center;
-  padding: 0px 20px;
+  justify-content: space-between;
+  padding: 0px 10px;
 `;
 
 const ModalUserInfo = styled.div`
   display: flex;
   align-items: center;
   gap: 10px;
+  flex: 2;
 `;
 
 const ModalProfilePic = styled.img`
@@ -277,6 +280,11 @@ const ModalButton = styled.button`
   background-color: ${({ theme }) => theme.spT};
   display: flex;
   justify-content: center;
+  padding: 7px;
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+  flex: 1;
 `;
 
 const style = {
@@ -315,22 +323,6 @@ const ProfileLeftComponent = ({ userData, getUser }) => {
   };
   const handleUnfriendClose = () => {
     setUnfriendOpen(false);
-  };
-
-  const displayFollowers = () => {
-    setFollowersOpen(true);
-  };
-
-  const handleFollowersClose = () => {
-    setFollowersOpen(false);
-  };
-
-  const displayFollowing = () => {
-    setFollowingOpen(true);
-  };
-
-  const handleFollowingClose = () => {
-    setFollowingOpen(false);
   };
 
   useEffect(() => {
@@ -444,6 +436,42 @@ const ProfileLeftComponent = ({ userData, getUser }) => {
     }
   };
 
+  const handleModalFollow = async (id) => {
+    dispatch(Start());
+    try {
+      await axiosInstance.put(`/users/followUser/${id}`, "", {
+        withCredentials: true,
+      });
+      dispatch(followSuccess(id));
+      getUser();
+    } catch (err) {
+      if (err.response.status === 500) {
+        alert("server/network error");
+      } else {
+        alert(err.response.data);
+      }
+      dispatch(Rejected());
+    }
+  };
+
+  const handleModalUnfollow = async (id) => {
+    dispatch(Start());
+    try {
+      await axiosInstance.put(`/users/unfollowUser/${id}`, "", {
+        withCredentials: true,
+      });
+      dispatch(unfollowSuccess(id));
+      getUser();
+    } catch (err) {
+      if (err.response.status === 500) {
+        alert("server/network error");
+      } else {
+        alert(err.response.data);
+      }
+      dispatch(Rejected());
+    }
+  };
+
   const getUserFriends = async () => {
     dispatch(Start());
     try {
@@ -464,13 +492,14 @@ const ProfileLeftComponent = ({ userData, getUser }) => {
     }
   };
 
-  useEffect(() => {
-    getUserFriends();
-  }, [userID]);
-
   const getFollowers = async () => {
     dispatch(Start());
     try {
+      const res = await axiosInstance.get(`/users/followers/${userID}`, {
+        withCredentials: true,
+      });
+      console.log(res.data);
+      setFollowersData(res.data);
     } catch (err) {
       if (err.response.status === 500) {
         alert("server/network error");
@@ -480,6 +509,51 @@ const ProfileLeftComponent = ({ userData, getUser }) => {
       dispatch(Rejected());
     }
   };
+
+  const getFollowings = async () => {
+    dispatch(Start());
+    try {
+      const res = await axiosInstance.get(`/users/followings/${userID}`, {
+        withCredentials: true,
+      });
+      console.log(res.data);
+      setFollowingData(res.data);
+    } catch (err) {
+      if (err.response.status === 500) {
+        alert("server/network error");
+      } else {
+        alert(err.response.data);
+      }
+      dispatch(Rejected());
+    }
+  };
+
+  useEffect(() => {
+    getUserFriends();
+  }, [userID]);
+
+  const displayFollowers = () => {
+    getFollowers();
+    setFollowersOpen(true);
+  };
+
+  const handleFollowersClose = () => {
+    getFollowings();
+    setFollowersOpen(false);
+  };
+
+  const displayFollowing = () => {
+    setFollowingOpen(true);
+  };
+
+  const handleFollowingClose = () => {
+    setFollowingOpen(false);
+  };
+
+  useEffect(() => {
+    getFollowers();
+    getFollowings();
+  }, [userID]);
 
   return (
     <ProfileLeft>
@@ -732,36 +806,63 @@ const ProfileLeftComponent = ({ userData, getUser }) => {
         aria-describedby="parent-modal-description"
       >
         <Box
-          sx={{ ...style, width: "20%" }}
+          sx={{ ...style, width: "20%", maxHeight: "50%" }}
           style={{
             backgroundColor: darkmode ? "#202020" : "white",
             border: darkmode ? "1px solid #181818" : "1px solid #f5f5f0",
             borderRadius: "12px",
             display: "flex",
             flexDirection: "column",
-            gap: "40px",
             color: darkmode ? "white" : "black",
-            padding: "10px 20px",
+            padding: "10px 5px",
+            overflowY: "scroll",
           }}
         >
           <ModalTop>
             <CloseIcon onClick={handleFollowersClose}>
               <CloseOutlinedIcon />
-              <ModalItems>
-                <ModalItem>
-                  <ModalUserInfo>
-                    <ModalProfilePic src={Ayomide} alt="profilePic" />
-                    <ModalName>Ayomide Oluwadiya</ModalName>
-                  </ModalUserInfo>
-                  {userInfo.following.includes(item._id) ? (
-                    <ModalButton>unfollow</ModalButton>
-                  ) : (
-                    <ModalButton>follow</ModalButton>
-                  )}
-                </ModalItem>
-              </ModalItems>
             </CloseIcon>
           </ModalTop>
+          <ModalItems>
+            {followersData?.map((item) => {
+              return (
+                <ModalItem key={item?._id}>
+                  <ModalUserInfo onClick={handleFollowersClose}>
+                    <Link
+                      to={`/profile/${item._id}`}
+                      style={{
+                        textDecoration: "none",
+                        color: "inherit",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "5px",
+                      }}
+                    >
+                      <ModalProfilePic
+                        src={item?.profilePic ? item.profilePic : Ayomide}
+                        alt="profilePic"
+                      />
+                      <ModalName>
+                        {item?.firstName} {item?.lastName}
+                      </ModalName>
+                    </Link>
+                  </ModalUserInfo>
+
+                  {userInfo.following.includes(item?._id) ? (
+                    <ModalButton onClick={() => handleModalUnfollow(item._id)}>
+                      unfollow
+                    </ModalButton>
+                  ) : item._id === userInfo._id ? (
+                    ""
+                  ) : (
+                    <ModalButton onClick={() => handleModalFollow(item._id)}>
+                      follow
+                    </ModalButton>
+                  )}
+                </ModalItem>
+              );
+            })}
+          </ModalItems>
         </Box>
       </Modal>
       <Modal
@@ -771,36 +872,63 @@ const ProfileLeftComponent = ({ userData, getUser }) => {
         aria-describedby="parent-modal-description"
       >
         <Box
-          sx={{ ...style, width: "20%" }}
+          sx={{ ...style, width: "20%", maxHeight: "50%" }}
           style={{
             backgroundColor: darkmode ? "#202020" : "white",
             border: darkmode ? "1px solid #181818" : "1px solid #f5f5f0",
             borderRadius: "12px",
             display: "flex",
             flexDirection: "column",
-            gap: "40px",
             color: darkmode ? "white" : "black",
-            padding: "20px",
+            padding: "10px 5px",
+            overflowY: "scroll",
           }}
         >
           <ModalTop>
             <CloseIcon onClick={handleFollowingClose}>
               <CloseOutlinedIcon />
-              <ModalItems>
-                <ModalItem>
-                  <ModalUserInfo>
-                    <ModalProfilePic src={Ayomide} alt="profilePic" />
-                    <ModalName>Ayomide Oluwadiya</ModalName>
-                  </ModalUserInfo>
-                  {userInfo.following.includes(item._id) ? (
-                    <ModalButton>unfollow</ModalButton>
-                  ) : (
-                    <ModalButton>follow</ModalButton>
-                  )}
-                </ModalItem>
-              </ModalItems>
             </CloseIcon>
           </ModalTop>
+          <ModalItems>
+            {followingData?.map((item) => {
+              return (
+                <ModalItem key={item?._id}>
+                  <ModalUserInfo onClick={handleFollowingClose}>
+                    <Link
+                      to={`/profile/${item._id}`}
+                      style={{
+                        textDecoration: "none",
+                        color: "inherit",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "5px",
+                      }}
+                    >
+                      <ModalProfilePic
+                        src={item?.profilePic ? item.profilePic : Ayomide}
+                        alt="profilePic"
+                      />
+                      <ModalName>
+                        {item?.firstName} {item?.lastName}
+                      </ModalName>
+                    </Link>
+                  </ModalUserInfo>
+
+                  {userInfo.following.includes(item?._id) ? (
+                    <ModalButton onClick={() => handleModalUnfollow(item._id)}>
+                      unfollow
+                    </ModalButton>
+                  ) : item._id === userInfo._id ? (
+                    ""
+                  ) : (
+                    <ModalButton onClick={() => handleModalFollow(item._id)}>
+                      follow
+                    </ModalButton>
+                  )}
+                </ModalItem>
+              );
+            })}
+          </ModalItems>
         </Box>
       </Modal>
     </ProfileLeft>

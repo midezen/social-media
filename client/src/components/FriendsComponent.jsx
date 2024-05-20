@@ -310,11 +310,13 @@ const FriendsComponent = ({ tab, setTab }) => {
                   </FriendItemLeft>
                 </Link>
 
-                <FriendItemRight
-                  onClick={() => handleFriendItemRightClick(item._id)}
-                >
-                  <MoreHorizOutlinedIcon style={{ fontSize: "18px" }} />
-                </FriendItemRight>
+                {item._id !== userInfo._id && (
+                  <FriendItemRight
+                    onClick={() => handleFriendItemRightClick(item._id)}
+                  >
+                    <MoreHorizOutlinedIcon style={{ fontSize: "18px" }} />
+                  </FriendItemRight>
+                )}
                 {item._id === activeItemId && (
                   <ArrowDiv key={item._id}>
                     {userInfo.following.includes(item._id) ? (
