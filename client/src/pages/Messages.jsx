@@ -3,6 +3,7 @@ import DrawOutlinedIcon from "@mui/icons-material/DrawOutlined";
 import { useState } from "react";
 import Ayomide from "../img/Ayomide 2.png";
 import MoreHorizOutlinedIcon from "@mui/icons-material/MoreHorizOutlined";
+import fire from "../img/fire.png";
 
 const Container = styled.div`
   display: flex;
@@ -12,7 +13,7 @@ const Container = styled.div`
 `;
 
 const Left = styled.div`
-  width: 27%;
+  width: 30%;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -24,7 +25,7 @@ const LeftTop = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-top: 20px;
+  padding-top: 15px;
   padding-left: 20px;
   padding-right: 20px;
 `;
@@ -68,6 +69,7 @@ const Conversations = styled.div`
   flex-direction: column;
   overflow-y: scroll;
   overflow-x: hidden;
+  height: 63%;
   &::-webkit-scrollbar {
     width: 7px;
   }
@@ -126,9 +128,59 @@ const ConversationRight = styled.div`
   background-color: blue;
   border-radius: 50%;
 `;
+const Logo = styled.div`
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  justify-content: center;
+`;
+
+const LogoImage = styled.img`
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+`;
+
+const H1 = styled.span`
+  font-family: "Honk", system-ui;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  font-variation-settings: "MORF" 15, "SHLN" 50;
+  font-size: 30px;
+`;
 
 const Right = styled.div`
-  width: 73%;
+  width: 70%;
+`;
+
+const RightTop = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 7px;
+  padding-left: 10px;
+  padding-right: 20px;
+`;
+
+const UserInfo = styled.div`
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 5px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.bgSoft};
+    border-radius: 5px;
+  }
+`;
+
+const RightTopProfilePic = styled.img`
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  object-fit: cover;
 `;
 
 const Messages = () => {
@@ -138,8 +190,8 @@ const Messages = () => {
     "This is the last message for this conversation, and that is on period.";
 
   const handleLastMessageSlice = () => {
-    if (texttest.length > 29) {
-      texttest = texttest.slice(0, 29);
+    if (texttest.length > 36) {
+      texttest = texttest.slice(0, 36);
     }
     return texttest;
   };
@@ -272,8 +324,25 @@ const Messages = () => {
             </Icon>
           </Conversation>
         </Conversations>
+        <Logo>
+          <LogoImage src={fire} alt="fire" />
+          <H1>ConnectiVerse</H1>
+          <LogoImage src={fire} alt="fire" />
+        </Logo>
       </Left>
-      <Right>right</Right>
+      <Right>
+        <RightTop>
+          <UserInfo>
+            <RightTopProfilePic src={Ayomide} alt="" />
+            <Name>Ayomide Oluwadiya</Name>
+          </UserInfo>
+          <Icon>
+            <MoreHorizOutlinedIcon
+              style={{ fontSize: "30px", cursor: "pointer" }}
+            />
+          </Icon>
+        </RightTop>
+      </Right>
     </Container>
   );
 };

@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import loginPic from "../img/login_pic.png";
 import fire from "../img/fire.png";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
