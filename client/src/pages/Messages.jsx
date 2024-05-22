@@ -5,12 +5,14 @@ import Ayomide from "../img/Ayomide 2.png";
 import MoreHorizOutlinedIcon from "@mui/icons-material/MoreHorizOutlined";
 import fire from "../img/fire.png";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import SendIcon from "@mui/icons-material/Send";
 
 const Container = styled.div`
   display: flex;
   width: 100%;
   background-color: ${({ theme }) => theme.bg};
   color: ${({ theme }) => theme.text};
+  height: Calc(100vh - 63px);
 `;
 
 const Left = styled.div`
@@ -18,7 +20,7 @@ const Left = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
-  height: 90vh;
+  height: 100%;
   border-right: 2px solid ${({ theme }) => theme.bgSoft};
 `;
 
@@ -130,6 +132,7 @@ const ConversationRight = styled.div`
   border-radius: 50%;
 `;
 const Logo = styled.div`
+  padding-top: 10px;
   display: flex;
   gap: 5px;
   align-items: center;
@@ -154,7 +157,7 @@ const H1 = styled.span`
 
 const Right = styled.div`
   width: 70%;
-  height: 90vh;
+  height: 100%;
 `;
 
 const RightTop = styled.div`
@@ -193,7 +196,7 @@ const MessagesContainer = styled.div`
   flex-direction: column;
   gap: 20px;
   padding: 30px 10px;
-  height: 67.2%;
+  height: 67.6%;
   overflow-y: scroll;
   &::-webkit-scrollbar {
     width: 7px;
@@ -255,6 +258,7 @@ const MessageDesc = styled.p`
   color: ${(props) => (props.mine ? "white" : props.theme.text)};
   padding: 10px;
   border-radius: 20px;
+  font-size: 14px;
 `;
 
 const OtherUserMessage = styled.div`
@@ -267,8 +271,29 @@ const OtherUserMessage = styled.div`
   }
 `;
 const Searchcontainer = styled.div`
-  width: 100%;
   border-top: 2px solid ${({ theme }) => theme.bgSoft};
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+`;
+
+const Search = styled.div`
+  display: flex;
+  align-items: center;
+  background-color: ${({ theme }) => theme.bgSoft};
+  flex: 1;
+  border-radius: 20px;
+`;
+
+const SearchInput = styled.input`
+  outline: 0;
+  border: none;
+  background-color: transparent;
+  color: ${({ theme }) => theme.text};
+  padding: 13px;
+  width: 100%;
+  margin-left: 10px;
 `;
 
 const Messages = () => {
@@ -399,7 +424,12 @@ const Messages = () => {
             </MessageIcon>
           </OtherUserMessage>
         </MessagesContainer>
-        <Searchcontainer></Searchcontainer>
+        <Searchcontainer>
+          <Search>
+            <SearchInput type="text" placeholder="Type message" />
+          </Search>
+          <SendIcon style={{ color: "blue" }} />
+        </Searchcontainer>
       </Right>
     </Container>
   );
