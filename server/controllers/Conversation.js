@@ -12,3 +12,12 @@ export const CreateConversation = async (req, res) => {
     res.status(500).json(err);
   }
 };
+
+export const getConversations = async (req, res) => {
+  try {
+    const conversations = await Conversation.find({ userId: req.params.id });
+    res.status(200).json(conversations);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
