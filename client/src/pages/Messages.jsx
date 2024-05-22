@@ -4,6 +4,7 @@ import { useState } from "react";
 import Ayomide from "../img/Ayomide 2.png";
 import MoreHorizOutlinedIcon from "@mui/icons-material/MoreHorizOutlined";
 import fire from "../img/fire.png";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 
 const Container = styled.div`
   display: flex;
@@ -17,7 +18,7 @@ const Left = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
-  height: 100vh;
+  height: 90vh;
   border-right: 2px solid ${({ theme }) => theme.bgSoft};
 `;
 
@@ -69,7 +70,7 @@ const Conversations = styled.div`
   flex-direction: column;
   overflow-y: scroll;
   overflow-x: hidden;
-  height: 63%;
+  height: 70%;
   &::-webkit-scrollbar {
     width: 7px;
   }
@@ -133,6 +134,7 @@ const Logo = styled.div`
   gap: 5px;
   align-items: center;
   justify-content: center;
+  border-top: 2px solid ${({ theme }) => theme.bgSoft};
 `;
 
 const LogoImage = styled.img`
@@ -152,15 +154,18 @@ const H1 = styled.span`
 
 const Right = styled.div`
   width: 70%;
+  height: 90vh;
 `;
 
 const RightTop = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-top: 7px;
+  padding-top: 3px;
   padding-left: 10px;
   padding-right: 20px;
+  padding-bottom: 3px;
+  border-bottom: 2px solid ${({ theme }) => theme.bgSoft};
 `;
 
 const UserInfo = styled.div`
@@ -181,6 +186,89 @@ const RightTopProfilePic = styled.img`
   height: 45px;
   border-radius: 50%;
   object-fit: cover;
+`;
+
+const MessagesContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 30px 10px;
+  height: 67.2%;
+  overflow-y: scroll;
+  &::-webkit-scrollbar {
+    width: 7px;
+  }
+  &::-webkit-scrollbar-track {
+    background: lightgray;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: gray;
+    border-radius: 20px;
+  }
+`;
+
+const MessagesUserInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+`;
+
+const MessageIcon = styled.div`
+  padding: 3px;
+  width: fit-content;
+  height: fit-content;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: ${({ theme }) => theme.bgSoft};
+  border-radius: 50%;
+  cursor: pointer;
+  visibility: hidden;
+`;
+
+const UserMessage = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: flex-end;
+  &:hover ${MessageIcon} {
+    visibility: visible;
+  }
+`;
+
+const OtherUserMessageProfilePic = styled.img`
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  object-fit: cover;
+  cursor: pointer;
+`;
+
+const MessageDesc = styled.p`
+  max-width: 70%;
+  background-color: ${(props) =>
+    props.mine ? props.theme.spT : props.theme.bgSoft};
+  color: ${(props) => (props.mine ? "white" : props.theme.text)};
+  padding: 10px;
+  border-radius: 20px;
+`;
+
+const OtherUserMessage = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 75%;
+  &:hover ${MessageIcon} {
+    visibility: visible;
+  }
+`;
+const Searchcontainer = styled.div`
+  width: 100%;
+  border-top: 2px solid ${({ theme }) => theme.bgSoft};
 `;
 
 const Messages = () => {
@@ -267,62 +355,6 @@ const Messages = () => {
               />
             </Icon>
           </Conversation>
-          <Conversation>
-            <ProfilePic src={Ayomide} alt="profile pic" />
-            <ConversationCenter>
-              <Name>Ayomide Oluwadiya</Name>
-              <LastMessage>{handleLastMessageSlice()}... 6d</LastMessage>
-            </ConversationCenter>
-
-            <ConversationRight></ConversationRight>
-            <Icon>
-              <MoreHorizOutlinedIcon
-                style={{ fontSize: "30px", cursor: "pointer" }}
-              />
-            </Icon>
-          </Conversation>
-          <Conversation>
-            <ProfilePic src={Ayomide} alt="profile pic" />
-            <ConversationCenter>
-              <Name>Ayomide Oluwadiya</Name>
-              <LastMessage>{handleLastMessageSlice()}... 6d</LastMessage>
-            </ConversationCenter>
-
-            <ConversationRight></ConversationRight>
-            <Icon>
-              <MoreHorizOutlinedIcon
-                style={{ fontSize: "30px", cursor: "pointer" }}
-              />
-            </Icon>
-          </Conversation>
-          <Conversation>
-            <ProfilePic src={Ayomide} alt="profile pic" />
-            <ConversationCenter>
-              <Name>Ayomide Oluwadiya</Name>
-              <LastMessage>{handleLastMessageSlice()}... 6d</LastMessage>
-            </ConversationCenter>
-
-            <ConversationRight></ConversationRight>
-            <Icon>
-              <MoreHorizOutlinedIcon
-                style={{ fontSize: "30px", cursor: "pointer" }}
-              />
-            </Icon>
-          </Conversation>
-          <Conversation>
-            <ProfilePic src={Ayomide} alt="profile pic" />
-            <ConversationCenter>
-              <Name>Ayomide Oluwadiya</Name>
-              <LastMessage>{handleLastMessageSlice()}... 6d</LastMessage>
-            </ConversationCenter>
-
-            <ConversationRight></ConversationRight>
-            <Icon>
-              <MoreHorizOutlinedIcon
-                style={{ fontSize: "30px", cursor: "pointer" }}
-              />
-            </Icon>
-          </Conversation>
         </Conversations>
         <Logo>
           <LogoImage src={fire} alt="fire" />
@@ -342,6 +374,32 @@ const Messages = () => {
             />
           </Icon>
         </RightTop>
+        <MessagesContainer>
+          <MessagesUserInfo>
+            <ProfilePic src={Ayomide} alt="profile pic" />
+            <Name>Ayomide Oluwadiya</Name>
+          </MessagesUserInfo>
+          <UserMessage>
+            <MessageIcon>
+              <MoreVertIcon />
+            </MessageIcon>
+            <MessageDesc mine>
+              This is my message, it is a very good insightful message! I'm
+              serious.
+            </MessageDesc>
+          </UserMessage>
+          <OtherUserMessage>
+            <OtherUserMessageProfilePic src={Ayomide} alt="profile pic" />
+            <MessageDesc>
+              This is the other user message, it is a very good insightful and
+              wonderful message! I'm serious.
+            </MessageDesc>
+            <MessageIcon>
+              <MoreVertIcon />
+            </MessageIcon>
+          </OtherUserMessage>
+        </MessagesContainer>
+        <Searchcontainer></Searchcontainer>
       </Right>
     </Container>
   );
