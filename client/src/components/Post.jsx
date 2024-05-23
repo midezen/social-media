@@ -83,11 +83,6 @@ const SeeMore = styled.span`
   cursor: pointer;
 `;
 
-const Hashtags = styled.div`
-  font-size: 13px;
-  color: ${({ theme }) => theme.spT};
-`;
-
 const Bottom = styled.div`
   width: 100%;
   margin-top: 15px;
@@ -179,6 +174,18 @@ const Comments = styled.div`
   border-top: 1px solid lightgray;
   margin-top: 10px;
   overflow-y: scroll;
+  overflow-x: hidden;
+  &::-webkit-scrollbar {
+    width: 7px;
+  }
+  &::-webkit-scrollbar-track {
+    background: lightgray;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: gray;
+    border-radius: 20px;
+  }
 `;
 
 const style = {
@@ -248,8 +255,6 @@ const Post = () => {
               </>
             )}
           </Desc>
-
-          <Hashtags>#lorem #ipsum #text</Hashtags>
         </PostDesc>
       </Middle>
 

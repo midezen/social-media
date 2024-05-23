@@ -50,6 +50,11 @@ const TopRight = styled.div`
   align-items: center;
 `;
 
+const Time = styled.span`
+  color: ${({ theme }) => theme.textSoft};
+  font-size: 12px;
+`;
+
 const Bottom = styled.div`
   display: flex;
   flex-direction: column;
@@ -89,6 +94,7 @@ const Replies = styled.div`
   flex-direction: column;
   gap: 10px;
 `;
+
 const Comment = () => {
   const [liked, setLiked] = useState(false);
   const [showReply, setShowReply] = useState(false);
@@ -111,6 +117,7 @@ const Comment = () => {
         </TopCenter>
         {liked ? (
           <TopRight>
+            <Time>10h</Time>
             <FavoriteIcon
               onClick={() => setLiked(!liked)}
               style={{ fontSize: "20px", color: "red" }}
@@ -119,6 +126,7 @@ const Comment = () => {
           </TopRight>
         ) : (
           <TopRight>
+            <Time>10h</Time>
             <FavoriteBorderOutlinedIcon
               onClick={() => setLiked(!liked)}
               style={{ fontSize: "20px", color: "red" }}

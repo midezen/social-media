@@ -3,10 +3,11 @@ import Ayomide from "../img/Ayomide 2.png";
 import ImageIcon from "../img/image.png";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { DarkmodeContext } from "../contexts/darkmode";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import AddToPhotosIcon from "@mui/icons-material/AddToPhotos";
+import { useDispatch, useSelector } from "react-redux";
 
 const Container = styled.div`
   background-color: ${({ theme }) => theme.bg};
@@ -184,7 +185,7 @@ const AddDisplay = styled.div`
   border-radius: 10px;
 `;
 
-const AddDisplayWrapper = styled.div`
+const AddDisplayWrapper = styled.label`
   height: 100%;
   border-radius: 10px;
   display: flex;
@@ -273,6 +274,13 @@ const PostButton = styled.button`
   font-size: 14px;
   font-weight: bold;
   cursor: pointer;
+
+  &:disabled {
+    cursor: not-allowed;
+    background-color: lightgray;
+    color: black;
+    opacity: 0.8;
+  }
 `;
 
 const style = {
@@ -286,7 +294,12 @@ const style = {
 const CreatePost = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [showAddDisplay, setShowAddDisplay] = useState(false);
+  const [postState, setPostState] = useState({ postDesc: "", file: "" });
+  const [disabled, setDisabled] = useState(true);
   const { darkmode } = useContext(DarkmodeContext);
+  const userInfo = useSelector((state) => state.user.userInfo);
+  const dispatch = useDispatch();
+
   const handleModalOpen = () => {
     setModalOpen(true);
   };
@@ -297,6 +310,32 @@ const CreatePost = () => {
     setModalOpen(true);
     setShowAddDisplay(true);
   };
+
+  const handleChange = (e) => {
+    setPostState((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  useEffect(() => {
+    setDisabled(
+      postState.postDesc === "" && postState.file === "" ? true : false
+    );
+  }, [postState]);
+
+  useEffect(() => {
+    !showAddDisplay && setPostState((prev) => ({ ...prev, file: "" }));
+  }, [showAddDisplay]);
+
+  const handleCreatePost = async () => {
+    try {
+    } catch (err) {
+      if (err.response.status === 500) {
+        alert("server/network error");
+      } else {
+        alert(err.response.data);
+      }
+    }
+  };
+
   return (
     <Container>
       <Top>
@@ -340,15 +379,31 @@ const CreatePost = () => {
           <ModalDivider />
           <ModalContent>
             <UserInfo>
-              <ProfilePic src={Ayomide} alt="profilePic" />
-              <Name>Ayomide Oluwadiya</Name>
+              <ProfilePic
+                src={userInfo.profilePic ? userInfo.profilePic : Ayomide}
+                alt="profilePic"
+              />
+              <Name>
+                {userInfo.firstName} {userInfo.lastName}
+              </Name>
             </UserInfo>
 
             <ContentCenter>
-              <TextArea placeholder="Share your thoughts Ayomide" />
+              <TextArea
+                placeholder={`Share your thoughts ${userInfo.firstName}`}
+                name="postDesc"
+                onChange={handleChange}
+              />
               {showAddDisplay && (
                 <AddDisplay>
-                  <AddDisplayWrapper>
+                  <input
+                    type="file"
+                    id="file"
+                    style={{ display: "none" }}
+                    name="file"
+                    onChange={handleChange}
+                  />
+                  <AddDisplayWrapper htmlFor="file">
                     <Cancel onClick={() => setShowAddDisplay(false)}>
                       <CloseOutlinedIcon style={{ fontSize: "20px" }} />
                     </Cancel>
@@ -367,10 +422,12 @@ const CreatePost = () => {
                 <ImgIcon
                   src={ImageIcon}
                   alt="image icon"
-                  onClick={() => setShowAddDisplay(true)}
+                  onClick={() => setShowAddDisplay(!showAddDisplay)}
                 />
               </AddToPost>
-              <PostButton>Post</PostButton>
+              <PostButton disabled={disabled} onClick={handleCreatePost}>
+                Post
+              </PostButton>
             </ContentBottom>
           </ModalContent>
         </Box>

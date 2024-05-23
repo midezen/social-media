@@ -89,6 +89,10 @@ const Replies = styled.div`
   flex-direction: column;
   gap: 10px;
 `;
+const Time = styled.span`
+  color: ${({ theme }) => theme.textSoft};
+  font-size: 12px;
+`;
 const Reply = () => {
   const [liked, setLiked] = useState(false);
   return (
@@ -110,6 +114,7 @@ const Reply = () => {
         </TopCenter>
         {liked ? (
           <TopRight>
+            <Time>10h</Time>
             <FavoriteIcon
               onClick={() => setLiked(!liked)}
               style={{ fontSize: "20px", color: "red" }}
@@ -118,6 +123,7 @@ const Reply = () => {
           </TopRight>
         ) : (
           <TopRight>
+            <Time>10h</Time>
             <FavoriteBorderOutlinedIcon
               onClick={() => setLiked(!liked)}
               style={{ fontSize: "20px", color: "red" }}
