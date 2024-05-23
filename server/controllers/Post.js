@@ -52,7 +52,7 @@ export const getPosts = async (req, res) => {
       const following = user.following;
       const list = await Promise.all(
         following.map((userID) => {
-          return Post.find({ userId: userID });
+          return Post.find({ userId: userID }).sort({ createdAt: "desc" });
         })
       );
       res.status(200).json(list.flat());
@@ -62,16 +62,18 @@ export const getPosts = async (req, res) => {
       const savedPosts = user.savedPosts;
       const list = await Promise.all(
         savedPosts.map((savedPostId) => {
-          return Post.findById(savedPostId);
+          return Post.findById(savedPostId).sort({ createdAt: "desc" });
         })
       );
       res.status(200).json(list.flat());
     } else if (req.query.timeline) {
       verifyToken();
-      const timelinePosts = await Post.find({ userId: req.user.id });
+      const timelinePosts = await Post.find({ userId: req.user.id }).sort({
+        createdAt: "desc",
+      });
       res.status(200).json(timelinePosts);
     } else {
-      const posts = await Post.find();
+      const posts = await Post.find().sort({ createdAt: "desc" });
       res.status(200).json(posts);
     }
   } catch (err) {

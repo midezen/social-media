@@ -4,12 +4,14 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import { useState } from "react";
 import Reply from "./Reply";
+import MoreHorizOutlined from "@mui/icons-material/MoreHorizOutlined";
 
 const Container = styled.div`
   margin-top: 10px;
   display: flex;
   flex-direction: column;
-  margin-right: 10px;
+  padding: 0px 10px;
+  width: 60%;
 `;
 
 const Top = styled.div`
@@ -34,6 +36,9 @@ const TopCenter = styled.span`
 
 const Desc = styled.p`
   text-align: justify;
+  padding: 10px;
+  border-radius: 12px;
+  background-color: ${({ theme }) => theme.bgSoft};
 `;
 
 const Username = styled.span`
@@ -73,11 +78,15 @@ const ReplyButton = styled.span`
   cursor: pointer;
 `;
 
-const DeleteButton = styled.span`
-  font-size: 12px;
-  font-weight: bold;
-  color: red;
+const IconButton = styled.span`
+  width: fit-content;
+  height: fit-content;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
+  background-color: ${({ theme }) => theme.bgSoft};
+  border-radius: 50%;
 `;
 
 const BottomSpan = styled.span`
@@ -111,13 +120,15 @@ const Comment = () => {
           </Desc>
 
           <Buttons>
+            <Time>10h</Time>
             <ReplyButton>Reply</ReplyButton>
-            <DeleteButton>Delete</DeleteButton>
+            <IconButton>
+              <MoreHorizOutlined />
+            </IconButton>
           </Buttons>
         </TopCenter>
         {liked ? (
           <TopRight>
-            <Time>10h</Time>
             <FavoriteIcon
               onClick={() => setLiked(!liked)}
               style={{ fontSize: "20px", color: "red" }}
@@ -126,7 +137,6 @@ const Comment = () => {
           </TopRight>
         ) : (
           <TopRight>
-            <Time>10h</Time>
             <FavoriteBorderOutlinedIcon
               onClick={() => setLiked(!liked)}
               style={{ fontSize: "20px", color: "red" }}

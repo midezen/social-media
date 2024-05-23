@@ -3,21 +3,21 @@ import { createSlice } from "@reduxjs/toolkit";
 const postSlice = createSlice({
   name: "post",
   initialState: {
-    postData: null,
-    loading: false,
-    error: false,
+    posts: null,
+    postLoading: false,
+    postError: false,
   },
   reducers: {
     postStart: (state) => {
-      state.loading = true;
+      state.postLoading = true;
     },
     postSuccess: (state) => {
-      state.loading = false;
-      state.error = false;
+      state.postLoading = false;
+      state.postError = false;
     },
     postRejected: (state) => {
-      state.loading = false;
-      state.error = true;
+      state.postLoading = false;
+      state.postError = true;
     },
   },
 });

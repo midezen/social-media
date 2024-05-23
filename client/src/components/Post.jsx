@@ -22,6 +22,7 @@ const Top = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  background-color: ${({ theme }) => theme.bg};
 `;
 
 const TopLeft = styled.div`
@@ -48,7 +49,7 @@ const ProfileName = styled.span`
   font-weight: bold;
 `;
 
-const ProfileUsername = styled.span`
+const Time = styled.span`
   font-size: 12px;
   color: ${({ theme }) => theme.textSoft};
 `;
@@ -76,6 +77,12 @@ const Desc = styled.div`
   font-size: 13.5px;
   text-align: justify;
   cursor: pointer;
+  margin-top: 20px;
+`;
+
+const PostDescription = styled.p`
+  font-size: 13.5px;
+  text-align: justify;
 `;
 
 const SeeMore = styled.span`
@@ -144,35 +151,17 @@ const ViewComment = styled.span`
   font-weight: bold;
 `;
 
-const ModalLeft = styled.div`
+const ModalWrapper = styled.div`
   flex: 1;
-  border-radius: 12px;
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-`;
-
-const ModalImage = styled.img`
+  display: flex;
+  flex-direction: column;
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  border-radius: 12px;
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
 `;
-
-const ModalRight = styled.div`
-  flex: 1;
-  padding: 12px;
+const ModalSection1 = styled.div`
   display: flex;
   flex-direction: column;
-`;
-
-const Comments = styled.div`
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  border-top: 1px solid lightgray;
-  margin-top: 10px;
+  height: 90%;
   overflow-y: scroll;
   overflow-x: hidden;
   &::-webkit-scrollbar {
@@ -188,6 +177,24 @@ const Comments = styled.div`
   }
 `;
 
+const ModalSection2 = styled.div`
+  height: 10%;
+`;
+
+const ModalImage = styled.img`
+  width: 100%;
+  object-fit: cover;
+  margin: 0;
+  margin-bottom: 20px;
+`;
+
+const Comments = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+`;
+
 const style = {
   position: "absolute",
   top: "50%",
@@ -196,10 +203,7 @@ const style = {
   boxShadow: 24,
 };
 
-const Post = () => {
-  const [postDesc, setPostDesc] = useState(
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed doeiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim adminim veniam, quis nostrud exercitation ullamco laboris nisi utaliquip ex ea commodo consequat. Duis aute irure dolor inreprehenderit in voluptate velit esse cillum dolore eu fugiat nullapariatur. Excepteur sint occaecat cupidatat non proident, sunt inculpa qui officia deserunt mollit anim id est laborum."
-  );
+const Post = ({ data }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const handleModalOpen = () => {
     setModalOpen(true);
@@ -229,7 +233,7 @@ const Post = () => {
           <ProfilePic src={Ayomide} alt="profile picture" />
           <ProfileInfo>
             <ProfileName>Ayomide Oluwadiya</ProfileName>
-            <ProfileUsername>@midzen</ProfileUsername>
+            <Time>19h ago</Time>
           </ProfileInfo>
         </TopLeft>
         <MoreHorizOutlinedIcon
@@ -240,21 +244,19 @@ const Post = () => {
       {/* THIS IS THE MIDDLE SECTION, IT CONTAINS THE POST IMAGE
       THE POST DESCRIPTION AND THE HASHTAGS */}
       <Middle>
-        <PostImage
-          src="https://images.unsplash.com/photo-1713714614660-18a216d92281?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyfHx8ZW58MHx8fHx8"
-          alt="post image"
-        />
+        {data?.fileUrl && <PostImage src={data.fileUrl} alt="post image" />}
         <PostDesc onClick={handleDescToggle}>
-          <Desc>
-            {descOpen ? (
-              postDesc
-            ) : (
-              <>
-                {`${postDesc.slice(0, 187)}`}
-                <SeeMore onClick={handleDescToggle}>...See more</SeeMore>
-              </>
-            )}
-          </Desc>
+          {data?.postDesc && (
+            <Desc>
+              {data.postDesc.length <= 187 || descOpen ? (
+                <PostDescription>{data.postDesc}</PostDescription>
+              ) : (
+                <PostDescription>
+                  {data.postDesc.slice(0, 187)}...<SeeMore>See more</SeeMore>
+                </PostDescription>
+              )}
+            </Desc>
+          )}
         </PostDesc>
       </Middle>
 
@@ -268,7 +270,7 @@ const Post = () => {
                   onClick={() => setLiked(!liked)}
                   style={{ fontSize: "25px", color: "red" }}
                 />
-                1.6k
+                {data?.likes.length}
               </Item>
             ) : (
               <Item>
@@ -276,7 +278,7 @@ const Post = () => {
                   onClick={() => setLiked(!liked)}
                   style={{ fontSize: "25px" }}
                 />
-                1.6k
+                {data?.likes.length}
               </Item>
             )}
             <Item>
@@ -316,7 +318,7 @@ const Post = () => {
         aria-describedby="parent-modal-description"
       >
         <Box
-          sx={{ ...style, width: "60%", height: "80%" }}
+          sx={{ ...style, width: "50%", height: "80%" }}
           style={{
             backgroundColor: darkmode ? "#202020" : "white",
             border: darkmode ? "1px solid #181818" : "1px solid #f5f5f0",
@@ -325,38 +327,91 @@ const Post = () => {
             color: darkmode ? "white" : "black",
           }}
         >
-          <ModalLeft>
-            <ModalImage
-              src="https://images.unsplash.com/photo-1713714614660-18a216d92281?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyfHx8ZW58MHx8fHx8"
-              alt="Modal Image"
-            />
-          </ModalLeft>
-          <ModalRight>
-            <Top>
-              <TopLeft>
-                <ProfilePic src={Ayomide} alt="profile picture" />
-                <ProfileInfo>
-                  <ProfileName>Ayomide Oluwadiya</ProfileName>
-                  <ProfileUsername>@midzen</ProfileUsername>
-                </ProfileInfo>
-              </TopLeft>
-              <MoreHorizOutlinedIcon
-                style={{ fontSize: "18px", cursor: "pointer" }}
+          <ModalWrapper>
+            <ModalSection1>
+              <Top
+                style={{
+                  position: "sticky",
+                  top: "0",
+                  zIndex: "999",
+                  padding: "5px 10px",
+                }}
+              >
+                <TopLeft>
+                  <ProfilePic src={Ayomide} alt="profile picture" />
+                  <ProfileInfo>
+                    <ProfileName>Ayomide Oluwadiya</ProfileName>
+                    <Time>19h ago</Time>
+                  </ProfileInfo>
+                </TopLeft>
+                <MoreHorizOutlinedIcon
+                  style={{ fontSize: "18px", cursor: "pointer" }}
+                />
+              </Top>
+              <PostDescription style={{ padding: "10px", marginBottom: "5px" }}>
+                {data.postDesc}
+              </PostDescription>
+              <ModalImage
+                src="https://images.unsplash.com/photo-1713714614660-18a216d92281?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyfHx8ZW58MHx8fHx8"
+                alt="Modal Image"
               />
-            </Top>
-            <Comments>
-              <Comment />
-              <Comment />
-              <Comment />
-            </Comments>
-            <InputContainer>
-              <Input
-                type="text"
-                placeholder="Add Comment"
-                onClick={handleModalOpen}
-              />
-            </InputContainer>
-          </ModalRight>
+
+              <Items style={{ padding: "0px 10px" }}>
+                <ItemsLeft>
+                  {liked ? (
+                    <Item>
+                      <FavoriteIcon
+                        onClick={() => setLiked(!liked)}
+                        style={{ fontSize: "25px", color: "red" }}
+                      />
+                      {data?.likes.length}
+                    </Item>
+                  ) : (
+                    <Item>
+                      <FavoriteBorderOutlinedIcon
+                        onClick={() => setLiked(!liked)}
+                        style={{ fontSize: "25px" }}
+                      />
+                      {data?.likes.length}
+                    </Item>
+                  )}
+                  <Item>
+                    <CommentOutlinedIcon style={{ fontSize: "21px" }} />
+                    2.3k
+                  </Item>
+                </ItemsLeft>
+                <ItemsRight>
+                  {saved ? (
+                    <BookmarkIcon
+                      onClick={() => setSaved(!saved)}
+                      style={{ fontSize: "24px", color: "#0000ff" }}
+                    />
+                  ) : (
+                    <BookmarkBorderOutlinedIcon
+                      onClick={() => setSaved(!saved)}
+                      style={{ fontSize: "24px" }}
+                    />
+                  )}
+                </ItemsRight>
+              </Items>
+
+              <Comments>
+                <Comment />
+                <Comment />
+                <Comment />
+              </Comments>
+            </ModalSection1>
+            <ModalSection2>
+              <InputContainer>
+                <Input
+                  type="text"
+                  placeholder="Add Comment"
+                  onClick={handleModalOpen}
+                  // style={{ paddingBottom: "0px" }}
+                />
+              </InputContainer>
+            </ModalSection2>
+          </ModalWrapper>
           {/* <ChildModal /> */}
         </Box>
       </Modal>

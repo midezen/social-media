@@ -3,11 +3,14 @@ import HomeLeft from "../components/HomeLeft";
 import HomeRight from "../components/HomeRight";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import Ayomide from "../img/Ayomide 2.png";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Post from "../components/Post";
 import CreatePost from "../components/CreatePost";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
+import { useDispatch } from "react-redux";
+import { postRejected, postStart, postSuccess } from "../redux/postSlice";
+import { axiosInstance } from "../utils/axiosConfig";
 
 const Container = styled.div`
   background-color: ${({ theme }) => theme.bgSoft};
@@ -167,7 +170,9 @@ const Posts = styled.div`
 
 const Home = () => {
   const [active, setActive] = useState("all");
+  const [postData, setPostData] = useState([]);
   const scrollRef = useRef(null);
+  const dispatch = useDispatch();
 
   const handleActive = (props) => {
     setActive(props);
@@ -184,6 +189,26 @@ const Home = () => {
       scrollRef.current.scrollLeft += 210;
     }
   };
+
+  const getAllPost = async () => {
+    dispatch(postStart());
+    try {
+      const res = await axiosInstance.get("/posts");
+      setPostData(res.data);
+      dispatch(postSuccess());
+    } catch (err) {
+      if (err.response.status === 500) {
+        alert("server/network error");
+      } else {
+        alert(err.response.data);
+      }
+      dispatch(postRejected());
+    }
+  };
+
+  useEffect(() => {
+    getAllPost();
+  }, []);
 
   return (
     <Container>
@@ -276,7 +301,7 @@ const Home = () => {
           </StoriesBottom>
         </StoriesContainer>
 
-        <CreatePost />
+        <CreatePost getAllPost={getAllPost} />
 
         {/* THIS IS SECTION 3, IT CONTAINS THE FEED */}
         <FeedContainer>
@@ -295,11 +320,9 @@ const Home = () => {
             </Buttons>
           </TopContainer>
           <Posts>
-            <Post />
-            <Post />
-            <Post />
-            <Post />
-            <Post />
+            {postData.map((item) => {
+              return <Post key={item._id} data={item} />;
+            })}
           </Posts>
         </FeedContainer>
       </Middle>

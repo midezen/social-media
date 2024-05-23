@@ -293,14 +293,15 @@ const style = {
   boxShadow: 24,
 };
 
-const CreatePost = () => {
+const CreatePost = ({ getAllPost }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [showAddDisplay, setShowAddDisplay] = useState(false);
-  const [postState, setPostState] = useState({ postDesc: "", file: "" });
+  const [postState, setPostState] = useState({ postDesc: "", fileUrl: "" });
   const [disabled, setDisabled] = useState(true);
   const { darkmode } = useContext(DarkmodeContext);
   const userInfo = useSelector((state) => state.user.userInfo);
   const dispatch = useDispatch();
+  const postLoading = useSelector((state) => state.post.postLoading);
 
   const handleModalOpen = () => {
     setModalOpen(true);
@@ -319,21 +320,22 @@ const CreatePost = () => {
 
   useEffect(() => {
     setDisabled(
-      postState.postDesc === "" && postState.file === "" ? true : false
+      postState.postDesc === "" && postState.fileUrl === "" ? true : false
     );
   }, [postState]);
 
   useEffect(() => {
-    !showAddDisplay && setPostState((prev) => ({ ...prev, file: "" }));
+    !showAddDisplay && setPostState((prev) => ({ ...prev, fileUrl: "" }));
   }, [showAddDisplay]);
 
   const handleCreatePost = async () => {
     dispatch(postStart());
     try {
-      await axiosInstance.post("/createPost", postState, {
+      await axiosInstance.post("/posts/createPost", postState, {
         withCredentials: true,
       });
       dispatch(postSuccess());
+      getAllPost();
       setModalOpen(false);
       setPostState(postState);
     } catch (err) {
@@ -410,7 +412,7 @@ const CreatePost = () => {
                     type="file"
                     id="file"
                     style={{ display: "none" }}
-                    name="file"
+                    name="fileUrl"
                     onChange={handleChange}
                   />
                   <AddDisplayWrapper htmlFor="file">
@@ -436,7 +438,7 @@ const CreatePost = () => {
                 />
               </AddToPost>
               <PostButton disabled={disabled} onClick={handleCreatePost}>
-                Post
+                {postLoading ? "Posting" : "Post"}
               </PostButton>
             </ContentBottom>
           </ModalContent>

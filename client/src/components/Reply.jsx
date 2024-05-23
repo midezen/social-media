@@ -3,6 +3,7 @@ import Ayomide from "../img/Ayomide 2.png";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import { useState } from "react";
+import MoreHorizOutlined from "@mui/icons-material/MoreHorizOutlined";
 
 const Container = styled.div`
   margin-top: 10px;
@@ -34,6 +35,9 @@ const TopCenter = styled.span`
 
 const Desc = styled.p`
   text-align: justify;
+  padding: 10px;
+  border-radius: 12px;
+  background-color: ${({ theme }) => theme.bgSoft};
 `;
 
 const Username = styled.span`
@@ -50,11 +54,6 @@ const TopRight = styled.div`
   align-items: center;
 `;
 
-const Bottom = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
 const Buttons = styled.div`
   display: flex;
   align-items: center;
@@ -68,27 +67,17 @@ const ReplyButton = styled.span`
   cursor: pointer;
 `;
 
-const DeleteButton = styled.span`
-  font-size: 12px;
-  font-weight: bold;
-  color: red;
-  cursor: pointer;
-`;
-
-const BottomSpan = styled.span`
+const IconButton = styled.span`
+  width: fit-content;
+  height: fit-content;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: ${({ theme }) => theme.textSoft};
-  font-size: 12px;
   cursor: pointer;
+  background-color: ${({ theme }) => theme.bgSoft};
+  border-radius: 50%;
 `;
 
-const Replies = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-`;
 const Time = styled.span`
   color: ${({ theme }) => theme.textSoft};
   font-size: 12px;
@@ -108,13 +97,15 @@ const Reply = () => {
           </Desc>
 
           <Buttons>
+            <Time>10h</Time>
             <ReplyButton>Reply</ReplyButton>
-            <DeleteButton>Delete</DeleteButton>
+            <IconButton>
+              <MoreHorizOutlined />
+            </IconButton>
           </Buttons>
         </TopCenter>
         {liked ? (
           <TopRight>
-            <Time>10h</Time>
             <FavoriteIcon
               onClick={() => setLiked(!liked)}
               style={{ fontSize: "20px", color: "red" }}
@@ -123,7 +114,6 @@ const Reply = () => {
           </TopRight>
         ) : (
           <TopRight>
-            <Time>10h</Time>
             <FavoriteBorderOutlinedIcon
               onClick={() => setLiked(!liked)}
               style={{ fontSize: "20px", color: "red" }}
