@@ -8,6 +8,8 @@ import { DarkmodeContext } from "../contexts/darkmode";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import AddToPhotosIcon from "@mui/icons-material/AddToPhotos";
 import { useDispatch, useSelector } from "react-redux";
+import { postRejected, postStart, postSuccess } from "../redux/postSlice";
+import { axiosInstance } from "../utils/axiosConfig";
 
 const Container = styled.div`
   background-color: ${({ theme }) => theme.bg};
@@ -326,13 +328,21 @@ const CreatePost = () => {
   }, [showAddDisplay]);
 
   const handleCreatePost = async () => {
+    dispatch(postStart());
     try {
+      await axiosInstance.post("/createPost", postState, {
+        withCredentials: true,
+      });
+      dispatch(postSuccess());
+      setModalOpen(false);
+      setPostState(postState);
     } catch (err) {
       if (err.response.status === 500) {
         alert("server/network error");
       } else {
         alert(err.response.data);
       }
+      dispatch(postRejected());
     }
   };
 
