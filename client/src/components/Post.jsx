@@ -279,7 +279,7 @@ const Post = ({ data }) => {
             <ProfileName>
               {postOwnerData?.firstName} {postOwnerData?.lastName}
             </ProfileName>
-            <Time>{moment(data.createdAt, "YYYYMMDD").fromNow()}</Time>
+            <Time>{moment(data.createdAt).fromNow()}</Time>
           </ProfileInfo>
         </TopLeft>
         <MoreHorizOutlinedIcon
@@ -396,7 +396,7 @@ const Post = ({ data }) => {
                     <ProfileName>
                       {postOwnerData?.firstName} {postOwnerData?.lastName}
                     </ProfileName>
-                    <Time>{moment(data.createdAt, "YYYYMMDD").fromNow()}</Time>
+                    <Time>{moment(data.createdAt).fromNow()}</Time>
                   </ProfileInfo>
                 </TopLeft>
                 <IconButton onClick={handleModalClose}>
