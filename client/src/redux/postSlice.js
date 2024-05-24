@@ -32,6 +32,16 @@ const postSlice = createSlice({
       state.postLoading = false;
       state.postError = false;
     },
+    deletePostSuccess: (state, action) => {
+      const getIndex = state.postData.findIndex(
+        (item) => item._id === action.payload
+      );
+      if (getIndex !== -1) {
+        state.postData.splice(getIndex, 1);
+      }
+      state.postLoading = false;
+      state.postError = false;
+    },
     postRejected: (state) => {
       state.postLoading = false;
       state.postError = true;
@@ -45,5 +55,6 @@ export const {
   postRejected,
   getAllPostsSuccess,
   updatePostSuccess,
+  deletePostSuccess,
 } = postSlice.actions;
 export default postSlice.reducer;

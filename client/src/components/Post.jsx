@@ -12,7 +12,12 @@ import Modal from "@mui/material/Modal";
 import { DarkmodeContext } from "../contexts/darkmode";
 import Comment from "./Comment";
 import { useDispatch } from "react-redux";
-import { postRejected, postStart, postSuccess } from "../redux/postSlice";
+import {
+  deletePostSuccess,
+  postRejected,
+  postStart,
+  postSuccess,
+} from "../redux/postSlice";
 import { axiosInstance } from "../utils/axiosConfig";
 import moment from "moment";
 import CloseOutlined from "@mui/icons-material/CloseOutlined";
@@ -365,6 +370,21 @@ const Post = ({ data }) => {
     setPostOptionOpen(false);
   };
 
+  const handlePostDelete = async (id) => {
+    dispatch(postStart());
+    try {
+      await axiosInstance.delete(`/posts/${id}`, { withCredentials: true });
+      dispatch(deletePostSuccess(id));
+    } catch (err) {
+      if (err.response.status === 500) {
+        alert("server/network error");
+      } else {
+        alert(err.response.data);
+      }
+      dispatch(postRejected());
+    }
+  };
+
   return (
     <Container>
       {/* THE POST CONTAINER IS DIVIDED INTO THREE PARTS: THE TOP, THE MIDDLE AND THE BOTTOM */}
@@ -600,8 +620,12 @@ const Post = ({ data }) => {
               Are you sure you want to delete this post?
             </DeleteModalSpan>
             <DeleteModalButtons>
-              <DeleteModalButton>Yes</DeleteModalButton>
-              <DeleteModalButton>No</DeleteModalButton>
+              <DeleteModalButton onClick={() => handlePostDelete(data._id)}>
+                Yes
+              </DeleteModalButton>
+              <DeleteModalButton onClick={handleDeleteModalClose}>
+                No
+              </DeleteModalButton>
             </DeleteModalButtons>
           </DeleteModalWrapper>
         </Box>
