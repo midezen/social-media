@@ -258,40 +258,42 @@ const Comments = styled.div`
   margin-top: 10px;
 `;
 
-const DeletePostModalWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
+const DeleteModalWrapper = styled.div`
+  padding: 10px;
   width: 100%;
   height: 100%;
-  justify-content: center;
-  align-items: center;
-  gap: 50px;
-`;
-
-const DeletePostModalSpan = styled.span`
-  font-size: 16px;
-  font-weight: bold;
-  color: ${({ theme }) => theme.text};
-`;
-
-const DeletePostModalButtons = styled.div`
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   gap: 50px;
 `;
 
-const DeletePostModalButton = styled.button`
-  border: none;
-  border-radius: 10px;
-  padding: 10px;
-  color: white;
+const DeleteModalSpan = styled.span`
+  font-size: 16px;
+  color: ${({ theme }) => theme.text};
   font-weight: bold;
+`;
+
+const DeleteModalButtons = styled.div`
+  display: flex;
+  gap: 70px;
+  align-items: center;
+`;
+
+const DeleteModalButton = styled.div`
+  padding: 10px 20px;
+  border: none;
   font-size: 14px;
+  font-weight: bold;
+  color: white;
+  border-radius: 10px;
   cursor: pointer;
 
-  &:first-child: {
-    background-color: ${({ theme }) => theme.spT};
+  &:first-child {
+    background-color: blue;
   }
-  &:last-child: {
+  &:last-child {
     background-color: red;
   }
 `;
@@ -465,6 +467,119 @@ const Post = ({ data }) => {
         </InputContainer>
       </Bottom>
       <Modal
+        open={modalOpen}
+        onClose={handleModalClose}
+        aria-labelledby="parent-modal-title"
+        aria-describedby="parent-modal-description"
+      >
+        <Box
+          sx={{ ...style, width: "50%", height: "80%" }}
+          style={{
+            backgroundColor: darkmode ? "#202020" : "white",
+            border: darkmode ? "1px solid #181818" : "1px solid #f5f5f0",
+            borderRadius: "12px",
+            display: "flex",
+            color: darkmode ? "white" : "black",
+          }}
+        >
+          <ModalWrapper>
+            <ModalSection1>
+              <Top
+                style={{
+                  position: "sticky",
+                  top: "0",
+                  zIndex: "999",
+                  padding: "5px 10px",
+                }}
+              >
+                <TopLeft>
+                  <ProfilePic
+                    src={
+                      postOwnerData?.profilePic
+                        ? postOwnerData.profilePic
+                        : Ayomide
+                    }
+                    alt="profile picture"
+                  />
+                  <ProfileInfo>
+                    <ProfileName>
+                      {postOwnerData?.firstName} {postOwnerData?.lastName}
+                    </ProfileName>
+                    <Time>{moment(data.createdAt).fromNow()}</Time>
+                  </ProfileInfo>
+                </TopLeft>
+                <IconButton onClick={handleModalClose}>
+                  <CloseOutlined />
+                </IconButton>
+              </Top>
+              <PostDescription style={{ padding: "10px", marginBottom: "5px" }}>
+                {data.postDesc}
+              </PostDescription>
+              <ModalImage
+                src="https://images.unsplash.com/photo-1713714614660-18a216d92281?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyfHx8ZW58MHx8fHx8"
+                alt="Modal Image"
+              />
+
+              <Items style={{ padding: "0px 10px" }}>
+                <ItemsLeft>
+                  {liked ? (
+                    <Item>
+                      <FavoriteIcon
+                        onClick={() => setLiked(!liked)}
+                        style={{ fontSize: "25px", color: "red" }}
+                      />
+                      {data?.likes.length}
+                    </Item>
+                  ) : (
+                    <Item>
+                      <FavoriteBorderOutlinedIcon
+                        onClick={() => setLiked(!liked)}
+                        style={{ fontSize: "25px" }}
+                      />
+                      {data?.likes.length}
+                    </Item>
+                  )}
+                  <Item>
+                    <CommentOutlinedIcon style={{ fontSize: "21px" }} />
+                    2.3k
+                  </Item>
+                </ItemsLeft>
+                <ItemsRight>
+                  {saved ? (
+                    <BookmarkIcon
+                      onClick={() => setSaved(!saved)}
+                      style={{ fontSize: "24px", color: "#0000ff" }}
+                    />
+                  ) : (
+                    <BookmarkBorderOutlinedIcon
+                      onClick={() => setSaved(!saved)}
+                      style={{ fontSize: "24px" }}
+                    />
+                  )}
+                </ItemsRight>
+              </Items>
+
+              <Comments>
+                <Comment />
+                <Comment />
+                <Comment />
+              </Comments>
+            </ModalSection1>
+            <ModalSection2>
+              <InputContainer>
+                <Input
+                  type="text"
+                  placeholder="Add Comment"
+                  onClick={handleModalOpen}
+                  // style={{ paddingBottom: "0px" }}
+                />
+              </InputContainer>
+            </ModalSection2>
+          </ModalWrapper>
+          {/* <ChildModal /> */}
+        </Box>
+      </Modal>
+      <Modal
         open={deleteModalOpen}
         onClose={handleDeleteModalClose}
         aria-labelledby="parent-modal-title"
@@ -480,18 +595,18 @@ const Post = ({ data }) => {
             color: darkmode ? "white" : "black",
           }}
         >
-          <DeletePostModalWrapper>
-            <DeletePostModalSpan>
+          <DeleteModalWrapper>
+            <DeleteModalSpan>
               Are you sure you want to delete this post?
-            </DeletePostModalSpan>
-            <DeletePostModalButtons>
-              <DeletePostModalButton>Yes</DeletePostModalButton>
-              <DeletePostModalButton>No</DeletePostModalButton>
-            </DeletePostModalButtons>
-          </DeletePostModalWrapper>
-          {/* <ChildModal /> */}
+            </DeleteModalSpan>
+            <DeleteModalButtons>
+              <DeleteModalButton>Yes</DeleteModalButton>
+              <DeleteModalButton>No</DeleteModalButton>
+            </DeleteModalButtons>
+          </DeleteModalWrapper>
         </Box>
       </Modal>
+
       {edit && (
         <CreatePost
           edit={edit}
