@@ -8,7 +8,12 @@ import { DarkmodeContext } from "../contexts/darkmode";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import AddToPhotosIcon from "@mui/icons-material/AddToPhotos";
 import { useDispatch, useSelector } from "react-redux";
-import { postRejected, postStart, postSuccess } from "../redux/postSlice";
+import {
+  postRejected,
+  postStart,
+  postSuccess,
+  updatePostSuccess,
+} from "../redux/postSlice";
 import { axiosInstance } from "../utils/axiosConfig";
 
 const Container = styled.div`
@@ -293,10 +298,13 @@ const style = {
   boxShadow: 24,
 };
 
-const CreatePost = ({ getAllPost }) => {
+const CreatePost = ({ getAllPost, edit, postData, postOwner, setEdit }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [showAddDisplay, setShowAddDisplay] = useState(false);
-  const [postState, setPostState] = useState({ postDesc: "", fileUrl: "" });
+  const [postState, setPostState] = useState({
+    postDesc: edit ? postData.postDesc : "",
+    fileUrl: edit ? postData.fileUrl : "",
+  });
   const [disabled, setDisabled] = useState(true);
   const { darkmode } = useContext(DarkmodeContext);
   const userInfo = useSelector((state) => state.user.userInfo);
@@ -308,6 +316,7 @@ const CreatePost = ({ getAllPost }) => {
   };
   const handleModalClose = () => {
     setModalOpen(false);
+    edit && setEdit(false);
   };
   const handleBottomItemClick = () => {
     setModalOpen(true);
@@ -327,6 +336,10 @@ const CreatePost = ({ getAllPost }) => {
   useEffect(() => {
     !showAddDisplay && setPostState((prev) => ({ ...prev, fileUrl: "" }));
   }, [showAddDisplay]);
+
+  useEffect(() => {
+    edit && setModalOpen(true);
+  }, [edit]);
 
   const handleCreatePost = async () => {
     dispatch(postStart());
@@ -348,21 +361,45 @@ const CreatePost = ({ getAllPost }) => {
     }
   };
 
+  const handleEditPost = async () => {
+    dispatch(postStart());
+    try {
+      const res = await axiosInstance.put(`/posts/${postData._id}`, postState, {
+        withCredentials: true,
+      });
+
+      setEdit(false);
+      setModalOpen(false);
+      dispatch(updatePostSuccess(res.data));
+    } catch (err) {
+      if (err.response.status === 500) {
+        alert("server/network error");
+      } else {
+        alert(err.response.data);
+      }
+      dispatch(postRejected());
+    }
+  };
+
   return (
     <Container>
-      <Top>
-        <ProfileImage src={Ayomide} alt="profile image" />
-        <InputContainer onClick={handleModalOpen}>
-          <Input type="text" placeholder="Share your thoughts" />
-        </InputContainer>
-      </Top>
-      <Divider />
-      <Bottom>
-        <BottomItem onClick={handleBottomItemClick}>
-          <PhotoIcon src={ImageIcon} alt="Image icon" />
-          Photo/video
-        </BottomItem>
-      </Bottom>
+      {!edit && (
+        <>
+          <Top>
+            <ProfileImage src={Ayomide} alt="profile image" />
+            <InputContainer onClick={handleModalOpen}>
+              <Input type="text" placeholder="Share your thoughts" />
+            </InputContainer>
+          </Top>
+          <Divider />
+          <Bottom>
+            <BottomItem onClick={handleBottomItemClick}>
+              <PhotoIcon src={ImageIcon} alt="Image icon" />
+              Photo/video
+            </BottomItem>
+          </Bottom>
+        </>
+      )}
       <Modal
         open={modalOpen}
         onClose={handleModalClose}
@@ -383,7 +420,9 @@ const CreatePost = ({ getAllPost }) => {
         >
           <ModalTop>
             <ModalTopLeft></ModalTopLeft>
-            <ModalTopCenter>Create post</ModalTopCenter>
+            <ModalTopCenter>
+              {edit ? "Edit Post" : "Create post"}
+            </ModalTopCenter>
             <ModalTopRight onClick={handleModalClose}>
               <CloseOutlinedIcon />
             </ModalTopRight>
@@ -392,19 +431,29 @@ const CreatePost = ({ getAllPost }) => {
           <ModalContent>
             <UserInfo>
               <ProfilePic
-                src={userInfo.profilePic ? userInfo.profilePic : Ayomide}
+                src={
+                  edit && postOwner.profilePic
+                    ? postOwner.profilePic
+                    : !edit && userInfo.profilePic
+                    ? userInfo.profilePic
+                    : Ayomide
+                }
                 alt="profilePic"
               />
               <Name>
-                {userInfo.firstName} {userInfo.lastName}
+                {edit ? postOwner.firstName : userInfo.firstName}{" "}
+                {edit ? postOwner.lastName : userInfo.lastName}
               </Name>
             </UserInfo>
 
             <ContentCenter>
               <TextArea
-                placeholder={`Share your thoughts ${userInfo.firstName}`}
+                placeholder={`Share your thoughts ${
+                  edit ? postOwner.firstName : userInfo.firstName
+                }`}
                 name="postDesc"
                 onChange={handleChange}
+                value={postState.postDesc}
               />
               {showAddDisplay && (
                 <AddDisplay>
@@ -414,6 +463,7 @@ const CreatePost = ({ getAllPost }) => {
                     style={{ display: "none" }}
                     name="fileUrl"
                     onChange={handleChange}
+                    value={postState.fileUrl}
                   />
                   <AddDisplayWrapper htmlFor="file">
                     <Cancel onClick={() => setShowAddDisplay(false)}>
@@ -437,9 +487,17 @@ const CreatePost = ({ getAllPost }) => {
                   onClick={() => setShowAddDisplay(!showAddDisplay)}
                 />
               </AddToPost>
-              <PostButton disabled={disabled} onClick={handleCreatePost}>
-                {postLoading ? "Posting" : "Post"}
-              </PostButton>
+
+              {!edit && (
+                <PostButton disabled={disabled} onClick={handleCreatePost}>
+                  {postLoading ? "Posting" : "Post"}
+                </PostButton>
+              )}
+              {edit && (
+                <PostButton disabled={disabled} onClick={handleEditPost}>
+                  {postLoading ? "Editing" : "Edit"}
+                </PostButton>
+              )}
             </ContentBottom>
           </ModalContent>
         </Box>

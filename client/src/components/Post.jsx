@@ -16,11 +16,14 @@ import { postRejected, postStart, postSuccess } from "../redux/postSlice";
 import { axiosInstance } from "../utils/axiosConfig";
 import moment from "moment";
 import CloseOutlined from "@mui/icons-material/CloseOutlined";
+import { ClickAwayListener } from "@mui/base/ClickAwayListener";
+import CreatePost from "./CreatePost";
 
 const Container = styled.div`
   background-color: ${({ theme }) => theme.bg};
   border-radius: 12px;
   padding: 12px;
+  position: relative;
 `;
 
 const Top = styled.div`
@@ -28,6 +31,47 @@ const Top = styled.div`
   align-items: center;
   justify-content: space-between;
   background-color: ${({ theme }) => theme.bg};
+`;
+
+const PostOptions = styled.div`
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0px 0px 11px 1px rgba(0, 0, 0, 0.75);
+  -webkit-box-shadow: 0px 0px 11px 1px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 0px 0px 11px 1px rgba(0, 0, 0, 0.75);
+  background-color: ${({ theme }) => theme.bg};
+  color: ${({ theme }) => theme.text};
+  position: absolute;
+  top: 45px;
+  right: 30px;
+  border-radius: 12px;
+`;
+
+const PostOption = styled.span`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  background-color: inherit;
+  color: inherit;
+  cursor: pointer;
+  border-bottom: 1px solid ${({ theme }) => theme.bgSoft};
+  font-size: 13px;
+  font-weight: bold;
+
+  &:first-child {
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+  }
+
+  &:last-child {
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+  }
+
+  &:hover {
+    background-color: ${({ theme }) => theme.bgSoft};
+  }
 `;
 
 const TopLeft = styled.div`
@@ -222,6 +266,8 @@ const style = {
 
 const Post = ({ data }) => {
   const [modalOpen, setModalOpen] = useState(false);
+  const [postOptionOpen, setPostOptionOpen] = useState(false);
+  const [edit, setEdit] = useState(false);
   const handleModalOpen = () => {
     setModalOpen(true);
   };
@@ -265,6 +311,10 @@ const Post = ({ data }) => {
     getPostOwner();
   }, [data]);
 
+  const handleClickAway = () => {
+    setPostOptionOpen(false);
+  };
+
   return (
     <Container>
       {/* THE POST CONTAINER IS DIVIDED INTO THREE PARTS: THE TOP, THE MIDDLE AND THE BOTTOM */}
@@ -284,8 +334,17 @@ const Post = ({ data }) => {
         </TopLeft>
         <MoreHorizOutlinedIcon
           style={{ fontSize: "18px", cursor: "pointer" }}
+          onClick={() => setPostOptionOpen(!postOptionOpen)}
         />
       </Top>
+      {postOptionOpen && (
+        <ClickAwayListener onClickAway={handleClickAway}>
+          <PostOptions>
+            <PostOption onClick={() => setEdit(true)}>Edit Post</PostOption>
+            <PostOption>Delete Post</PostOption>
+          </PostOptions>
+        </ClickAwayListener>
+      )}
 
       {/* THIS IS THE MIDDLE SECTION, IT CONTAINS THE POST IMAGE
       THE POST DESCRIPTION AND THE HASHTAGS */}
@@ -470,6 +529,14 @@ const Post = ({ data }) => {
           {/* <ChildModal /> */}
         </Box>
       </Modal>
+      {edit && (
+        <CreatePost
+          edit={edit}
+          postData={data}
+          postOwner={postOwnerData}
+          setEdit={setEdit}
+        />
+      )}
     </Container>
   );
 };

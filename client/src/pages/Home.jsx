@@ -8,8 +8,12 @@ import Post from "../components/Post";
 import CreatePost from "../components/CreatePost";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
-import { useDispatch } from "react-redux";
-import { postRejected, postStart, postSuccess } from "../redux/postSlice";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getAllPostsSuccess,
+  postRejected,
+  postStart,
+} from "../redux/postSlice";
 import { axiosInstance } from "../utils/axiosConfig";
 
 const Container = styled.div`
@@ -170,7 +174,7 @@ const Posts = styled.div`
 
 const Home = () => {
   const [active, setActive] = useState("all");
-  const [postData, setPostData] = useState([]);
+  const postData = useSelector((state) => state.post.postData);
   const scrollRef = useRef(null);
   const dispatch = useDispatch();
 
@@ -194,8 +198,7 @@ const Home = () => {
     dispatch(postStart());
     try {
       const res = await axiosInstance.get("/posts");
-      setPostData(res.data);
-      dispatch(postSuccess());
+      dispatch(getAllPostsSuccess(res.data));
     } catch (err) {
       if (err.response.status === 500) {
         alert("server/network error");
@@ -320,7 +323,7 @@ const Home = () => {
             </Buttons>
           </TopContainer>
           <Posts>
-            {postData.map((item) => {
+            {postData?.map((item) => {
               return <Post key={item._id} data={item} />;
             })}
           </Posts>
