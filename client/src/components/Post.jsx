@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import MoreHorizOutlinedIcon from "@mui/icons-material/MoreHorizOutlined";
 import Ayomide from "../img/Ayomide 2.png";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
@@ -11,6 +11,11 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { DarkmodeContext } from "../contexts/darkmode";
 import Comment from "./Comment";
+import { useDispatch } from "react-redux";
+import { postRejected, postStart, postSuccess } from "../redux/postSlice";
+import { axiosInstance } from "../utils/axiosConfig";
+import moment from "moment";
+import CloseOutlined from "@mui/icons-material/CloseOutlined";
 
 const Container = styled.div`
   background-color: ${({ theme }) => theme.bg};
@@ -177,6 +182,18 @@ const ModalSection1 = styled.div`
   }
 `;
 
+const IconButton = styled.span`
+  width: fit-content;
+  height: fit-content;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background-color: ${({ theme }) => theme.bgSoft};
+  border-radius: 50%;
+  padding: 3px;
+`;
+
 const ModalSection2 = styled.div`
   height: 10%;
 `;
@@ -219,10 +236,34 @@ const Post = ({ data }) => {
   const [saved, setSaved] = useState(false);
 
   const { darkmode } = useContext(DarkmodeContext);
+  const dispatch = useDispatch();
+  const [postOwnerData, setPostOwnerData] = useState(null);
 
   const handleDescToggle = () => {
     setDescOpen(!descOpen);
   };
+
+  const getPostOwner = async () => {
+    dispatch(postStart());
+    try {
+      const res = await axiosInstance.get(`/users/${data.userId}`, {
+        withCredentials: true,
+      });
+      setPostOwnerData(res.data);
+      dispatch(postSuccess());
+    } catch (err) {
+      if (err.response.status === 500) {
+        alert("server/network error");
+      } else {
+        alert(err.response.data);
+      }
+      dispatch(postRejected());
+    }
+  };
+
+  useEffect(() => {
+    getPostOwner();
+  }, [data]);
 
   return (
     <Container>
@@ -230,10 +271,15 @@ const Post = ({ data }) => {
       {/* THIS IS THE TOP SECTION, IT CONTAINS THE PROFILE INFO OF THE POST OWNER */}
       <Top>
         <TopLeft>
-          <ProfilePic src={Ayomide} alt="profile picture" />
+          <ProfilePic
+            src={postOwnerData?.profilePic ? postOwnerData.profilePic : Ayomide}
+            alt="profile picture"
+          />
           <ProfileInfo>
-            <ProfileName>Ayomide Oluwadiya</ProfileName>
-            <Time>19h ago</Time>
+            <ProfileName>
+              {postOwnerData?.firstName} {postOwnerData?.lastName}
+            </ProfileName>
+            <Time>{moment(data.createdAt, "YYYYMMDD").fromNow()}</Time>
           </ProfileInfo>
         </TopLeft>
         <MoreHorizOutlinedIcon
@@ -338,15 +384,24 @@ const Post = ({ data }) => {
                 }}
               >
                 <TopLeft>
-                  <ProfilePic src={Ayomide} alt="profile picture" />
+                  <ProfilePic
+                    src={
+                      postOwnerData?.profilePic
+                        ? postOwnerData.profilePic
+                        : Ayomide
+                    }
+                    alt="profile picture"
+                  />
                   <ProfileInfo>
-                    <ProfileName>Ayomide Oluwadiya</ProfileName>
-                    <Time>19h ago</Time>
+                    <ProfileName>
+                      {postOwnerData?.firstName} {postOwnerData?.lastName}
+                    </ProfileName>
+                    <Time>{moment(data.createdAt, "YYYYMMDD").fromNow()}</Time>
                   </ProfileInfo>
                 </TopLeft>
-                <MoreHorizOutlinedIcon
-                  style={{ fontSize: "18px", cursor: "pointer" }}
-                />
+                <IconButton onClick={handleModalClose}>
+                  <CloseOutlined />
+                </IconButton>
               </Top>
               <PostDescription style={{ padding: "10px", marginBottom: "5px" }}>
                 {data.postDesc}
