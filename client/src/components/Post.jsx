@@ -127,11 +127,13 @@ const Desc = styled.div`
   text-align: justify;
   cursor: pointer;
   margin-top: 20px;
+  width: 100%;
 `;
 
 const PostDescription = styled.p`
   font-size: 13.5px;
   text-align: justify;
+  width: 100%;
 `;
 
 const SeeMore = styled.span`
@@ -256,6 +258,44 @@ const Comments = styled.div`
   margin-top: 10px;
 `;
 
+const DeletePostModalWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  gap: 50px;
+`;
+
+const DeletePostModalSpan = styled.span`
+  font-size: 16px;
+  font-weight: bold;
+  color: ${({ theme }) => theme.text};
+`;
+
+const DeletePostModalButtons = styled.div`
+  display: flex;
+  gap: 50px;
+`;
+
+const DeletePostModalButton = styled.button`
+  border: none;
+  border-radius: 10px;
+  padding: 10px;
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+
+  &:first-child: {
+    background-color: ${({ theme }) => theme.spT};
+  }
+  &:last-child: {
+    background-color: red;
+  }
+`;
+
 const style = {
   position: "absolute",
   top: "50%",
@@ -266,6 +306,7 @@ const style = {
 
 const Post = ({ data }) => {
   const [modalOpen, setModalOpen] = useState(false);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [postOptionOpen, setPostOptionOpen] = useState(false);
   const [edit, setEdit] = useState(false);
   const handleModalOpen = () => {
@@ -273,6 +314,13 @@ const Post = ({ data }) => {
   };
   const handleModalClose = () => {
     setModalOpen(false);
+  };
+
+  const handleDeleteModalOpen = () => {
+    setDeleteModalOpen(true);
+  };
+  const handleDeleteModalClose = () => {
+    setDeleteModalOpen(false);
   };
 
   const [descOpen, setDescOpen] = useState(false);
@@ -341,7 +389,7 @@ const Post = ({ data }) => {
         <ClickAwayListener onClickAway={handleClickAway}>
           <PostOptions>
             <PostOption onClick={() => setEdit(true)}>Edit Post</PostOption>
-            <PostOption>Delete Post</PostOption>
+            <PostOption onClick={handleDeleteModalOpen}>Delete Post</PostOption>
           </PostOptions>
         </ClickAwayListener>
       )}
@@ -417,13 +465,13 @@ const Post = ({ data }) => {
         </InputContainer>
       </Bottom>
       <Modal
-        open={modalOpen}
-        onClose={handleModalClose}
+        open={deleteModalOpen}
+        onClose={handleDeleteModalClose}
         aria-labelledby="parent-modal-title"
         aria-describedby="parent-modal-description"
       >
         <Box
-          sx={{ ...style, width: "50%", height: "80%" }}
+          sx={{ ...style, width: "40%", height: "40%" }}
           style={{
             backgroundColor: darkmode ? "#202020" : "white",
             border: darkmode ? "1px solid #181818" : "1px solid #f5f5f0",
@@ -432,100 +480,15 @@ const Post = ({ data }) => {
             color: darkmode ? "white" : "black",
           }}
         >
-          <ModalWrapper>
-            <ModalSection1>
-              <Top
-                style={{
-                  position: "sticky",
-                  top: "0",
-                  zIndex: "999",
-                  padding: "5px 10px",
-                }}
-              >
-                <TopLeft>
-                  <ProfilePic
-                    src={
-                      postOwnerData?.profilePic
-                        ? postOwnerData.profilePic
-                        : Ayomide
-                    }
-                    alt="profile picture"
-                  />
-                  <ProfileInfo>
-                    <ProfileName>
-                      {postOwnerData?.firstName} {postOwnerData?.lastName}
-                    </ProfileName>
-                    <Time>{moment(data.createdAt).fromNow()}</Time>
-                  </ProfileInfo>
-                </TopLeft>
-                <IconButton onClick={handleModalClose}>
-                  <CloseOutlined />
-                </IconButton>
-              </Top>
-              <PostDescription style={{ padding: "10px", marginBottom: "5px" }}>
-                {data.postDesc}
-              </PostDescription>
-              <ModalImage
-                src="https://images.unsplash.com/photo-1713714614660-18a216d92281?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyfHx8ZW58MHx8fHx8"
-                alt="Modal Image"
-              />
-
-              <Items style={{ padding: "0px 10px" }}>
-                <ItemsLeft>
-                  {liked ? (
-                    <Item>
-                      <FavoriteIcon
-                        onClick={() => setLiked(!liked)}
-                        style={{ fontSize: "25px", color: "red" }}
-                      />
-                      {data?.likes.length}
-                    </Item>
-                  ) : (
-                    <Item>
-                      <FavoriteBorderOutlinedIcon
-                        onClick={() => setLiked(!liked)}
-                        style={{ fontSize: "25px" }}
-                      />
-                      {data?.likes.length}
-                    </Item>
-                  )}
-                  <Item>
-                    <CommentOutlinedIcon style={{ fontSize: "21px" }} />
-                    2.3k
-                  </Item>
-                </ItemsLeft>
-                <ItemsRight>
-                  {saved ? (
-                    <BookmarkIcon
-                      onClick={() => setSaved(!saved)}
-                      style={{ fontSize: "24px", color: "#0000ff" }}
-                    />
-                  ) : (
-                    <BookmarkBorderOutlinedIcon
-                      onClick={() => setSaved(!saved)}
-                      style={{ fontSize: "24px" }}
-                    />
-                  )}
-                </ItemsRight>
-              </Items>
-
-              <Comments>
-                <Comment />
-                <Comment />
-                <Comment />
-              </Comments>
-            </ModalSection1>
-            <ModalSection2>
-              <InputContainer>
-                <Input
-                  type="text"
-                  placeholder="Add Comment"
-                  onClick={handleModalOpen}
-                  // style={{ paddingBottom: "0px" }}
-                />
-              </InputContainer>
-            </ModalSection2>
-          </ModalWrapper>
+          <DeletePostModalWrapper>
+            <DeletePostModalSpan>
+              Are you sure you want to delete this post?
+            </DeletePostModalSpan>
+            <DeletePostModalButtons>
+              <DeletePostModalButton>Yes</DeletePostModalButton>
+              <DeletePostModalButton>No</DeletePostModalButton>
+            </DeletePostModalButtons>
+          </DeletePostModalWrapper>
           {/* <ChildModal /> */}
         </Box>
       </Modal>
