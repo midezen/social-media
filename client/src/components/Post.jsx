@@ -427,6 +427,19 @@ const Post = ({ data }) => {
     data.likes.includes(userInfo._id) ? setLiked(true) : setLiked(false);
   }, [data]);
 
+  const getComments = async () => {
+    dispatch(postStart());
+    try {
+    } catch (err) {
+      if (err.response.status === 500) {
+        alert("server/network error");
+      } else {
+        alert(err.response.data);
+      }
+      dispatch(postRejected());
+    }
+  };
+
   return (
     <Container>
       {/* THE POST CONTAINER IS DIVIDED INTO THREE PARTS: THE TOP, THE MIDDLE AND THE BOTTOM */}
@@ -542,6 +555,7 @@ const Post = ({ data }) => {
             borderRadius: "12px",
             display: "flex",
             color: darkmode ? "white" : "black",
+            marginTop: "20px",
           }}
         >
           <ModalWrapper>
@@ -552,6 +566,8 @@ const Post = ({ data }) => {
                   top: "0",
                   zIndex: "999",
                   padding: "5px 10px",
+                  borderTopLeftRadius: "12px",
+                  borderTopRightRadius: "12px",
                 }}
               >
                 <TopLeft>
@@ -574,13 +590,16 @@ const Post = ({ data }) => {
                   <CloseOutlined />
                 </IconButton>
               </Top>
-              <PostDescription style={{ padding: "10px", marginBottom: "5px" }}>
-                {data.postDesc}
-              </PostDescription>
-              <ModalImage
-                src="https://images.unsplash.com/photo-1713714614660-18a216d92281?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyfHx8ZW58MHx8fHx8"
-                alt="Modal Image"
-              />
+              {data.postDesc && (
+                <PostDescription
+                  style={{ padding: "10px", marginBottom: "5px" }}
+                >
+                  {data.postDesc}
+                </PostDescription>
+              )}
+              {data.fileUrl && (
+                <ModalImage src={data.fileUrl} alt="Modal Image" />
+              )}
 
               <Items style={{ padding: "0px 10px" }}>
                 <ItemsLeft>
