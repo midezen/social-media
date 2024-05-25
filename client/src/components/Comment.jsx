@@ -5,6 +5,13 @@ import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlin
 import { useState } from "react";
 import Reply from "./Reply";
 import MoreHorizOutlined from "@mui/icons-material/MoreHorizOutlined";
+import { useDispatch } from "react-redux";
+import {
+  commentRejected,
+  commentStart,
+  commentSuccess,
+} from "../redux/commentSlice";
+import moment from "moment";
 
 const Container = styled.div`
   margin-top: 10px;
@@ -41,7 +48,7 @@ const Desc = styled.p`
   background-color: ${({ theme }) => theme.bgSoft};
 `;
 
-const Username = styled.span`
+const FirstName = styled.span`
   font-weight: bold;
   margin-right: 5px;
   font-size: 13px;
@@ -104,23 +111,50 @@ const Replies = styled.div`
   gap: 10px;
 `;
 
-const Comment = () => {
+const Comment = ({ data }) => {
   const [liked, setLiked] = useState(false);
   const [showReply, setShowReply] = useState(false);
+  const [commentOwner, setCommentOwner] = useState(null);
+
+  const dispatch = useDispatch();
+
+  const getCommentOwner = async () => {
+    dispatch(commentStart());
+    try {
+      const res = await axiosInstance.get(`/users/${data.userId}`, {
+        withCredentials: true,
+      });
+      setCommentOwner(res.data);
+      dispatch(commentSuccess());
+    } catch (err) {
+      if (err.response.status === 500) {
+        alert("server/network error");
+      } else {
+        alert(err.response.data);
+      }
+      dispatch(commentRejected());
+    }
+  };
+
+  useEffect(() => {
+    getCommentOwner();
+  }, [data]);
+
   return (
     <Container>
       <Top>
-        <TopLeft src={Ayomide} alt="" />
+        <TopLeft
+          src={commentOwner?.profilePic ? commentOwner.profilePic : Ayomide}
+          alt="profile Pic"
+        />
         <TopCenter>
           <Desc>
-            <Username>midzen</Username>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation
+            <FirstName>{commentOwner?.firstName}</FirstName>
+            {data.commentDesc}
           </Desc>
 
           <Buttons>
-            <Time>10h</Time>
+            <Time>{moment(data.createdAt).fromNow()}</Time>
             <ReplyButton>Reply</ReplyButton>
             <IconButton>
               <MoreHorizOutlined />

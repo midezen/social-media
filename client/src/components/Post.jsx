@@ -25,6 +25,7 @@ import moment from "moment";
 import CloseOutlined from "@mui/icons-material/CloseOutlined";
 import { ClickAwayListener } from "@mui/base/ClickAwayListener";
 import CreatePost from "./CreatePost";
+import { getCommentsSuccess } from "../redux/commentSlice";
 
 const Container = styled.div`
   background-color: ${({ theme }) => theme.bg};
@@ -341,6 +342,7 @@ const Post = ({ data }) => {
   const dispatch = useDispatch();
   const [postOwnerData, setPostOwnerData] = useState(null);
   const userInfo = useSelector((state) => state.user.userInfo);
+  const comments = useSelector((state) => state.comment.commentData);
 
   const handleDescToggle = () => {
     setDescOpen(!descOpen);
@@ -430,6 +432,10 @@ const Post = ({ data }) => {
   const getComments = async () => {
     dispatch(postStart());
     try {
+      const res = await axiosInstance.get(`/comments/${data._id}`, {
+        withCredentials: true,
+      });
+      dispatch(getCommentsSuccess(res.data));
     } catch (err) {
       if (err.response.status === 500) {
         alert("server/network error");
@@ -439,6 +445,10 @@ const Post = ({ data }) => {
       dispatch(postRejected());
     }
   };
+
+  useEffect(() => {
+    getComments();
+  }, [data]);
 
   return (
     <Container>
@@ -513,7 +523,7 @@ const Post = ({ data }) => {
             )}
             <Item>
               <CommentOutlinedIcon style={{ fontSize: "21px" }} />
-              2.3k
+              {comments?.length}
             </Item>
           </ItemsLeft>
           <ItemsRight>
@@ -622,7 +632,7 @@ const Post = ({ data }) => {
                   )}
                   <Item>
                     <CommentOutlinedIcon style={{ fontSize: "21px" }} />
-                    2.3k
+                    {comments?.length}
                   </Item>
                 </ItemsLeft>
                 <ItemsRight>
@@ -641,9 +651,9 @@ const Post = ({ data }) => {
               </Items>
 
               <Comments>
-                <Comment />
-                <Comment />
-                <Comment />
+                {comments?.map((comment) => {
+                  return <Comment key={comment._id} data={comment} />;
+                })}
               </Comments>
             </ModalSection1>
             <ModalSection2>

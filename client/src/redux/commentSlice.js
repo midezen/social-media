@@ -15,6 +15,10 @@ const commentSlice = createSlice({
       state.commentLoading = false;
       state.commentError = true;
     },
+    commentSuccess: (state) => {
+      state.commentLoading = false;
+      state.commentError = false;
+    },
     getCommentsSuccess: (state, action) => {
       state.commentData = action.payload;
       state.commentLoading = false;
@@ -23,7 +27,11 @@ const commentSlice = createSlice({
   },
 });
 
-export const { commentStart, commentRejected, getCommentsSuccess } =
-  commentSlice.actions;
+export const {
+  commentStart,
+  commentRejected,
+  getCommentsSuccess,
+  commentSuccess,
+} = commentSlice.actions;
 
 export default commentSlice.reducer;
