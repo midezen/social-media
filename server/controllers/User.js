@@ -88,7 +88,7 @@ export const unfollowUser = async (req, res) => {
 export const likePost = async (req, res) => {
   try {
     await Post.findByIdAndUpdate(req.params.PostId, {
-      $push: { likes: req.user.id },
+      $addToSet: { likes: req.user.id },
     });
     res.status(200).json("successfully liked post");
   } catch (err) {
@@ -110,7 +110,7 @@ export const unlikePost = async (req, res) => {
 export const likeComment = async (req, res) => {
   try {
     await Comment.findByIdAndUpdate(req.params.CommentId, {
-      $push: { likes: req.user.id },
+      $addToSet: { likes: req.user.id },
     });
     res.status(200).json("successfully liked comment");
   } catch (err) {
@@ -132,7 +132,7 @@ export const unlikeComment = async (req, res) => {
 export const likeReply = async (req, res) => {
   try {
     await Reply.findByIdAndUpdate(req.params.ReplyId, {
-      $push: { likes: req.user.id },
+      $addToSet: { likes: req.user.id },
     });
     res.status(200).json("successfully liked reply");
   } catch (err) {
@@ -154,7 +154,7 @@ export const unlikeReply = async (req, res) => {
 export const savePost = async (req, res) => {
   try {
     await User.findByIdAndUpdate(req.user.id, {
-      $push: { savedPosts: req.params.PostId },
+      $addToSet: { savedPosts: req.params.PostId },
     });
     res.status(200).json("Post saved successfully");
   } catch (err) {
@@ -235,13 +235,13 @@ export const unFriend = async (req, res) => {
 export const AcceptFriendRequest = async (req, res) => {
   try {
     await User.findByIdAndUpdate(req.user.id, {
-      $push: { friends: req.params.id },
+      $addToSet: { friends: req.params.id },
       $pull: { friendRequests: req.params.id },
       $addToSet: { followers: req.params.id, following: req.params.id },
     });
 
     await User.findByIdAndUpdate(req.params.id, {
-      $push: { friends: req.user.id },
+      $addToSet: { friends: req.user.id },
       $pull: { sentRequests: req.user.id },
       $addToSet: { following: req.user.id, followers: req.user.id },
     });

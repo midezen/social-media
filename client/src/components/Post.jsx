@@ -11,12 +11,14 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { DarkmodeContext } from "../contexts/darkmode";
 import Comment from "./Comment";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   deletePostSuccess,
+  likePostSuccess,
   postRejected,
   postStart,
   postSuccess,
+  unlikePostSuccess,
 } from "../redux/postSlice";
 import { axiosInstance } from "../utils/axiosConfig";
 import moment from "moment";
@@ -132,12 +134,11 @@ const Desc = styled.div`
   text-align: justify;
   cursor: pointer;
   margin-top: 20px;
-  width: 100%;
+  width: fit-content;
 `;
 
-const PostDescription = styled.p`
+const PostDescription = styled.pre`
   font-size: 13.5px;
-  text-align: justify;
   width: 100%;
 `;
 
@@ -339,6 +340,7 @@ const Post = ({ data }) => {
   const { darkmode } = useContext(DarkmodeContext);
   const dispatch = useDispatch();
   const [postOwnerData, setPostOwnerData] = useState(null);
+  const userInfo = useSelector((state) => state.user.userInfo);
 
   const handleDescToggle = () => {
     setDescOpen(!descOpen);
@@ -384,6 +386,46 @@ const Post = ({ data }) => {
       dispatch(postRejected());
     }
   };
+
+  const handleLikePost = async (id) => {
+    dispatch(postStart());
+    try {
+      await axiosInstance.put(`/users/likePost/${id}`, "", {
+        withCredentials: true,
+      });
+      dispatch(likePostSuccess({ postId: id, userId: userInfo._id }));
+      setLiked(true);
+    } catch (err) {
+      if (err.response.status === 500) {
+        alert("server/network error");
+      } else {
+        alert(err.response.data);
+      }
+      dispatch(postRejected());
+    }
+  };
+
+  const handleUnlikePost = async (id) => {
+    dispatch(postStart());
+    try {
+      await axiosInstance.put(`/users/unlikePost/${id}`, "", {
+        withCredentials: true,
+      });
+      dispatch(unlikePostSuccess({ postId: id, userId: userInfo._id }));
+      setLiked(false);
+    } catch (err) {
+      if (err.response.status === 500) {
+        alert("server/network error");
+      } else {
+        alert(err.response.data);
+      }
+      dispatch(postRejected());
+    }
+  };
+
+  useEffect(() => {
+    data.likes.includes(userInfo._id) ? setLiked(true) : setLiked(false);
+  }, [data]);
 
   return (
     <Container>
@@ -442,7 +484,7 @@ const Post = ({ data }) => {
             {liked ? (
               <Item>
                 <FavoriteIcon
-                  onClick={() => setLiked(!liked)}
+                  onClick={() => handleUnlikePost(data._id)}
                   style={{ fontSize: "25px", color: "red" }}
                 />
                 {data?.likes.length}
@@ -450,7 +492,7 @@ const Post = ({ data }) => {
             ) : (
               <Item>
                 <FavoriteBorderOutlinedIcon
-                  onClick={() => setLiked(!liked)}
+                  onClick={() => handleLikePost(data._id)}
                   style={{ fontSize: "25px" }}
                 />
                 {data?.likes.length}
@@ -545,7 +587,7 @@ const Post = ({ data }) => {
                   {liked ? (
                     <Item>
                       <FavoriteIcon
-                        onClick={() => setLiked(!liked)}
+                        onClick={() => handleUnlikePost(data._id)}
                         style={{ fontSize: "25px", color: "red" }}
                       />
                       {data?.likes.length}
@@ -553,7 +595,7 @@ const Post = ({ data }) => {
                   ) : (
                     <Item>
                       <FavoriteBorderOutlinedIcon
-                        onClick={() => setLiked(!liked)}
+                        onClick={() => handleLikePost(data._id)}
                         style={{ fontSize: "25px" }}
                       />
                       {data?.likes.length}

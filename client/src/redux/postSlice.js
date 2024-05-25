@@ -42,6 +42,31 @@ const postSlice = createSlice({
       state.postLoading = false;
       state.postError = false;
     },
+    likePostSuccess: (state, action) => {
+      const Post = state.postData.find(
+        (post) => post._id === action.payload.postId
+      );
+      if (Post) {
+        !Post.likes.includes(action.payload.userId) &&
+          Post.likes.push(action.payload.userId);
+      }
+      state.postLoading = true;
+      state.postError = false;
+    },
+    unlikePostSuccess: (state, action) => {
+      const Post = state.postData.find(
+        (post) => post._id === action.payload.postId
+      );
+
+      if (Post) {
+        if (Post.likes.includes(action.payload.userId)) {
+          const getIndex = Post.likes.indexOf(action.payload.userId);
+          getIndex !== -1 && Post.likes.splice(getIndex, 1);
+        }
+      }
+      state.postLoading = false;
+      state.postError = false;
+    },
     postRejected: (state) => {
       state.postLoading = false;
       state.postError = true;
@@ -56,5 +81,7 @@ export const {
   getAllPostsSuccess,
   updatePostSuccess,
   deletePostSuccess,
+  likePostSuccess,
+  unlikePostSuccess,
 } = postSlice.actions;
 export default postSlice.reducer;

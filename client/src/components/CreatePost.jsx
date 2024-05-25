@@ -350,7 +350,7 @@ const CreatePost = ({ getAllPost, edit, postData, postOwner, setEdit }) => {
       dispatch(postSuccess());
       getAllPost();
       setModalOpen(false);
-      setPostState(postState);
+      setPostState({ postDesc: "", fileUrl: "" });
     } catch (err) {
       if (err.response.status === 500) {
         alert("server/network error");
